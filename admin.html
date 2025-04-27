@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Telegram Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Админ-панель Telegram</h1>
+
+        <div class="section">
+            <h2>Управление пользователями</h2>
+            <button onclick="banUser()">Забанить пользователя</button>
+            <button onclick="unbanUser()">Разбанить пользователя</button>
+        </div>
+
+        <div class="section">
+            <h2>Рассылка сообщений</h2>
+            <textarea id="broadcastMessage" placeholder="Введите сообщение для рассылки..."></textarea>
+            <button onclick="sendBroadcast()">Отправить рассылку</button>
+        </div>
+
+        <div class="section">
+            <h2>Настройки бота</h2>
+            <button onclick="restartBot()">Перезапустить бота</button>
+            <button onclick="logout()">Выйти</button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
