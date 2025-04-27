@@ -159,9 +159,13 @@ function generateReceipt() {
   document.getElementById('checkAmount').textContent = amount;
   document.getElementById('fpd').textContent = fpd;
 
+  // Генерация QR-кода для СБП
+  const sumInKopecks = amount * 100; 
+  const sbpUrl = `https://qr.nspk.ru/AD10004TEST1234567890123456789ABCDEF?type=01&bank=100000000000&sum=${sumInKopecks}`;
+
   const qr = new QRious({
     element: document.getElementById('qr'),
-    value: `Услуга: Аварийный Комиссар\nСумма: ${amount}₽\nДата: ${date}`,
+    value: sbpUrl,
     size: 100
   });
 
