@@ -1,90 +1,130 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оплата услуги "Аварийный Комиссар"</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 300px;
-            text-align: center;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .receipt {
-            margin-top: 20px;
-            text-align: left;
-            display: none;
-            background: #e9f5ec;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Оплата "Аварийный Комиссар"</title>
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .payment-form {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #28a745;
+      border: none;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      width: 300px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .modal-content h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .close-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-top: 15px;
+      width: 100%;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Оплата услуги</h2>
-    <p>"Аварийный Комиссар"</p>
-    <input type="number" id="amount" placeholder="Введите сумму, ₽">
-    <button onclick="generateReceipt()">Оплатить</button>
+<div class="payment-form">
+  <h2>Аварийный Комиссар</h2>
+  <input type="number" id="amount" placeholder="Введите сумму, ₽">
+  <button onclick="generateReceipt()">Оплатить</button>
+</div>
 
-    <div class="receipt" id="receipt">
-        <h3>Чек об оплате</h3>
-        <p>Услуга: Аварийный Комиссар</p>
-        <p id="paidAmount"></p>
-        <p>Дата: <span id="date"></span></p>
-        <p>Спасибо за оплату!</p>
-    </div>
+<div class="modal" id="receiptModal">
+  <div class="modal-content">
+    <h3>КАССОВЫЙ ЧЕК</h3>
+    <p>ИНН: 7701234567</p>
+    <p>Номер чека: <span id="checkNumber"></span></p>
+    <p>Дата: <span id="checkDate"></span></p>
+    <hr>
+    <p>Услуга: Аварийный Комиссар</p>
+    <p>Сумма: <span id="checkAmount"></span> ₽</p>
+    <hr>
+    <p>ФПД: <span id="fpd"></span></p>
+    <button class="close-btn" onclick="closeModal()">Закрыть</button>
+  </div>
 </div>
 
 <script>
 function generateReceipt() {
-    var amount = document.getElementById('amount').value;
-    if (amount === "" || amount <= 0) {
-        alert("Пожалуйста, введите корректную сумму.");
-        return;
-    }
-    var today = new Date();
-    var date = today.toLocaleString('ru-RU');
+  const amount = document.getElementById('amount').value;
+  if (amount === "" || amount <= 0) {
+    alert("Введите корректную сумму!");
+    return;
+  }
+  const checkNumber = Math.floor(100000 + Math.random() * 900000);
+  const fpd = Math.floor(1000000000 + Math.random() * 9000000000);
+  const date = new Date().toLocaleString('ru-RU');
 
-    document.getElementById('paidAmount').textContent = "Сумма: " + amount + " ₽";
-    document.getElementById('date').textContent = date;
-    document.getElementById('receipt').style.display = 'block';
+  document.getElementById('checkNumber').textContent = checkNumber;
+  document.getElementById('checkDate').textContent = date;
+  document.getElementById('checkAmount').textContent = amount;
+  document.getElementById('fpd').textContent = fpd;
+
+  document.getElementById('receiptModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('receiptModal').style.display = 'none';
 }
 </script>
 
