@@ -1,358 +1,92 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Чудо Ремонт | Автосервис</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    body {
-      background: #2f2f2f;
-      color: #fff;
-      font-size: 16px;
-      overflow-x: hidden;
-    }
-
-    header {
-      background: linear-gradient(45deg, #ff5722, #ff9800);
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    header h1 {
-      font-size: 50px;
-      font-weight: bold;
-    }
-
-    header p {
-      font-size: 18px;
-    }
-
-    .hero {
-      background: url('https://images.unsplash.com/photo-1605559424843-cf2d254d9033') center/cover no-repeat;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
-      position: relative;
-      filter: brightness(0.5);
-    }
-
-    .hero h2 {
-      font-size: 60px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      z-index: 1;
-    }
-
-    .cta-button {
-      background-color: #ff5722;
-      color: white;
-      padding: 20px 40px;
-      border-radius: 10px;
-      font-size: 20px;
-      margin-top: 20px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: background-color 0.3s ease;
-      text-decoration: none;
-    }
-
-    .cta-button:hover {
-      background-color: #e64a19;
-    }
-
-    .services {
-      background: #333;
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .services h2 {
-      font-size: 40px;
-      margin-bottom: 40px;
-      color: #ff9800;
-    }
-
-    .services .service-item {
-      display: inline-block;
-      margin: 20px;
-      width: 250px;
-      padding: 20px;
-      background: #444;
-      border-radius: 10px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .services .service-item:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 5px 20px rgba(255, 152, 0, 0.5);
-    }
-
-    .services .service-item h3 {
-      font-size: 24px;
-      color: #ff9800;
-      margin-bottom: 10px;
-    }
-
-    .form-section {
-      background: #222;
-      padding: 60px 20px;
-    }
-
-    .form-section h2 {
-      font-size: 40px;
-      margin-bottom: 40px;
-      color: #ff9800;
-      text-align: center;
-    }
-
-    form {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #333;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-    }
-
-    label {
-      font-size: 18px;
-      color: #ff9800;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #555;
-      border-radius: 5px;
-      background: #444;
-      color: white;
-      font-size: 16px;
-    }
-
-    button {
-      background-color: #ff5722;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 5px;
-      font-size: 18px;
-      width: 100%;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #e64a19;
-    }
-
-    footer {
-      background: #111;
-      color: #fff;
-      padding: 20px 0;
-      text-align: center;
-    }
-
-    footer p {
-      font-size: 14px;
-    }
-
-    .footer-links a {
-      color: #ff9800;
-      text-decoration: none;
-      margin: 0 10px;
-      font-size: 18px;
-    }
-
-    .footer-links a:hover {
-      text-decoration: underline;
-    }
-
-    /* Адаптация для мобильных устройств */
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 36px;
-      }
-
-      .hero h2 {
-        font-size: 40px;
-      }
-
-      .cta-button {
-        font-size: 18px;
-        padding: 15px 30px;
-      }
-
-      .services h2 {
-        font-size: 30px;
-      }
-
-      .services .service-item {
-        width: 100%;
-        margin: 10px 0;
-      }
-
-      .form-section h2 {
-        font-size: 32px;
-      }
-
-      form {
-        padding: 20px;
-      }
-
-      input, select, textarea {
-        padding: 10px;
-        font-size: 14px;
-      }
-
-      button {
-        padding: 12px 25px;
-        font-size: 16px;
-      }
-
-      footer p {
-        font-size: 12px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header h1 {
-        font-size: 30px;
-      }
-
-      .hero h2 {
-        font-size: 32px;
-      }
-
-      .cta-button {
-        font-size: 16px;
-        padding: 12px 25px;
-      }
-
-      .services h2 {
-        font-size: 28px;
-      }
-
-      .form-section h2 {
-        font-size: 28px;
-      }
-
-      .services .service-item {
-        width: 100%;
-        padding: 15px;
-      }
-
-      button {
-        font-size: 14px;
-        padding: 10px 20px;
-      }
-
-      footer p {
-        font-size: 10px;
-      }
-
-      .footer-links a {
-        font-size: 14px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата услуги "Аварийный Комиссар"</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .receipt {
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+            background: #e9f5ec;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>Чудо Ремонт</h1>
-    <p>Ремонт и обслуживание автомобилей с гарантией качества</p>
-  </header>
+<div class="container">
+    <h2>Оплата услуги</h2>
+    <p>"Аварийный Комиссар"</p>
+    <input type="number" id="amount" placeholder="Введите сумму, ₽">
+    <button onclick="generateReceipt()">Оплатить</button>
 
-  <section class="hero">
-    <h2>Профессиональный ремонт автомобилей</h2>
-    <a href="#services" class="cta-button">Наши услуги</a>
-  </section>
-
-  <section class="services" id="services">
-    <h2>Наши услуги</h2>
-    <div class="service-item">
-      <h3>Диагностика</h3>
-      <p>Полная диагностика вашего автомобиля для выявления любых неисправностей.</p>
+    <div class="receipt" id="receipt">
+        <h3>Чек об оплате</h3>
+        <p>Услуга: Аварийный Комиссар</p>
+        <p id="paidAmount"></p>
+        <p>Дата: <span id="date"></span></p>
+        <p>Спасибо за оплату!</p>
     </div>
-    <div class="service-item">
-      <h3>Ремонт двигателя</h3>
-      <p>Профессиональный ремонт и восстановление двигателя с использованием оригинальных запчастей.</p>
-    </div>
-    <div class="service-item">
-      <h3>Тормозная система</h3>
-      <p>Обслуживание и ремонт тормозной системы для вашей безопасности.</p>
-    </div>
-    <div class="service-item">
-      <h3>Шиномонтаж</h3>
-      <p>Шиномонтаж, балансировка и сезонная замена шин.</p>
-    </div>
-  </section>
+</div>
 
-  <section class="form-section" id="contact">
-    <h2>Запишитесь на сервис</h2>
-    <form id="bookingForm">
-      <label for="name">Имя</label>
-      <input type="text" id="name" name="name" required />
+<script>
+function generateReceipt() {
+    var amount = document.getElementById('amount').value;
+    if (amount === "" || amount <= 0) {
+        alert("Пожалуйста, введите корректную сумму.");
+        return;
+    }
+    var today = new Date();
+    var date = today.toLocaleString('ru-RU');
 
-      <label for="phone">Телефон</label>
-      <input type="tel" id="phone" name="phone" required />
-
-      <label for="car">Марка и модель автомобиля</label>
-      <input type="text" id="car" name="car" required />
-
-      <label for="service">Услуга</label>
-      <select id="service" name="service" required>
-        <option value="">Выберите услугу</option>
-        <option>Диагностика</option>
-        <option>Ремонт двигателя</option>
-        <option>Тормозная система</option>
-        <option>Шиномонтаж</option>
-      </select>
-
-      <label for="date">Дата</label>
-      <input type="date" id="date" name="date" required />
-
-      <label for="message">Комментарий</label>
-      <textarea id="message" name="message" rows="4"></textarea>
-
-      <button type="submit">Отправить заявку</button>
-    </form>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Чудо Ремонт. Все права защищены.</p>
-    <div class="footer-links">
-      <a href="#">Политика конфиденциальности</a>
-      <a href="#">Контакты</a>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Спасибо! Ваша заявка отправлена.');
-      this.reset();
-    });
-  </script>
+    document.getElementById('paidAmount').textContent = "Сумма: " + amount + " ₽";
+    document.getElementById('date').textContent = date;
+    document.getElementById('receipt').style.display = 'block';
+}
+</script>
 
 </body>
 </html>
