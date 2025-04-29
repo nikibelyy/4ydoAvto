@@ -1,19 +1,42 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Вход в Админку</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Объяснение при ДТП</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="login-container">
-        <h1>Вход в Админ-панель</h1>
-        <input type="text" id="username" placeholder="Имя пользователя">
-        <input type="password" id="password" placeholder="Пароль">
-        <button onclick="login()">Войти</button>
-        <p id="loginError" class="error"></p>
-    </div>
+  <div class="container">
+    <h1>Генератор объяснения ДТП</h1>
+    <form id="dtpForm">
+      <label>ФИО:</label>
+      <input type="text" id="fio" required />
 
-    <script src="script.js"></script>
+      <label>Марка автомобиля:</label>
+      <input type="text" id="car" required />
+
+      <label>Госномер:</label>
+      <input type="text" id="plate" required />
+
+      <label>Улица / Направление движения:</label>
+      <input type="text" id="street" required />
+
+      <label>Марка и госномер второго автомобиля:</label>
+      <input type="text" id="otherCar" required />
+
+      <label>Нарушение ПДД (если вы потерпевший):</label>
+      <input type="text" id="violation" />
+
+      <p>Выберите, кем вы являетесь:</p>
+      <div class="buttons">
+        <button type="button" onclick="generateExplanation('виновник')">Я виновник</button>
+        <button type="button" onclick="generateExplanation('потерпевший')">Я потерпевший</button>
+      </div>
+    </form>
+    <div id="output" class="explanation-box"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

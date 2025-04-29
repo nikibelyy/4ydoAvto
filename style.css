@@ -1,96 +1,60 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7f9;
-    margin: 0;
-    padding: 20px;
-}
-
-.login-container {
-    max-width: 400px;
-    margin: 100px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.login-container input {
-    width: 90%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.login-container button {
-    width: 95%;
-    padding: 10px;
-    background-color: #0077ff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.login-container button:hover {
-    background-color: #005fcc;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 20px;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-    color: #333;
+h1 {
+  text-align: center;
 }
 
-.section {
-    margin-bottom: 30px;
+label {
+  display: block;
+  margin-top: 15px;
 }
 
-textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
-    padding: 10px;
-    resize: vertical;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #0077ff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #005fcc;
+  background-color: #0056b3;
 }
 
-.notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #28a745;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 5px;
-    display: none;
-    z-index: 1000;
-}
-
-.error {
-    color: red;
-    margin-top: 10px;
+.explanation-box {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  white-space: pre-line;
 }
