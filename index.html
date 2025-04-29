@@ -30,10 +30,18 @@
 
       <p>Выберите, кем вы являетесь:</p>
       <div class="buttons">
-        <button type="button" onclick="generateExplanation('виновник')">Я виновник</button>
-        <button type="button" onclick="generateExplanation('потерпевший')">Я потерпевший</button>
+        <input type="radio" id="roleGuilty" name="role" value="виновник" required>
+        <label for="roleGuilty">Я виновник</label>
+
+        <input type="radio" id="roleVictim" name="role" value="потерпевший" required>
+        <label for="roleVictim">Я потерпевший</label>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <button type="button" onclick="generateFromForm()">Сгенерировать объяснение</button>
       </div>
     </form>
+
     <div id="output" class="explanation-box"></div>
   </div>
 
