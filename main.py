@@ -6,8 +6,9 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 
-API_TOKEN = os.getenv("API_TOKEN")
-ADMIN_ID = int(os.getenv("ADMIN_ID"))
+API_TOKEN = os.getenv("8185937071:AAE0xX623aApu-Lv9iej8wBZq0Hw0-G91os
+")
+ADMIN_ID = int(os.getenv("7523840597"))
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
