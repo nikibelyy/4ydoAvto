@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Направление на осмотр авто</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Форма направления на осмотр автомобиля (ДТП)</h2>
+
+<form id="dtpForm">
+  <label for="name">Имя</label>
+  <input type="text" id="name" required />
+
+  <label for="phone">Номер телефона</label>
+  <input type="tel" id="phone" required />
+
+  <label for="date">Дата ДТП</label>
+  <input type="date" id="date" required />
+
+  <label for="policy">Полис</label>
+  <input type="text" id="policy" required />
+
+  <label for="carNumber">Номер автомобиля</label>
+  <input type="text" id="carNumber" required />
+
+  <label for="carModel">Марка / Модель автомобиля</label>
+  <input type="text" id="carModel" required />
+
+  <button type="button" onclick="generatePDF()">Сгенерировать PDF</button>
+</form>
+
+<script>
+  async function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const date = document.getElementById("date").value;
+    const policy = document.getElementById("policy").value;
+    const carNumber = document.getElementById("carNumber").value;
+    const carModel = document.getElementById("carModel").value;
+
+    doc.setFont("Times", "normal");
+    doc.setFontSize(14);
+
+    doc.text("МИНИСТЕРСТВО ВНУТРЕННИХ ДЕЛ", 20, 20);
+    doc.text("НАПРАВЛЕНИЕ НА ОСМОТР АВТОМОБИЛЯ", 20, 30);
+    doc.line(20, 32, 190, 32);
+
+    doc.setFontSize(12);
+    doc.text(`ФИО заявителя: ${name}`, 20, 45);
+    doc.text(`Телефон: ${phone}`, 20, 55);
+    doc.text(`Дата ДТП: ${date}`, 20, 65);
+    doc.text(`Полис страхования: ${policy}`, 20, 75);
+    doc.text(`Номер автомобиля: ${carNumber}`, 20, 85);
+    doc.text(`Марка и модель: ${carModel}`, 20, 95);
+
+    doc.text("Выдано для проведения экспертной оценки повреждений после ДТП.", 20, 110);
+    doc.text("Подпись сотрудника ГАИ: ____________________", 20, 130);
+    doc.text("Дата выдачи направления: ___________________", 20, 140);
+
+    doc.save("napravlenie_na_osmotr.pdf");
+  }
+</script>
+
+</body>
+</html>
