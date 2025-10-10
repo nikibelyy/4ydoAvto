@@ -36,7 +36,7 @@ ymaps.ready(() => {
 
     events.forEach(e => {
       if (e.type === 'ДТП') {
-        fetch('https://80.93.61.59/incident', {
+        fetch('https://вызовдтп.рф/incident', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
