@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Яндекс ДТП Мониторинг</title>
-    <style>
-        html, body, #map {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
-    <!-- Подключаем Яндекс.Карты -->
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=3de168ba-04ed-42f5-bb4e-6abff9b3f317" type="text/javascript"></script>
-    <!-- Подключаем наш JS -->
-    <script src="traffic.js"></script>
+  <meta charset="UTF-8">
+  <title>Мониторинг ДТП — ВызовДТП.рф</title>
+  <style>
+    html, body, #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=3de168ba-04ed-42f5-bb4e-6abff9b3f317"></script>
+  <script src="traffic_monitor.js"></script>
 </head>
 <body>
-<div id="map"></div>
+  <div id="map"></div>
 </body>
 </html>
