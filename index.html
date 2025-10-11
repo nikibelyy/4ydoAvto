@@ -20,7 +20,7 @@
 ymaps.ready(init);
 
 function init() {
-    // Создаем карту, центрируем на Воронеж
+    // Создаём карту
     var myMap = new ymaps.Map("map", {
         center: [51.6833, 39.1802],
         zoom: 13,
@@ -35,42 +35,29 @@ function init() {
     var actualProvider = new ymaps.traffic.provider.Actual({}, { infoLayerShown: true });
     actualProvider.setMap(myMap);
 
-    var infoLayer = new ymaps.traffic.InfoLayer(myMap, { provider: actualProvider });
-    infoLayer.setMap(myMap);
-
     // Функция для получения только ДТП
-    window.getIncidents = async function() {
-        try {
-            const provider = infoLayer.getProvider && infoLayer.getProvider();
-            if (!provider) return [];
+    window.getIncidents = function() {
+        const events = actualProvider.getEvents ? actualProvider.getEvents() : [];
+        const results = [];
 
-            const events = provider.getEvents ? provider.getEvents() : (provider.events || []);
-            const results = [];
+        events.forEach(e => {
+            const props = e.properties || {};
+            const coords = e.geometry && e.geometry.coordinates ? e.geometry.coordinates : null;
+            const type = props.type || "";
 
-            if (events && events.forEach) {
-                events.forEach(e => {
-                    try {
-                        const props = e.get && e.get("properties") ? e.get("properties").getAll() : e;
-                        const coords = e.get && e.get("geometry") ? e.get("geometry").getCoordinates() : null;
-                        const description = props.description || props.hintContent || props.name || "";
-
-                        if (/ДТП/i.test(description)) {
-                            results.push({
-                                id: props.id || (coords ? coords.join(",") : description),
-                                address: props.address || description,
-                                lat: coords ? coords[0] : null,
-                                lon: coords ? coords[1] : null
-                            });
-                        }
-                    } catch(err){}
+            // Фильтруем только ДТП
+            if (/accident/i.test(type)) {
+                results.push({
+                    id: props.id || (coords ? coords.join(",") : props.name || ""),
+                    address: props.name || "Адрес не указан",
+                    lat: coords ? coords[1] : null,
+                    lon: coords ? coords[0] : null,
+                    type: type
                 });
             }
+        });
 
-            return results;
-        } catch (err) {
-            console.error("Ошибка при сборе ДТП:", err);
-            return [];
-        }
+        return results;
     };
 }
 </script>
