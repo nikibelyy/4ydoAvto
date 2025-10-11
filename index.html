@@ -1,21 +1,146 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Мониторинг ДТП — ВызовДТП.рф</title>
+  <meta charset="utf-8" />
+  <title>Карта ДТП — Воронеж</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
   <style>
-    html, body, #map {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
+    html,body,#map { width:100%; height:100vh; margin:0; padding:0; }
+    /* Скрываем панельки, подписи, лишнее UI */
+    .ymaps-2-1-79-controls { display: none !important; }
   </style>
-
-  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=3de168ba-04ed-42f5-bb4e-6abff9b3f317"></script>
-  <script src="traffic_monitor.js"></script>
 </head>
 <body>
   <div id="map"></div>
+
+  <script>
+  /* Глобальная переменная — сюда будем складывать текущие инциденты */
+  window.__TRAFFIC_INCIDENTS = window.__TRAFFIC_INCIDENTS || {};
+
+  ymaps.ready(function () {
+    // Инициализация карты Воронежа
+    const map = new ymaps.Map('map', {
+      center: [51.6755, 39.2089], // примерный центр Воронежа
+      zoom: 12,
+      controls: [] // убираем все контролы
+    });
+
+    // Слой пробок + дорожных событий
+    const trafficProvider = new ymaps.traffic.provider.Actual({}, { infoLayerShown: true });
+    trafficProvider.setMap(map);
+
+    // Вспомогательная: формируем ссылку на точку (маячок)
+    function pointToMapLink(point, zoom=16) {
+      // point: [lon, lat] или [lat, lon] — у нас будут [lon, lat] в данных ниже
+      // Мы сделаем ll=longitude,latitude
+      const lon = point[0];
+      const lat = point[1];
+      return `https://yandex.ru/maps/probki/?ll=${lon},${lat}&z=${zoom}&l=trf%2Ctrfe&trf=info`;
+    }
+
+    // Функция нормализации события, возвращает простой объект
+    function normalizeEvent(ev) {
+      // ev может содержать разные поля, пытаемся извлечь адрес и координаты
+      const addr = ev.address || ev.name || ev.title || (ev.meta && ev.meta.address) || 'Неизвестный адрес';
+      // Попробуем достать точку: ev.point или ev.geometry
+      let point = null;
+      if (ev.point && Array.isArray(ev.point)) {
+        // В некоторых версиях point = [lat, lon]
+        // Проверим — если значение близко к координатам РФ (lat ~ 50..60)
+        const p0 = Number(ev.point[0]);
+        const p1 = Number(ev.point[1]);
+        if (p0 >= 10 && p0 <= 200 && p1 >= -90 && p1 <= 90) {
+          // p0 - lon, p1 - lat
+          point = [p0, p1];
+        } else {
+          // поменяем местами
+          point = [p1, p0];
+        }
+      } else if (ev.geometry && ev.geometry.coordinates) {
+        const c = ev.geometry.coordinates;
+        point = [c[0], c[1]];
+      } else {
+        // fallback: центр карты
+        point = map.getCenter();
+      }
+
+      // Создаём уникальный id (по координатам + типу + адресу)
+      const id = `${(ev.id||ev.__id||'')}_${point[0].toFixed(6)}_${point[1].toFixed(6)}_${(ev.type||'')}`;
+
+      return {
+        id,
+        address: addr,
+        point, // [lon, lat]
+        type: ev.type || ev.typeName || ev.kind || 'unknown',
+        link: pointToMapLink(point)
+      };
+    }
+
+    // Подписываемся на изменение состояния провайдера
+    let lastStateHash = null;
+    trafficProvider.state.events.add('change', function () {
+      try {
+        if (!trafficProvider.state.get('isInited')) return;
+        const events = trafficProvider.state.get('events') || [];
+        // events может быть массивом объектов
+        // Нормализуем каждое событие и сохраняем в window.__TRAFFIC_INCIDENTS
+        events.forEach(ev => {
+          try {
+            const norm = normalizeEvent(ev);
+            // Сохраняем только ДТП (если хотите — можно хранить все типы)
+            // некоторые события имеют type: 'ACCIDENT' или локализованный 'ДТП' — проверим на подстроку
+            const t = String(norm.type).toLowerCase();
+            if (t.includes('accident') || t.includes('дт') || t.includes('дтп')) {
+              window.__TRAFFIC_INCIDENTS[norm.id] = {
+                id: norm.id,
+                address: norm.address,
+                point: norm.point,
+                type: norm.type,
+                link: norm.link,
+                ts: Date.now()
+              };
+            }
+          } catch (e) {
+            console.error('normalize event error', e);
+          }
+        });
+      } catch (err) {
+        console.error('traffic change handler error', err);
+      }
+    });
+
+    // Дополнительно: каждые 30 сек пробуем "подтянуть" состояние, если событие не вызвало change
+    setInterval(() => {
+      try {
+        const events = (trafficProvider.state && trafficProvider.state.get('events')) || [];
+        if (!events.length) return;
+        events.forEach(ev => {
+          const norm = normalizeEvent(ev);
+          const t = String(norm.type).toLowerCase();
+          if (t.includes('accident') || t.includes('дт') || t.includes('дтп')) {
+            window.__TRAFFIC_INCIDENTS[norm.id] = {
+              id: norm.id,
+              address: norm.address,
+              point: norm.point,
+              type: norm.type,
+              link: norm.link,
+              ts: Date.now()
+            };
+          }
+        });
+      } catch(e) { console.error(e); }
+    }, 30_000);
+
+    // Для удобства: функция возврата массива инцидентов (для бота/отладки)
+    window.getTrafficIncidents = function () {
+      try {
+        return Object.values(window.__TRAFFIC_INCIDENTS || {});
+      } catch (e) { return []; }
+    };
+
+    console.log('Map ready; traffic provider set.'); // для отладки
+  });
+  </script>
 </body>
 </html>
