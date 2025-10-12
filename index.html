@@ -25,15 +25,12 @@
 
   <script>
     ymaps.ready(function () {
-      // Координаты центра Воронежа
       const voronezhCenter = [51.673, 39.210];
-      
-      // Оптимальный зум, чтобы увидеть весь город и основные дороги
-      const optimalZoom = 11;
+      const detailedZoom = 14;
 
       const map = new ymaps.Map("map", {
         center: voronezhCenter,
-        zoom: optimalZoom,
+        zoom: detailedZoom,
         controls: []
       });
 
@@ -46,9 +43,13 @@
       const provider = trafficControl.getProvider('traffic#actual');
       provider.state.set('infoLayerShown', true);
 
-      // При каждом изменении — собираем ДТП
+      // Маркеры и зоны для ДТП
+      let incidentMarkers = [];
+      let incidentZones = [];
+
       provider.state.events.add('change', () => {
         if (!provider.state.get('isInited')) return;
+
         const events = provider.state.get('events') || [];
         const incidents = events
           .filter(e => e.type && e.type.toLowerCase().includes('дтп'))
@@ -58,7 +59,44 @@
             coords: e.coords
           }));
 
-        // Отправляем JSON наружу (бот его прочитает)
+        // Удаляем старые маркеры и зоны
+        incidentMarkers.forEach(marker => map.geoObjects.remove(marker));
+        incidentZones.forEach(zone => map.geoObjects.remove(zone));
+        incidentMarkers = [];
+        incidentZones = [];
+
+        if (incidents.length > 0) {
+          const coordsForBounds = [];
+
+          incidents.forEach(i => {
+            // Маркер ДТП
+            const marker = new ymaps.Placemark(i.coords, {
+              balloonContent: `<b>${i.title}</b><br>${i.description}`
+            }, {
+              preset: 'islands#redIcon'
+            });
+            map.geoObjects.add(marker);
+            incidentMarkers.push(marker);
+            coordsForBounds.push(i.coords);
+
+            // Зона вокруг ДТП (полупрозрачный круг, радиус 500 м)
+            const zone = new ymaps.Circle([i.coords, 500], {}, {
+              fillColor: 'rgba(255,0,0,0.2)',
+              strokeColor: 'rgba(255,0,0,0.5)',
+              strokeWidth: 2
+            });
+            map.geoObjects.add(zone);
+            incidentZones.push(zone);
+          });
+
+          // Автоцентрирование и масштаб по всем ДТП
+          map.setBounds(coordsForBounds, { checkZoomRange: true, zoomMargin: 50 });
+        } else {
+          // Если ДТП нет, возвращаемся к центру города
+          map.setCenter(voronezhCenter, detailedZoom);
+        }
+
+        // Отправляем JSON наружу
         window.dispatchEvent(new CustomEvent('trafficUpdate', { detail: incidents }));
       });
     });
