@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <title>Дорожные события Воронежа</title>
+  <title>Карта Воронежа — Пробки и дорожные события</title>
   <style>
     html, body, #map {
       width: 100%;
@@ -12,28 +12,24 @@
       overflow: hidden;
     }
 
-    /* скрываем стандартный интерфейс Яндекс.Карт */
-    .ymaps-2-1-79-controls__control,
-    .ymaps-2-1-79-controls__toolbar {
-      display: none !important;
+    /* Серая панель управления */
+    .ymaps-2-1-79-controls__toolbar,
+    .ymaps-2-1-79-controls__control {
+      background-color: rgba(80, 80, 80, 0.9) !important;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
-    /* Полноэкранный оверлей */
-    #overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.8); /* затемнение */
-      color: #ffffff;
-      font-size: 48px;
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      text-align: center;
+    /* Цвет текста и иконок */
+    .ymaps-2-1-79-traffic-panel,
+    .ymaps-2-1-79-traffic-panel * {
+      color: #fff !important;
+    }
+
+    /* Подсветка активных кнопок */
+    .ymaps-2-1-79-traffic-panel-button_active {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+      border-radius: 4px;
     }
   </style>
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
@@ -41,84 +37,33 @@
 <body>
   <div id="map"></div>
 
-  <!-- Оверлей с сообщением -->
-  <div id="overlay">Ведется разработка бота</div>
-
   <script>
     ymaps.ready(function () {
       const voronezhCenter = [51.673, 39.210];
-      const detailedZoom = 14;
 
       const map = new ymaps.Map("map", {
         center: voronezhCenter,
-        zoom: detailedZoom,
+        zoom: 12,
         controls: []
       });
 
+      // Добавляем и сразу включаем слой пробок
       const trafficControl = new ymaps.control.TrafficControl({
-        state: { trafficShown: true },
-        options: { visible: false }
+        state: {
+          trafficShown: true,      // пробки включены
+          infoLayerShown: true     // дорожные события включены
+        },
+        options: {
+          position: { top: 10, right: 10 }
+        }
       });
+
       map.controls.add(trafficControl);
 
+      // Явно активируем слой пробок при старте
       const provider = trafficControl.getProvider('traffic#actual');
+      provider.state.set('trafficShown', true);
       provider.state.set('infoLayerShown', true);
-
-      let incidentMarkers = [];
-      let incidentZones = [];
-
-      provider.state.events.add('change', () => {
-        if (!provider.state.get('isInited')) return;
-
-        const events = provider.state.get('events') || [];
-        const incidents = events
-          .filter(e => e.type && e.type.toLowerCase().includes('дтп'))
-          .map(e => ({
-            title: e.type,
-            description: e.description,
-            coords: e.coords
-          }));
-
-        // Удаляем старые маркеры и зоны
-        incidentMarkers.forEach(marker => map.geoObjects.remove(marker));
-        incidentZones.forEach(zone => map.geoObjects.remove(zone));
-        incidentMarkers = [];
-        incidentZones = [];
-
-        if (incidents.length > 0) {
-          const coordsForBounds = [];
-
-          incidents.forEach(i => {
-            // Маркер ДТП
-            const marker = new ymaps.Placemark(i.coords, {
-              balloonContent: `<b>${i.title}</b><br>${i.description}`
-            }, {
-              preset: 'islands#redIcon'
-            });
-            map.geoObjects.add(marker);
-            incidentMarkers.push(marker);
-            coordsForBounds.push(i.coords);
-
-            // Зона вокруг ДТП
-            const zone = new ymaps.Circle([i.coords, 500], {}, {
-              fillColor: 'rgba(255,0,0,0.2)',
-              strokeColor: 'rgba(255,0,0,0.5)',
-              strokeWidth: 2
-            });
-            map.geoObjects.add(zone);
-            incidentZones.push(zone);
-          });
-
-          // Автоцентрирование и масштаб по всем ДТП
-          map.setBounds(coordsForBounds, { checkZoomRange: true, zoomMargin: 50 });
-        } else {
-          // Если ДТП нет, возвращаемся к центру города
-          map.setCenter(voronezhCenter, detailedZoom);
-        }
-
-        // Отправляем JSON наружу
-        window.dispatchEvent(new CustomEvent('trafficUpdate', { detail: incidents }));
-      });
     });
   </script>
 </body>
