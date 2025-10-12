@@ -12,16 +12,37 @@
       overflow: hidden;
     }
 
-    /* скрываем интерфейс */
+    /* скрываем стандартный интерфейс Яндекс.Карт */
     .ymaps-2-1-79-controls__control,
     .ymaps-2-1-79-controls__toolbar {
       display: none !important;
+    }
+
+    /* Полноэкранный оверлей */
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8); /* затемнение */
+      color: #ffffff;
+      font-size: 48px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      text-align: center;
     }
   </style>
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 </head>
 <body>
   <div id="map"></div>
+
+  <!-- Оверлей с сообщением -->
+  <div id="overlay">Ведется разработка бота</div>
 
   <script>
     ymaps.ready(function () {
@@ -43,7 +64,6 @@
       const provider = trafficControl.getProvider('traffic#actual');
       provider.state.set('infoLayerShown', true);
 
-      // Маркеры и зоны для ДТП
       let incidentMarkers = [];
       let incidentZones = [];
 
@@ -79,7 +99,7 @@
             incidentMarkers.push(marker);
             coordsForBounds.push(i.coords);
 
-            // Зона вокруг ДТП (полупрозрачный круг, радиус 500 м)
+            // Зона вокруг ДТП
             const zone = new ymaps.Circle([i.coords, 500], {}, {
               fillColor: 'rgba(255,0,0,0.2)',
               strokeColor: 'rgba(255,0,0,0.5)',
