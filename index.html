@@ -19,14 +19,14 @@
       display: none !important;
     }
   </style>
-  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=3de168ba-04ed-42f5-bb4e-6abff9b3f317" type="text/javascript"></script>
 </head>
 <body>
   <div id="map"></div>
 
   <script>
     ymaps.ready(function () {
-      const voronezhCenter = [51.673, 39.210];
+      const voronezhCenter = [51.685962, 39.185699];
 
       const map = new ymaps.Map("map", {
         center: voronezhCenter,
@@ -34,7 +34,7 @@
         controls: []
       });
 
-      // Добавляем слой пробок
+      // Добавляем слой пробок и дорожных событий
       const trafficControl = new ymaps.control.TrafficControl({
         state: {
           trafficShown: true,
@@ -45,7 +45,7 @@
 
       map.controls.add(trafficControl);
 
-      // Активируем пробки и дорожные события
+      // Активируем отображение пробок и событий
       const provider = trafficControl.getProvider('traffic#actual');
       provider.state.set('trafficShown', true);
       provider.state.set('infoLayerShown', true);
