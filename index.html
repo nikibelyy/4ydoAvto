@@ -25,21 +25,16 @@
 
   <script>
     ymaps.ready(function () {
+      // Координаты центра Воронежа
+      const voronezhCenter = [51.673, 39.210];
+      
+      // Оптимальный зум, чтобы увидеть весь город и основные дороги
+      const optimalZoom = 11;
+
       const map = new ymaps.Map("map", {
-        center: [51.67, 39.19], // примерный центр Воронежа
-        zoom: 12,
+        center: voronezhCenter,
+        zoom: optimalZoom,
         controls: []
-      });
-
-      // Можно добавить границы города Воронежа через геообъект
-      const voronezhBounds = [
-        [51.563, 39.08], // юго-запад
-        [51.743, 39.34]  // северо-восток
-      ];
-
-      map.setBounds(voronezhBounds, {
-        checkZoomRange: true,  // чтобы масштаб автоматически подстроился
-        zoomMargin: 20          // отступы, чтобы карта не была впритык
       });
 
       const trafficControl = new ymaps.control.TrafficControl({
