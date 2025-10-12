@@ -12,24 +12,11 @@
       overflow: hidden;
     }
 
-    /* Серая панель управления */
+    /* Скрываем все панели и элементы управления */
     .ymaps-2-1-79-controls__toolbar,
-    .ymaps-2-1-79-controls__control {
-      background-color: rgba(80, 80, 80, 0.9) !important;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-
-    /* Цвет текста и иконок */
-    .ymaps-2-1-79-traffic-panel,
-    .ymaps-2-1-79-traffic-panel * {
-      color: #fff !important;
-    }
-
-    /* Подсветка активных кнопок */
-    .ymaps-2-1-79-traffic-panel-button_active {
-      background-color: rgba(255, 255, 255, 0.2) !important;
-      border-radius: 4px;
+    .ymaps-2-1-79-controls__control,
+    .ymaps-2-1-79-traffic-panel {
+      display: none !important;
     }
   </style>
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
@@ -43,24 +30,22 @@
 
       const map = new ymaps.Map("map", {
         center: voronezhCenter,
-        zoom: 12,
+        zoom: 13,
         controls: []
       });
 
-      // Добавляем и сразу включаем слой пробок
+      // Добавляем слой пробок
       const trafficControl = new ymaps.control.TrafficControl({
         state: {
-          trafficShown: true,      // пробки включены
-          infoLayerShown: true     // дорожные события включены
+          trafficShown: true,
+          infoLayerShown: true
         },
-        options: {
-          position: { top: 10, right: 10 }
-        }
+        options: { visible: false } // панель скрыта
       });
 
       map.controls.add(trafficControl);
 
-      // Явно активируем слой пробок при старте
+      // Активируем пробки и дорожные события
       const provider = trafficControl.getProvider('traffic#actual');
       provider.state.set('trafficShown', true);
       provider.state.set('infoLayerShown', true);
