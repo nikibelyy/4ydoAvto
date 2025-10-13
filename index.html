@@ -1,91 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>MapKit ДТП Воронеж (Ночная карта)</title>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=0b912c39-2b07-41d8-96f5-ceeea79796ff&lang=ru_RU" type="text/javascript"></script>
-    <style>
-        html, body, #map {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-            background-color: #000; /* для плавного перехода к ночному стилю */
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>Пробки — Воронеж</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- ВАЖНО: вставь свой API-ключ MapKit (Yandex.Maps JS) в параметр apikey -->
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=0b912c39-2b07-41d8-96f5-ceeea79796ff" type="text/javascript"></script>
+
+  <style>
+    html, body, #map {
+      width: 100%; height: 100%; margin: 0; padding: 0;
+    }
+    #top {
+      position: absolute; left: 10px; top: 10px; z-index: 1000;
+      background: rgba(255,255,255,0.9); padding: 8px; border-radius: 6px;
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 <body>
-<div id="map"></div>
+  <div id="top">Воронеж — пробки & ДТП (слой: Пробки)</div>
+  <div id="map"></div>
 
-<script>
-ymaps.ready(init);
+  <script>
+    ymaps.ready(init);
+    function init() {
+      // Центр Воронежа (можешь изменить)
+      var center = [51.703947, 39.181225]; // [lat, lon]
+      var map = new ymaps.Map('map', {
+        center: center,
+        zoom: 14,
+        controls: ['zoomControl','fullscreenControl']
+      });
 
-function init() {
-    var map = new ymaps.Map("map", {
-        center: [51.6720, 39.1843], // Воронеж
-        zoom: 12,
-        type: 'yandex#darkMap', // <-- НОЧНОЙ ТИП КАРТЫ
-        controls: ['zoomControl', 'fullscreenControl']
-    });
+      // Добавляем слой пробок (traffic)
+      // TrafficControl добавляет кнопку для включения/выключения пробок.
+      var trafficControl = new ymaps.control.TrafficControl({shown: true});
+      map.controls.add(trafficControl);
 
-    var trafficProvider = new ymaps.traffic.provider.Actual();
-    trafficProvider.setMap(map);
+      // Автоматически включаем отображение пробок
+      trafficControl.show(); // отображение панели
+      trafficControl.getMap().then(function(trafficLayer){
+        // Если нужно — можно работать с trafficLayer
+        console.log('Traffic layer ready', trafficLayer);
+      });
 
-    const sentEventIds = new Set();
-    const geoObjects = new ymaps.GeoObjectCollection();
-
-    map.geoObjects.add(geoObjects);
-
-    async function sendEventToServer(eventData) {
-        try {
-            await fetch('http://80.93.61.59:5000/events', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(eventData)
-            });
-        } catch (e) {
-            console.error('Ошибка при отправке события на сервер:', e);
-        }
+      // Маленькая подсказка: кликая на место можно открыть карту Яндекс.Пробки в новой вкладке
+      map.events.add('click', function (e) {
+        var coords = e.get('coords'); // [lat, lon]
+        var lon = coords[1].toFixed(6);
+        var lat = coords[0].toFixed(6);
+        var url = `https://yandex.ru/maps/probki/?ll=${lon},${lat}&z=${map.getZoom()}&l=trf%2Ctrfe&trf=info`;
+        window.open(url, '_blank');
+      });
     }
-
-    function scanRoadEvents() {
-        trafficProvider.getRoadEvents().then(events => {
-            events.forEach(event => {
-                if (event.type && event.type.toLowerCase().includes('accident')) {
-                    const id = event.id || event.hash;
-                    if (!sentEventIds.has(id)) {
-                        sentEventIds.add(id);
-
-                        const coords = event.geometry.coordinates || [];
-                        const description = event.description || '—';
-
-                        // Добавляем маркер на карту
-                        if (coords.length >= 2) {
-                            const placemark = new ymaps.Placemark(coords, {
-                                balloonContent: `<b>ДТП</b><br>${description}`
-                            }, {
-                                preset: 'islands#redIcon'
-                            });
-                            geoObjects.add(placemark);
-                        }
-
-                        const data = {
-                            id: id,
-                            type: event.type,
-                            description: description,
-                            coords: coords,
-                            detectedAt: new Date().toISOString()
-                        };
-                        sendEventToServer(data);
-                    }
-                }
-            });
-        }).catch(err => console.error(err));
-    }
-
-    // Сканируем каждые 30 секунд
-    setInterval(scanRoadEvents, 30000);
-}
-</script>
+  </script>
 </body>
 </html>
