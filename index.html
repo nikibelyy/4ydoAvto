@@ -17,23 +17,23 @@
 ymaps.ready(init);
 
 function init() {
-    // Создаём карту с центром на Воронеж
     var map = new ymaps.Map("map", {
         center: [51.6720, 39.1843], // Воронеж
         zoom: 12,
         controls: ['zoomControl', 'fullscreenControl']
     });
 
-    // Слой дорожных событий
     var trafficProvider = new ymaps.traffic.provider.Actual();
     trafficProvider.setMap(map);
 
     const sentEventIds = new Set();
+    const geoObjects = new ymaps.GeoObjectCollection();
 
-    // Функция отправки события на сервер
+    map.geoObjects.add(geoObjects);
+
     async function sendEventToServer(eventData) {
         try {
-            await fetch('http://80.93.61.59:5000/events', {  // Ваш IP VPS
+            await fetch('http://80.93.61.59:5000/events', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(eventData)
@@ -43,20 +43,32 @@ function init() {
         }
     }
 
-    // Сканируем дорожные события и фильтруем только ДТП
     function scanRoadEvents() {
         trafficProvider.getRoadEvents().then(events => {
             events.forEach(event => {
-                // Проверяем тип события: только ДТП
                 if (event.type && event.type.toLowerCase().includes('accident')) {
                     const id = event.id || event.hash;
                     if (!sentEventIds.has(id)) {
                         sentEventIds.add(id);
+
+                        const coords = event.geometry.coordinates || [];
+                        const description = event.description || '—';
+
+                        // Добавляем маркер на карту
+                        if (coords.length >= 2) {
+                            const placemark = new ymaps.Placemark(coords, {
+                                balloonContent: `<b>ДТП</b><br>${description}`
+                            }, {
+                                preset: 'islands#redIcon'
+                            });
+                            geoObjects.add(placemark);
+                        }
+
                         const data = {
                             id: id,
                             type: event.type,
-                            description: event.description || '',
-                            coords: event.geometry.coordinates || [],
+                            description: description,
+                            coords: coords,
                             detectedAt: new Date().toISOString()
                         };
                         sendEventToServer(data);
