@@ -24,17 +24,16 @@ function init() {
         controls: ['zoomControl', 'fullscreenControl']
     });
 
-    // Слой дорожных событий (пробки и ДТП)
+    // Слой дорожных событий
     var trafficProvider = new ymaps.traffic.provider.Actual();
     trafficProvider.setMap(map);
 
-    // Массив уже отправленных событий
     const sentEventIds = new Set();
 
     // Функция отправки события на сервер
     async function sendEventToServer(eventData) {
         try {
-            await fetch('/events', {
+            await fetch('http://80.93.61.59:5000/events', {  // Ваш IP VPS
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(eventData)
@@ -44,21 +43,24 @@ function init() {
         }
     }
 
-    // Функция сканирования дорожных событий
+    // Сканируем дорожные события и фильтруем только ДТП
     function scanRoadEvents() {
         trafficProvider.getRoadEvents().then(events => {
             events.forEach(event => {
-                const id = event.id || event.hash;
-                if (!sentEventIds.has(id)) {
-                    sentEventIds.add(id);
-                    const data = {
-                        id: id,
-                        type: event.type || 'unknown',
-                        description: event.description || '',
-                        coords: event.geometry.coordinates || [],
-                        detectedAt: new Date().toISOString()
-                    };
-                    sendEventToServer(data);
+                // Проверяем тип события: только ДТП
+                if (event.type && event.type.toLowerCase().includes('accident')) {
+                    const id = event.id || event.hash;
+                    if (!sentEventIds.has(id)) {
+                        sentEventIds.add(id);
+                        const data = {
+                            id: id,
+                            type: event.type,
+                            description: event.description || '',
+                            coords: event.geometry.coordinates || [],
+                            detectedAt: new Date().toISOString()
+                        };
+                        sendEventToServer(data);
+                    }
                 }
             });
         }).catch(err => console.error(err));
