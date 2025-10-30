@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>вызовдтп.рф — Аварийный комиссар</title>
+  <title>вызовдтп.рф — Аварийный комиссар Воронеж</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
@@ -62,9 +62,37 @@
       flex-direction: column;
       text-align: center;
       padding: 0 20px;
-      background: linear-gradient(135deg, #1a1f2e 0%, #10141f 100%);
-      background-attachment: fixed;
-      animation: fadeIn 1.5s ease forwards;
+      background: radial-gradient(circle at center, #1a1f2e 0%, #0c0f15 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Анимированные фоны */
+    .hero::before, .hero::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: #ff3838;
+      border-radius: 50%;
+      opacity: 0.2;
+      animation: float 6s ease-in-out infinite alternate;
+    }
+
+    .hero::before {
+      top: 10%;
+      left: 10%;
+    }
+
+    .hero::after {
+      bottom: 10%;
+      right: 10%;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-30px); }
     }
 
     .hero h2 {
@@ -72,12 +100,14 @@
       font-weight: 700;
       line-height: 1.3;
       margin-bottom: 20px;
+      animation: fadeIn 1.5s ease forwards;
     }
 
     .hero p {
       font-size: 1.2rem;
       color: #ccc;
       margin-bottom: 40px;
+      animation: fadeInUp 2s ease forwards;
     }
 
     .btn {
@@ -101,6 +131,25 @@
       animation: fadeInUp 1s ease forwards;
     }
 
+    h2.section-title {
+      text-align: center;
+      font-size: 2rem;
+      color: #ff3838;
+      margin-bottom: 60px;
+    }
+
+    .about {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 1.6;
+      color: #ccc;
+    }
+
+    .about strong {
+      color: #ff3838;
+    }
+
     .services {
       display: flex;
       flex-wrap: wrap;
@@ -115,6 +164,7 @@
       text-align: center;
       flex: 1 1 300px;
       transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeIn 1s ease forwards;
     }
 
     .service-card:hover {
@@ -132,6 +182,28 @@
       color: #ccc;
       font-size: 1rem;
       line-height: 1.5;
+    }
+
+    .contact {
+      text-align: center;
+    }
+
+    .contact p {
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+
+    .contact a {
+      color: #ff3838;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .region {
+      margin-top: 30px;
+      font-size: 1.1rem;
+      color: #bbb;
+      animation: fadeIn 1.5s ease forwards;
     }
 
     footer {
@@ -196,6 +268,7 @@
   <header>
     <h1>вызовдтп.рф</h1>
     <nav>
+      <a href="#about">О нас</a>
       <a href="#services">Услуги</a>
       <a href="#contacts">Контакты</a>
     </nav>
@@ -204,35 +277,52 @@
   <section class="hero">
     <h2>Аварийный комиссар<br>в любое время и в любом месте</h2>
     <p>Помощь при ДТП 24/7 — быстро, профессионально и с заботой о вас</p>
-    <a href="tel:+79957192523" class="btn">Вызвать комиссара</a>
+    <a href="tel:+79957192523" class="btn">📞 Вызвать комиссара</a>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title">О компании</h2>
+    <div class="about">
+      <p>
+        Служба <strong>вызовдтп.рф</strong> работает по <strong>Воронежу и Воронежской области</strong>.
+        Мы помогаем автомобилистам в самых сложных ситуациях на дороге.
+        Наши аварийные комиссары приедут к вам быстро, оформят документы и обеспечат юридическую поддержку.
+      </p>
+      <p class="region">Работаем круглосуточно — 24/7 по всему региону!</p>
+    </div>
   </section>
 
   <section id="services">
-    <h2 style="text-align:center; margin-bottom:50px;">Наши услуги</h2>
+    <h2 class="section-title">Наши услуги</h2>
     <div class="services">
       <div class="service-card">
-        <h3>Оформление ДТП</h3>
-        <p>Профессиональная помощь в оформлении документов без участия ГИБДД. Всё сделаем правильно и быстро.</p>
+        <h3>Оформление ДТП без ГИБДД</h3>
+        <p>Помогаем правильно оформить происшествие и подготовить документы для страховой.</p>
       </div>
       <div class="service-card">
-        <h3>Консультации по ОСАГО и КАСКО</h3>
-        <p>Подскажем, как действовать, чтобы получить максимальную выплату от страховой компании.</p>
+        <h3>Консультации по страховым случаям</h3>
+        <p>Разъясним ваши права и подскажем, как получить максимальную выплату по ОСАГО и КАСКО.</p>
       </div>
       <div class="service-card">
-        <h3>Фото и видеофиксация</h3>
-        <p>Сделаем все необходимые фото- и видео материалы для страховой и защиты ваших прав.</p>
+        <h3>Фото- и видеофиксация</h3>
+        <p>Сделаем профессиональные снимки и материалы для страховой и суда.</p>
+      </div>
+      <div class="service-card">
+        <h3>Выезд юриста</h3>
+        <p>При необходимости — выезд юриста для защиты ваших интересов.</p>
       </div>
     </div>
   </section>
 
-  <section id="contacts" style="text-align:center;">
-    <h2>Контакты</h2>
-    <p style="margin-top:20px;">Вызов комиссара: <a href="tel:+79957192523" style="color:#ff3838;">+7 (995) 719-25-23</a></p>
-    <p>Консультации: <a href="tel:+79518703934" style="color:#ff3838;">+7 951 870 39 34</a></p>
+  <section id="contacts" class="contact">
+    <h2 class="section-title">Контакты</h2>
+    <p>📞 Вызов комиссара: <a href="tel:+79957192523">+7 (995) 719-25-23</a></p>
+    <p>📋 Консультации: <a href="tel:+79518703934">+7 951 870 39 34</a></p>
+    <p class="region">Работаем по Воронежу и Воронежской области</p>
   </section>
 
   <footer>
-    <p>© 2025 вызовдтп.рф | Все права защищены</p>
+    <p>© 2025 вызовдтп.рф | Работаем по Воронежу и области | Все права защищены</p>
   </footer>
 
 </body>
