@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>вызовдтп.рф — Аварийный комиссар</title>
+  <title>вызовдтп.рф — Аварийный комиссар Воронеж</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
@@ -16,7 +16,7 @@
 
     body {
       font-family: 'Montserrat', sans-serif;
-      background: #0e1117;
+      background: radial-gradient(circle at top, #141824 0%, #0e1117 100%);
       color: #fff;
       overflow-x: hidden;
     }
@@ -31,7 +31,8 @@
       justify-content: space-between;
       align-items: center;
       background: rgba(15, 15, 20, 0.8);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 56, 56, 0.2);
       z-index: 1000;
       animation: fadeInDown 1s ease forwards;
     }
@@ -40,6 +41,7 @@
       font-weight: 800;
       color: #ff3838;
       letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(255, 56, 56, 0.4);
     }
 
     nav a {
@@ -47,11 +49,23 @@
       text-decoration: none;
       margin-left: 30px;
       font-weight: 500;
+      position: relative;
       transition: 0.3s;
     }
 
-    nav a:hover {
-      color: #ff3838;
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #ff3838;
+      left: 0;
+      bottom: -4px;
+      transition: 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
     }
 
     .hero {
@@ -63,42 +77,46 @@
       text-align: center;
       padding: 0 20px;
       background: linear-gradient(135deg, #1a1f2e 0%, #10141f 100%);
+      animation: fadeIn 2s ease forwards;
       background-attachment: fixed;
-      animation: fadeIn 1.5s ease forwards;
     }
 
     .hero h2 {
       font-size: 2.8rem;
-      font-weight: 700;
+      font-weight: 800;
       line-height: 1.3;
       margin-bottom: 20px;
+      animation: slideIn 1.5s ease;
     }
 
     .hero p {
       font-size: 1.2rem;
       color: #ccc;
       margin-bottom: 40px;
+      animation: fadeIn 2.5s ease;
     }
 
     .btn {
       background: #ff3838;
       color: #fff;
-      padding: 15px 30px;
+      padding: 15px 40px;
       border-radius: 50px;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       transition: 0.3s;
       animation: pulse 2s infinite;
     }
 
     .btn:hover {
       background: #ff5050;
-      transform: scale(1.05);
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255, 56, 56, 0.6);
     }
 
     section {
       padding: 100px 10%;
-      animation: fadeInUp 1s ease forwards;
+      animation: fadeInUp 1.2s ease forwards;
     }
 
     .services {
@@ -109,16 +127,18 @@
     }
 
     .service-card {
-      background: #181c25;
+      background: rgba(24, 28, 37, 0.85);
       padding: 40px;
       border-radius: 15px;
       text-align: center;
       flex: 1 1 300px;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.4s, box-shadow 0.4s;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 56, 56, 0.15);
     }
 
     .service-card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-10px) scale(1.03);
       box-shadow: 0 10px 30px rgba(255, 56, 56, 0.3);
     }
 
@@ -134,11 +154,33 @@
       line-height: 1.5;
     }
 
+    .region {
+      background: linear-gradient(135deg, #141824, #0e1117);
+      text-align: center;
+      padding: 80px 10%;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .region h2 {
+      color: #ff3838;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .region p {
+      color: #bbb;
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
     footer {
       text-align: center;
       padding: 40px 10%;
       background: #10141f;
       color: #777;
+      border-top: 1px solid rgba(255, 56, 56, 0.2);
     }
 
     footer a {
@@ -148,8 +190,8 @@
 
     /* Анимации */
     @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
 
     @keyframes fadeInUp {
@@ -159,6 +201,11 @@
 
     @keyframes fadeInDown {
       from {opacity: 0; transform: translateY(-40px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes slideIn {
+      from {opacity: 0; transform: translateY(30px);}
       to {opacity: 1; transform: translateY(0);}
     }
 
@@ -172,19 +219,15 @@
       header {
         padding: 15px 5%;
       }
-
       nav {
         display: none;
       }
-
       .hero h2 {
         font-size: 2rem;
       }
-
       .hero p {
         font-size: 1rem;
       }
-
       .service-card {
         padding: 25px;
       }
@@ -197,6 +240,7 @@
     <h1>вызовдтп.рф</h1>
     <nav>
       <a href="#services">Услуги</a>
+      <a href="#region">Регион</a>
       <a href="#contacts">Контакты</a>
     </nav>
   </header>
@@ -216,23 +260,34 @@
       </div>
       <div class="service-card">
         <h3>Консультации по ОСАГО и КАСКО</h3>
-        <p>Подскажем, как действовать, чтобы получить максимальную выплату от страховой компании.</p>
+        <p>Поможем вам получить максимальную страховую выплату и подскажем, как действовать в сложных ситуациях.</p>
       </div>
       <div class="service-card">
         <h3>Фото и видеофиксация</h3>
-        <p>Сделаем все необходимые фото- и видео материалы для страховой и защиты ваших прав.</p>
+        <p>Сделаем все необходимые фото- и видеоматериалы для страховой компании и защиты ваших интересов.</p>
+      </div>
+      <div class="service-card">
+        <h3>Помощь на месте</h3>
+        <p>Приедем быстро, разберём ситуацию и поможем оформить всё правильно без лишних нервов и ошибок.</p>
       </div>
     </div>
+  </section>
+
+  <section id="region" class="region">
+    <h2>Работаем по Воронежу и области</h2>
+    <p>Наша команда аварийных комиссаров работает по всему Воронежу и Воронежской области.  
+      Независимо от того, где произошло ДТП — в черте города или за его пределами, мы приедем быстро, окажем поддержку и поможем оформить всё на месте.</p>
   </section>
 
   <section id="contacts" style="text-align:center;">
     <h2>Контакты</h2>
     <p style="margin-top:20px;">Вызов комиссара: <a href="tel:+79957192523" style="color:#ff3838;">+7 (995) 719-25-23</a></p>
     <p>Консультации: <a href="tel:+79518703934" style="color:#ff3838;">+7 951 870 39 34</a></p>
+    <p style="margin-top:20px; color:#bbb;">Работаем круглосуточно, без выходных</p>
   </section>
 
   <footer>
-    <p>© 2025 вызовдтп.рф | Все права защищены</p>
+    <p>© 2025 вызовдтп.рф — Аварийный комиссар Воронеж | Все права защищены</p>
   </footer>
 
 </body>
