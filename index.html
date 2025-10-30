@@ -16,7 +16,7 @@
 
     body {
       font-family: 'Montserrat', sans-serif;
-      background: radial-gradient(circle at top, #141824 0%, #0e1117 100%);
+      background: radial-gradient(circle at center, #0a0a0a 0%, #050505 100%);
       color: #fff;
       overflow-x: hidden;
     }
@@ -30,9 +30,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(15, 15, 20, 0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 56, 56, 0.2);
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       z-index: 1000;
       animation: fadeInDown 1s ease forwards;
     }
@@ -41,7 +41,7 @@
       font-weight: 800;
       color: #ff3838;
       letter-spacing: 1px;
-      text-shadow: 0 0 10px rgba(255, 56, 56, 0.4);
+      text-shadow: 0 0 20px rgba(255, 56, 56, 0.6);
     }
 
     nav a {
@@ -76,47 +76,75 @@
       flex-direction: column;
       text-align: center;
       padding: 0 20px;
-      background: linear-gradient(135deg, #1a1f2e 0%, #10141f 100%);
-      animation: fadeIn 2s ease forwards;
-      background-attachment: fixed;
+      background: linear-gradient(160deg, rgba(10,10,10,0.9), rgba(20,20,20,0.95)), 
+                  url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
     }
 
     .hero h2 {
-      font-size: 2.8rem;
+      font-size: 3rem;
       font-weight: 800;
-      line-height: 1.3;
       margin-bottom: 20px;
-      animation: slideIn 1.5s ease;
+      text-shadow: 0 0 20px rgba(255, 56, 56, 0.6);
+      animation: fadeIn 2s ease;
     }
 
     .hero p {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       color: #ccc;
       margin-bottom: 40px;
-      animation: fadeIn 2.5s ease;
+      animation: fadeInUp 2s ease;
     }
 
     .btn {
-      background: #ff3838;
+      background: linear-gradient(90deg, #ff3838, #ff5c5c);
       color: #fff;
-      padding: 15px 40px;
+      padding: 18px 50px;
       border-radius: 50px;
       text-decoration: none;
       font-weight: 700;
       letter-spacing: 0.5px;
       transition: 0.3s;
+      position: relative;
+      box-shadow: 0 0 25px rgba(255, 56, 56, 0.6);
       animation: pulse 2s infinite;
     }
 
+    .btn::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #ff3838, transparent);
+      opacity: 0.4;
+      filter: blur(6px);
+      border-radius: 50%;
+    }
+
     .btn:hover {
-      background: #ff5050;
       transform: scale(1.08);
-      box-shadow: 0 0 20px rgba(255, 56, 56, 0.6);
+      box-shadow: 0 0 40px rgba(255, 56, 56, 0.8);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
     }
 
     section {
       padding: 100px 10%;
-      animation: fadeInUp 1.2s ease forwards;
+      animation: fadeInUp 1s ease forwards;
     }
 
     .services {
@@ -127,25 +155,37 @@
     }
 
     .service-card {
-      background: rgba(24, 28, 37, 0.85);
+      background: rgba(20, 20, 20, 0.9);
       padding: 40px;
       border-radius: 15px;
       text-align: center;
       flex: 1 1 300px;
       transition: transform 0.4s, box-shadow 0.4s;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 56, 56, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 10%;
+      width: 80%;
+      height: 2px;
+      background: rgba(255,255,255,0.2);
+      filter: blur(4px);
     }
 
     .service-card:hover {
       transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 10px 30px rgba(255, 56, 56, 0.3);
+      box-shadow: 0 15px 40px rgba(255, 56, 56, 0.3);
     }
 
     .service-card h3 {
       color: #ff3838;
       margin-bottom: 15px;
       font-size: 1.4rem;
+      text-shadow: 0 0 10px rgba(255, 56, 56, 0.4);
     }
 
     .service-card p {
@@ -155,16 +195,18 @@
     }
 
     .region {
-      background: linear-gradient(135deg, #141824, #0e1117);
+      background: radial-gradient(circle at center, #111, #090909);
       text-align: center;
       padding: 80px 10%;
       animation: fadeIn 1.5s ease;
+      box-shadow: inset 0 0 100px rgba(255, 56, 56, 0.05);
     }
 
     .region h2 {
       color: #ff3838;
       font-size: 2rem;
       margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(255, 56, 56, 0.4);
     }
 
     .region p {
@@ -178,14 +220,39 @@
     footer {
       text-align: center;
       padding: 40px 10%;
-      background: #10141f;
+      background: #080808;
       color: #777;
-      border-top: 1px solid rgba(255, 56, 56, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     footer a {
       color: #ff3838;
       text-decoration: none;
+    }
+
+    .call-btn {
+      position: fixed;
+      right: 25px;
+      bottom: 25px;
+      background: #ff3838;
+      color: #fff;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 0 30px rgba(255, 56, 56, 0.6);
+      animation: pulse 2s infinite;
+      z-index: 9999;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .call-btn:hover {
+      transform: scale(1.1);
+      background: #ff5050;
     }
 
     /* Анимации */
@@ -204,33 +271,18 @@
       to {opacity: 1; transform: translateY(0);}
     }
 
-    @keyframes slideIn {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
     @keyframes pulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(255, 56, 56, 0.4); }
-      50% { box-shadow: 0 0 0 20px rgba(255, 56, 56, 0); }
+      50% { box-shadow: 0 0 0 25px rgba(255, 56, 56, 0); }
     }
 
-    /* Адаптив */
     @media (max-width: 768px) {
-      header {
-        padding: 15px 5%;
-      }
-      nav {
-        display: none;
-      }
-      .hero h2 {
-        font-size: 2rem;
-      }
-      .hero p {
-        font-size: 1rem;
-      }
-      .service-card {
-        padding: 25px;
-      }
+      header { padding: 15px 5%; }
+      nav { display: none; }
+      .hero h2 { font-size: 2.2rem; }
+      .hero p { font-size: 1rem; }
+      .service-card { padding: 25px; }
+      .call-btn { width: 60px; height: 60px; font-size: 26px; }
     }
   </style>
 </head>
@@ -246,9 +298,9 @@
   </header>
 
   <section class="hero">
-    <h2>Аварийный комиссар<br>в любое время и в любом месте</h2>
-    <p>Помощь при ДТП 24/7 — быстро, профессионально и с заботой о вас</p>
-    <a href="tel:+79957192523" class="btn">Вызвать комиссара</a>
+    <h2>Аварийный комиссар<br>Воронеж и область</h2>
+    <p>Круглосуточная помощь при ДТП — без паники, без ошибок, без ожидания</p>
+    <a href="tel:+79957192523" class="btn">📞 Позвонить комиссару</a>
   </section>
 
   <section id="services">
@@ -256,39 +308,41 @@
     <div class="services">
       <div class="service-card">
         <h3>Оформление ДТП</h3>
-        <p>Профессиональная помощь в оформлении документов без участия ГИБДД. Всё сделаем правильно и быстро.</p>
+        <p>Помощь в правильном оформлении ДТП без участия ГИБДД. Всё сделаем быстро и законно.</p>
       </div>
       <div class="service-card">
         <h3>Консультации по ОСАГО и КАСКО</h3>
-        <p>Поможем вам получить максимальную страховую выплату и подскажем, как действовать в сложных ситуациях.</p>
+        <p>Расскажем, как получить максимальную выплату и не попасть в ловушки страховой.</p>
       </div>
       <div class="service-card">
         <h3>Фото и видеофиксация</h3>
-        <p>Сделаем все необходимые фото- и видеоматериалы для страховой компании и защиты ваших интересов.</p>
+        <p>Создадим необходимые доказательства для страховой и защиты ваших интересов.</p>
       </div>
       <div class="service-card">
         <h3>Помощь на месте</h3>
-        <p>Приедем быстро, разберём ситуацию и поможем оформить всё правильно без лишних нервов и ошибок.</p>
+        <p>Выезжаем мгновенно, решаем все вопросы, сохраняем ваше спокойствие.</p>
       </div>
     </div>
   </section>
 
   <section id="region" class="region">
     <h2>Работаем по Воронежу и области</h2>
-    <p>Наша команда аварийных комиссаров работает по всему Воронежу и Воронежской области.  
-      Независимо от того, где произошло ДТП — в черте города или за его пределами, мы приедем быстро, окажем поддержку и поможем оформить всё на месте.</p>
+    <p>Наша команда оперативно выезжает на место ДТП в любую точку Воронежа и области.  
+      Мы ценим ваше время и безопасность — приедем, оформим, объясним и поддержим.</p>
   </section>
 
   <section id="contacts" style="text-align:center;">
     <h2>Контакты</h2>
     <p style="margin-top:20px;">Вызов комиссара: <a href="tel:+79957192523" style="color:#ff3838;">+7 (995) 719-25-23</a></p>
     <p>Консультации: <a href="tel:+79518703934" style="color:#ff3838;">+7 951 870 39 34</a></p>
-    <p style="margin-top:20px; color:#bbb;">Работаем круглосуточно, без выходных</p>
+    <p style="margin-top:20px; color:#bbb;">Работаем 24/7 без выходных</p>
   </section>
 
   <footer>
     <p>© 2025 вызовдтп.рф — Аварийный комиссар Воронеж | Все права защищены</p>
   </footer>
+
+  <a href="tel:+79957192523" class="call-btn">📞</a>
 
 </body>
 </html>
