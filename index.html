@@ -34,13 +34,11 @@
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       z-index: 1000;
-      animation: fadeInDown 1s ease forwards;
     }
 
     header h1 {
       font-weight: 800;
       color: #ff3838;
-      letter-spacing: 1px;
       text-shadow: 0 0 20px rgba(255, 56, 56, 0.6);
     }
 
@@ -75,8 +73,7 @@
       justify-content: center;
       flex-direction: column;
       text-align: center;
-      padding: 0 20px;
-      background: linear-gradient(160deg, rgba(10,10,10,0.9), rgba(20,20,20,0.95)), 
+      background: linear-gradient(160deg, rgba(10,10,10,0.9), rgba(20,20,20,0.95)),
                   url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
       position: relative;
     }
@@ -96,14 +93,12 @@
       font-weight: 800;
       margin-bottom: 20px;
       text-shadow: 0 0 20px rgba(255, 56, 56, 0.6);
-      animation: fadeIn 2s ease;
     }
 
     .hero p {
       font-size: 1.3rem;
       color: #ccc;
       margin-bottom: 40px;
-      animation: fadeInUp 2s ease;
     }
 
     .btn {
@@ -120,31 +115,13 @@
       animation: pulse 2s infinite;
     }
 
-    .btn::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, #ff3838, transparent);
-      opacity: 0.4;
-      filter: blur(6px);
-      border-radius: 50%;
-    }
-
     .btn:hover {
       transform: scale(1.08);
       box-shadow: 0 0 40px rgba(255, 56, 56, 0.8);
     }
 
-    .btn:active {
-      transform: scale(0.95);
-    }
-
     section {
       padding: 100px 10%;
-      animation: fadeInUp 1s ease forwards;
     }
 
     .services {
@@ -165,17 +142,6 @@
       overflow: hidden;
     }
 
-    .service-card::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 10%;
-      width: 80%;
-      height: 2px;
-      background: rgba(255,255,255,0.2);
-      filter: blur(4px);
-    }
-
     .service-card:hover {
       transform: translateY(-10px) scale(1.03);
       box-shadow: 0 15px 40px rgba(255, 56, 56, 0.3);
@@ -188,17 +154,10 @@
       text-shadow: 0 0 10px rgba(255, 56, 56, 0.4);
     }
 
-    .service-card p {
-      color: #ccc;
-      font-size: 1rem;
-      line-height: 1.5;
-    }
-
     .region {
       background: radial-gradient(circle at center, #111, #090909);
       text-align: center;
       padding: 80px 10%;
-      animation: fadeIn 1.5s ease;
       box-shadow: inset 0 0 100px rgba(255, 56, 56, 0.05);
     }
 
@@ -206,15 +165,6 @@
       color: #ff3838;
       font-size: 2rem;
       margin-bottom: 20px;
-      text-shadow: 0 0 20px rgba(255, 56, 56, 0.4);
-    }
-
-    .region p {
-      color: #bbb;
-      font-size: 1.1rem;
-      max-width: 700px;
-      margin: 0 auto;
-      line-height: 1.6;
     }
 
     footer {
@@ -230,59 +180,57 @@
       text-decoration: none;
     }
 
-    .call-btn {
+    /* 🔵 Новая кнопка консультации */
+    .consult-btn {
       position: fixed;
       right: 25px;
       bottom: 25px;
-      background: #ff3838;
+      background: linear-gradient(90deg, #3dbfff, #66e0ff);
       color: #fff;
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
+      font-weight: 700;
+      border-radius: 50px;
+      padding: 16px 32px;
+      text-decoration: none;
+      box-shadow: 0 0 25px rgba(102, 224, 255, 0.6);
+      backdrop-filter: blur(8px);
+      animation: pulseBlue 2.5s infinite;
+      transition: 0.3s;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      box-shadow: 0 0 30px rgba(255, 56, 56, 0.6);
-      animation: pulse 2s infinite;
+      gap: 10px;
       z-index: 9999;
-      text-decoration: none;
-      transition: 0.3s;
     }
 
-    .call-btn:hover {
-      transform: scale(1.1);
-      background: #ff5050;
+    .consult-btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 0 40px rgba(102, 224, 255, 0.8);
     }
 
-    /* Анимации */
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
+    .consult-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 10%;
+      width: 80%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      filter: blur(5px);
+      border-radius: 50%;
     }
 
-    @keyframes fadeInUp {
-      from {opacity: 0; transform: translateY(40px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    @keyframes fadeInDown {
-      from {opacity: 0; transform: translateY(-40px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 56, 56, 0.4); }
-      50% { box-shadow: 0 0 0 25px rgba(255, 56, 56, 0); }
+    /* 🔵 Анимация синего пульса */
+    @keyframes pulseBlue {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(102, 224, 255, 0.5); }
+      50% { box-shadow: 0 0 0 25px rgba(102, 224, 255, 0); }
     }
 
     @media (max-width: 768px) {
-      header { padding: 15px 5%; }
-      nav { display: none; }
-      .hero h2 { font-size: 2.2rem; }
-      .hero p { font-size: 1rem; }
-      .service-card { padding: 25px; }
-      .call-btn { width: 60px; height: 60px; font-size: 26px; }
+      .consult-btn {
+        bottom: 15px;
+        right: 15px;
+        padding: 14px 26px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -300,7 +248,7 @@
   <section class="hero">
     <h2>Аварийный комиссар<br>Воронеж и область</h2>
     <p>Круглосуточная помощь при ДТП — без паники, без ошибок, без ожидания</p>
-    <a href="tel:+79957192523" class="btn">📞 Позвонить комиссару</a>
+    <a href="tel:+79957192523" class="btn">🚨 Вызвать комиссара</a>
   </section>
 
   <section id="services">
@@ -308,41 +256,41 @@
     <div class="services">
       <div class="service-card">
         <h3>Оформление ДТП</h3>
-        <p>Помощь в правильном оформлении ДТП без участия ГИБДД. Всё сделаем быстро и законно.</p>
+        <p>Помощь в оформлении ДТП без участия ГИБДД. Всё сделаем быстро и правильно.</p>
       </div>
       <div class="service-card">
         <h3>Консультации по ОСАГО и КАСКО</h3>
-        <p>Расскажем, как получить максимальную выплату и не попасть в ловушки страховой.</p>
+        <p>Объясним, как получить максимальную выплату от страховой компании.</p>
       </div>
       <div class="service-card">
         <h3>Фото и видеофиксация</h3>
-        <p>Создадим необходимые доказательства для страховой и защиты ваших интересов.</p>
+        <p>Сделаем все материалы для страховой и защиты ваших прав.</p>
       </div>
       <div class="service-card">
         <h3>Помощь на месте</h3>
-        <p>Выезжаем мгновенно, решаем все вопросы, сохраняем ваше спокойствие.</p>
+        <p>Приедем мгновенно, решим всё на месте, сохраним ваше спокойствие.</p>
       </div>
     </div>
   </section>
 
   <section id="region" class="region">
     <h2>Работаем по Воронежу и области</h2>
-    <p>Наша команда оперативно выезжает на место ДТП в любую точку Воронежа и области.  
-      Мы ценим ваше время и безопасность — приедем, оформим, объясним и поддержим.</p>
+    <p>Наши специалисты выезжают на место ДТП в любую точку Воронежской области.  
+    Мы приедем, всё оформим и поддержим вас в любой ситуации.</p>
   </section>
 
   <section id="contacts" style="text-align:center;">
     <h2>Контакты</h2>
     <p style="margin-top:20px;">Вызов комиссара: <a href="tel:+79957192523" style="color:#ff3838;">+7 (995) 719-25-23</a></p>
-    <p>Консультации: <a href="tel:+79518703934" style="color:#ff3838;">+7 951 870 39 34</a></p>
-    <p style="margin-top:20px; color:#bbb;">Работаем 24/7 без выходных</p>
+    <p>Консультации: <a href="tel:+79518703934" style="color:#66e0ff;">+7 951 870-39-34</a></p>
   </section>
 
   <footer>
     <p>© 2025 вызовдтп.рф — Аварийный комиссар Воронеж | Все права защищены</p>
   </footer>
 
-  <a href="tel:+79957192523" class="call-btn">📞</a>
+  <!-- 🔵 Плавающая кнопка консультации -->
+  <a href="tel:+79518703934" class="consult-btn">📞 Консультация</a>
 
 </body>
 </html>
