@@ -7,232 +7,112 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: #070707;
-      color: #fff;
-      overflow-x: hidden;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body { font-family: 'Montserrat', sans-serif; background: #070707; color: #fff; overflow-x: hidden; }
 
     header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 25px 10%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      background: rgba(10, 10, 10, 0.75);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      z-index: 1000;
+      position: fixed; top: 0; left: 0; width: 100%; padding: 25px 10%;
+      display: flex; justify-content: flex-start; align-items: center;
+      background: rgba(10, 10, 10, 0.75); backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 1000;
     }
-
     header h1 {
-      font-weight: 800;
-      color: #ff4040;
-      font-size: 1.6rem;
-      letter-spacing: 1px;
-      text-shadow: 0 0 25px rgba(255, 64, 64, 0.6);
+      font-weight: 800; color: #ff4040; font-size: 1.6rem;
+      letter-spacing: 1px; text-shadow: 0 0 25px rgba(255,64,64,0.6);
     }
 
     .hero {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(10,10,10,0.9)),
-                  url('https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-      position: relative;
-      overflow: hidden;
+      position: relative; height: 100vh; overflow: hidden; text-align: center;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 250px;
-      background: linear-gradient(to top, rgba(0,0,0,1), transparent);
+    /* Видео-фон */
+    .hero video {
+      position: absolute; top: 50%; left: 50%;
+      width: 100%; height: 100%; object-fit: cover;
+      transform: translate(-50%, -50%); z-index: 0;
     }
 
-    .hero h2 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 25px;
-      text-shadow: 0 0 40px rgba(255, 56, 56, 0.7);
+    .hero-content {
+      position: relative; z-index: 2; padding: 0 20px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;
+    }
+
+    .hero-content h2 {
+      font-size: 3rem; font-weight: 800; margin-bottom: 25px;
+      text-shadow: 0 0 40px rgba(255,56,56,0.7);
       animation: fadeIn 1.5s ease;
     }
 
-    .hero p {
-      font-size: 1.3rem;
-      color: #ccc;
-      margin-bottom: 50px;
-      max-width: 600px;
+    .hero-content p {
+      font-size: 1.3rem; color: #ccc; margin-bottom: 50px; max-width: 600px;
       animation: fadeIn 2s ease;
     }
 
     .btn {
-      background: linear-gradient(90deg, #ff3030, #ff5757);
-      color: #fff;
-      padding: 20px 55px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 0.5px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 25px rgba(255, 56, 56, 0.7);
-      transition: 0.3s;
-      animation: pulse 2s infinite;
+      background: linear-gradient(90deg,#ff3030,#ff5757); color:#fff;
+      padding:20px 55px; border-radius:50px; font-weight:700; font-size:1.1rem;
+      letter-spacing:0.5px; position: relative; overflow:hidden;
+      box-shadow:0 0 25px rgba(255,56,56,0.7); transition:0.3s; animation:pulse 2s infinite;
+      text-decoration:none;
     }
 
-    .btn:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 45px rgba(255, 80, 80, 0.8);
-    }
+    .btn:hover { transform: scale(1.08); box-shadow:0 0 45px rgba(255,80,80,0.8); }
 
-    .btn::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 10%;
-      width: 80%;
-      height: 5px;
-      background: rgba(255,255,255,0.4);
-      filter: blur(5px);
-      border-radius: 50%;
+    /* Мигающие мигалки поверх видео */
+    .light-left, .light-right {
+      position: absolute; top: 60px; width: 50px; height: 20px; border-radius: 50%;
+      z-index: 2; animation: blink 1s infinite alternate;
     }
+    .light-left { left: 45%; background: red; }
+    .light-right { left: 55%; background: blue; animation-delay: 0.5s; }
 
-    section {
-      padding: 100px 10%;
-    }
-
-    .services {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
-    }
-
-    .service-card {
-      background: rgba(20, 20, 20, 0.9);
-      padding: 45px;
-      border-radius: 15px;
-      text-align: center;
-      flex: 1 1 300px;
-      transition: transform 0.4s, box-shadow 0.4s;
-      box-shadow: inset 0 0 20px rgba(255, 56, 56, 0.05);
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 20px 50px rgba(255, 56, 56, 0.3);
-    }
-
-    .service-card h3 {
-      color: #ff4040;
-      margin-bottom: 15px;
-      font-size: 1.4rem;
-      text-shadow: 0 0 10px rgba(255, 56, 56, 0.5);
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 10%;
-      background: #0a0a0a;
-      color: #777;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    footer a {
-      color: #ff4040;
-      text-decoration: none;
-    }
-
-    /* 💬 Кнопка консультации */
-    .consult-btn {
-      position: fixed;
-      right: 25px;
-      bottom: 25px;
-      background: linear-gradient(100deg, #3dcfff, #6effff);
-      color: #fff;
-      font-weight: 700;
-      border-radius: 50px;
-      padding: 18px 34px;
-      text-decoration: none;
-      box-shadow: 0 0 25px rgba(110, 255, 255, 0.6);
-      backdrop-filter: blur(8px);
-      animation: pulseBlue 2.5s infinite;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 9999;
-      overflow: hidden;
-    }
-
-    .consult-btn:hover {
-      transform: scale(1.07);
-      box-shadow: 0 0 40px rgba(110, 255, 255, 0.8);
-    }
-
-    /* ✨ Эффект луча */
-    .consult-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -75px;
-      width: 50px;
-      height: 100%;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent);
-      transform: skewX(-20deg);
-      animation: shine 3s infinite;
-    }
-
-    @keyframes shine {
-      0% { left: -75px; opacity: 0; }
-      50% { left: 100%; opacity: 1; }
-      100% { left: 100%; opacity: 0; }
-    }
-
-    /* 🔥 Анимации */
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 56, 56, 0.5); }
-      50% { box-shadow: 0 0 0 25px rgba(255, 56, 56, 0); }
-    }
-
-    @keyframes pulseBlue {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(110, 255, 255, 0.4); }
-      50% { box-shadow: 0 0 0 25px rgba(110, 255, 255, 0); }
+    @keyframes blink {
+      0% { opacity: 1; box-shadow: 0 0 25px; }
+      50% { opacity: 0.2; box-shadow: 0 0 60px; }
+      100% { opacity: 1; box-shadow: 0 0 25px; }
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform: translateY(20px); }
+      to { opacity:1; transform: translateY(0); }
     }
 
-    @media (max-width: 768px) {
-      .hero h2 { font-size: 2.2rem; }
-      .btn { padding: 15px 35px; }
-      .consult-btn {
-        bottom: 15px;
-        right: 15px;
-        padding: 14px 26px;
-        font-size: 14px;
-      }
+    @keyframes pulse {
+      0%,100% { box-shadow:0 0 0 0 rgba(255,56,56,0.5);}
+      50% { box-shadow:0 0 0 25px rgba(255,56,56,0);}
+    }
+
+    /* Плавающая кнопка консультации */
+    .consult-btn {
+      position: fixed; right: 25px; bottom: 25px;
+      background: linear-gradient(100deg,#3dcfff,#6effff);
+      color: #fff; font-weight:700; border-radius:50px; padding:18px 34px;
+      text-decoration:none; box-shadow:0 0 25px rgba(110,255,255,0.6);
+      backdrop-filter: blur(8px); animation:pulseBlue 2.5s infinite;
+      transition:0.3s; display:flex; align-items:center; gap:10px; z-index:9999;
+      overflow:hidden;
+    }
+
+    .consult-btn:hover { transform: scale(1.07); box-shadow:0 0 40px rgba(110,255,255,0.8); }
+
+    .consult-btn::before {
+      content:''; position:absolute; top:0; left:-75px; width:50px; height:100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent);
+      transform: skewX(-20deg); animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left:-75px; opacity:0; } 50% { left:100%; opacity:1; } 100% { left:100%; opacity:0; }
+    }
+
+    @keyframes pulseBlue {
+      0%,100% { box-shadow:0 0 0 0 rgba(110,255,255,0.4); } 50% { box-shadow:0 0 0 25px rgba(110,255,255,0);}
+    }
+
+    @media (max-width:768px) {
+      .hero-content h2 { font-size:2.2rem; }
+      .btn { padding:15px 35px; }
+      .consult-btn { bottom:15px; right:15px; padding:14px 26px; font-size:14px; }
     }
   </style>
 </head>
@@ -243,30 +123,19 @@
   </header>
 
   <section class="hero">
-    <h2>Аварийный комиссар<br>Воронеж и область</h2>
-    <p>Профессиональная помощь при ДТП 24/7 — приедем быстро, оформим всё правильно и защитим ваши интересы.</p>
-    <a href="tel:+79957192523" class="btn">🚨 Вызвать комиссара</a>
-  </section>
+    <!-- Видео фон -->
+    <video autoplay muted loop playsinline>
+      <source src="dps_car.mp4" type="video/mp4">
+    </video>
 
-  <section id="services">
-    <h2 style="text-align:center; margin-bottom:50px;">Наши услуги</h2>
-    <div class="services">
-      <div class="service-card">
-        <h3>Оформление ДТП</h3>
-        <p>Помощь без участия ГИБДД. Всё сделаем по правилам и быстро.</p>
-      </div>
-      <div class="service-card">
-        <h3>Консультации по ОСАГО и КАСКО</h3>
-        <p>Расскажем, как получить максимум от страховой компании.</p>
-      </div>
-      <div class="service-card">
-        <h3>Фото и видеофиксация</h3>
-        <p>Профессиональная фиксация для защиты ваших интересов.</p>
-      </div>
-      <div class="service-card">
-        <h3>Помощь на месте</h3>
-        <p>Приедем мгновенно, решим вопрос на месте и сохраним ваше спокойствие.</p>
-      </div>
+    <!-- Мигающие мигалки -->
+    <div class="light-left"></div>
+    <div class="light-right"></div>
+
+    <div class="hero-content">
+      <h2>Аварийный комиссар Воронеж и область</h2>
+      <p>Круглосуточная помощь при ДТП — приедем быстро, оформим всё правильно и защитим ваши интересы.</p>
+      <a href="tel:+79957192523" class="btn">🚨 Вызвать комиссара</a>
     </div>
   </section>
 
@@ -274,7 +143,6 @@
     <p>© 2025 вызовдтп.рф — Аварийный комиссар Воронеж | Все права защищены</p>
   </footer>
 
-  <!-- 💬 Кнопка консультации -->
   <a href="tel:+79518703934" class="consult-btn">📞 Консультация</a>
 
 </body>
