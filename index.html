@@ -1,169 +1,286 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>вызовдтп.рф — Аварийный комиссар Воронеж | Вызов 24/7</title>
-  <meta name="description" content="вызовдтп.рф — аварийный комиссар в Воронеже. Срочный выезд, оформление ДТП, консультация 24/7. Звоните: +7 (995) 719-25-23" />
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"LocalBusiness",
-    "name":"вызовдтп.рф — Аварийный комиссар Воронеж",
-    "telephone":["+7-995-719-25-23","+7-951-870-39-34"],
-    "areaServed":"Воронеж",
-    "url":"https://вызовдтп.рф",
-    "description":"Срочный выезд аварийного комиссара, оформление ДТП, консультации 24/7."
-  }
-  </script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Вызов комиссара </title>
+<style>
+/* ---- Настройки шрифта и базовые цвета ---- */
+:root{
+  --bg:#0b1220;
+  --card:#0f1722;
+  --muted:#9aa3b2;
+  --accent:#ff4040;
+  --accent-2:#e13a3a;
+  --outline: rgba(255,255,255,0.04);
+  --glass: rgba(255,255,255,0.02);
+  --blue:#2b63ff;
+  --radius:14px;
+  --pad:18px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background:linear-gradient(180deg,var(--bg) 0%, #07101a 100%);
+  color:#eaf0ff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.35;
+  padding:24px 16px;
+}
+
+/* Top bar */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+.brand{
+  font-weight:800;
+  color:var(--accent);
+  letter-spacing:0.6px;
+}
+.hamb{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid rgba(255,255,255,0.04);
+}
+
+/* Hero */
+.hero{
+  text-align:center;
+  padding:22px 10px 26px;
+}
+.badge{
+  display:inline-block;
+  background:var(--glass);
+  padding:6px 10px;border-radius:999px;
+  color:var(--muted); font-size:13px;
+  margin-bottom:14px;
+}
+.title{
+  font-size:34px;
+  font-weight:800;
+  line-height:1.03;
+  margin:6px 0 12px;
+}
+.title b{ color:#fff; }
+.title .red{ color:var(--accent); display:inline-block; margin-left:4px;}
+
+/* subtitle & actions */
+.subtitle{ color:var(--muted); margin-bottom:18px; max-width:760px; margin-left:auto;margin-right:auto; }
+.actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:22px; }
+.btn{
+  padding:14px 18px;
+  border-radius:12px;
+  min-width:170px;
+  text-align:center;
+  font-weight:700;
+  cursor:pointer;
+  border:1px solid transparent;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.btn.call{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:white;
+}
+.btn.ghost{
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--muted);
+}
+
+/* features row */
+.features{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  margin:12px 0 28px;
+}
+.feature{
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  border:1px solid var(--outline);
+  padding:16px;
+  border-radius:12px;
+  text-align:center;
+}
+.feature h4{ margin:0 0 6px; font-size:15px; font-weight:700; color:#fff; }
+.feature p{ margin:0; color:var(--muted); font-size:13px; }
+
+/* Services list */
+.services{
+  margin-top:6px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  border-radius:14px;
+  padding:18px;
+  border:1px solid var(--outline);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+.card h3{ margin:0 0 8px; font-size:18px; }
+.card p{ margin:0 0 12px; color:var(--muted); font-size:14px; }
+.bul{
+  margin:0;padding-left:18px;color:var(--muted);
+  font-size:13px;
+}
+
+/* Contact section */
+.contact{
+  margin-top:30px;
+  text-align:center;
+}
+.contact h2{font-size:22px;margin:0 0 6px;}
+.contact p{color:var(--muted); margin:0 0 18px;}
+
+/* Contact buttons */
+.contact-grid{ display:flex; flex-direction:column; gap:14px; align-items:stretch; }
+.contact-item{
+  border-radius:14px;
+  padding:16px;
+  border:1px solid var(--outline);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  text-align:center;
+}
+.contact-item .icon{
+  width:56px;height:56px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px;
+  background: rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.03);
+}
+.telbtn{
+  display:inline-block;
+  margin-top:12px;
+  padding:10px 14px;border-radius:10px;
+  min-width:220px;
+  font-weight:700;
+}
+.telbtn.red{ background:var(--accent); color:white; border:none; }
+.telbtn.blue{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.06); }
+
+/* footer */
+.footer{
+  margin-top:34px;
+  padding:20px 12px;
+  text-align:center;
+  color:var(--muted);
+  border-top:1px solid rgba(255,255,255,0.02);
+  font-size:13px;
+}
+
+/* small devices adjustments */
+@media(min-width:680px){
+  .hero{ padding-top:34px; }
+  .features{ grid-template-columns: repeat(3,1fr); }
+  .contact-grid{ flex-direction:row; gap:18px; }
+  .contact-item{ flex:1; }
+  .title{ font-size:44px; }
+  body{ padding:28px; }
+}
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="logo" href="#">вызовдтп.рф</a>
-      <nav class="nav">
-        <a href="#services">Услуги</a>
-        <a href="#about">О нас</a>
-        <a href="#contact" class="btn btn-outline">Контакты</a>
-      </nav>
-      <div class="header-phones">
-        <a class="phone primary" href="tel:+79957192523">Вызвать: +7 (995) 719-25-23</a>
-        <a class="phone" href="tel:+79518703934">Консультация: +7 951 870 39 34</a>
-      </div>
-      <button class="burger" aria-label="Открыть меню" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
+  <div class="topbar">
+    <div class="brand">вызовдтп.рф</div>
+    <div class="hamb" aria-hidden="true">≡</div>
+  </div>
 
   <main>
-    <section class="hero" id="home">
-      <div class="container hero-inner">
-        <div class="hero-left">
-          <h1>Аварийный комиссар в Воронеже — выезд 24/7</h1>
-          <p>Быстро оформим ДТП, поможем с документами и эвакуацией. Работаем без выходных.</p>
-          <div class="hero-ctas">
-            <a class="btn btn-primary big" href="tel:+79957192523">Вызвать комиссара</a>
-            <a class="btn btn-secondary big" href="tel:+79518703934">Консультация</a>
-          </div>
-          <ul class="features">
-            <li>Оперативный выезд — <strong>30–60 минут</strong></li>
-            <li>Оформление европротокола</li>
-            <li>Сотрудничество со страховыми</li>
-          </ul>
-        </div>
-        <div class="hero-right">
-          <div class="phone-card anim-drop">
-            <svg class="car-icon" viewBox="0 0 24 24" width="56" height="56">
-              <path fill="currentColor" d="M3 11v5a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1h10v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-5l-1.5-4A2 2 0 0 0 18.5 4H5.5A2 2 0 0 0 3 7z"/>
-            </svg>
-            <div class="card-body">
-              <h3>24/7 — Вызов комиссара</h3>
-              <p class="muted">Номер экстренной связи</p>
-              <a class="big-phone" href="tel:+79957192523">+7 (995) 719-25-23</a>
-            </div>
-          </div>
-        </div>
+    <section class="hero" role="banner">
+      <div class="badge">Работаем 24/7</div>
+      <h1 class="title"><b>Аварийный комиссар</b> <span class="red">в любое время</span> и в любом месте</h1>
+      <p class="subtitle">Помощь при ДТП 24/7 — быстро, профессионально и с заботой о вас.</p>
+
+      <div class="actions" role="group" aria-label="действия">
+        <a class="btn call" href="tel:+79957192523" title="Вызвать комиссара">📞 Вызвать комиссара</a>
+        <a class="btn ghost" href="tel:+79518703934" title="Бесплатная консультация">💬 Бесплатная консультация</a>
+      </div>
+
+      <div class="features" aria-hidden="false">
+        <div class="feature"><h4>Приедем за 15 минут</h4><p>Быстрая реакция на вызов</p></div>
+        <div class="feature"><h4>Оформление без ГИБДД</h4><p>Экономим ваше время</p></div>
+        <div class="feature"><h4>100% легально</h4><p>Все по закону РФ</p></div>
       </div>
     </section>
 
-    <section id="services" class="section services">
-      <div class="container">
-        <h2>Наши услуги</h2>
-        <div class="cards">
-          <article class="card">
-            <h3>Выезд на ДТП</h3>
-            <p>Быстрый приезд на место, фотофиксация, оформление документов.</p>
-          </article>
-          <article class="card">
-            <h3>Оформление документов</h3>
-            <p>Европротокол, извещения, акты для страховой — всё грамотно и быстро.</p>
-          </article>
-          <article class="card">
-            <h3>Эвакуация и помощь</h3>
-            <p>Организация эвакуатора, помощь при поломке или ДТП.</p>
-          </article>
-          <article class="card">
-            <h3>Консультации</h3>
-            <p>Юридическая и страховая консультация по телефону круглосуточно.</p>
-          </article>
-        </div>
+    <section class="services" aria-labelledby="services-title">
+      <h2 id="services-title" style="text-align:center;font-size:22px;margin:8px 0 6px;">Наши услуги</h2>
+      <p style="text-align:center;color:var(--muted);margin-top:0;margin-bottom:12px;">Полный спектр услуг для решения любых проблем после ДТП</p>
+
+      <div class="card">
+        <h3>Оформление ДТП</h3>
+        <p>Профессиональная помощь в оформлении документов без участия ГИБДД. Всё сделаем правильно и быстро.</p>
+        <ul class="bul">
+          <li>Составление схемы ДТП</li>
+          <li>Заполнение извещений</li>
+          <li>Помощь в общении со страховой</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Консультации по ОСАГО и КАСКО</h3>
+        <p>Подскажем, как действовать, чтобы получить максимальную выплату от страховой компании.</p>
+        <ul class="bul">
+          <li>Оценка ущерба</li>
+          <li>Защита ваших прав</li>
+          <li>Помощь в споре со страховой</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Фото и видеофиксация</h3>
+        <p>Сделаем все необходимые фото- и видео материалы для страховой и защиты ваших прав.</p>
+        <ul class="bul">
+          <li>Детальная фотофиксация</li>
+          <li>Видео с места ДТП</li>
+          <li>Опрос свидетелей</li>
+        </ul>
       </div>
     </section>
 
-    <section id="about" class="section about">
-      <div class="container about-inner">
-        <div class="about-text">
-          <h2>Почему выбирают вызовдтп.рф</h2>
-          <ul>
-            <li>Опытные комиссары с большим стажем.</li>
-            <li>Честные цены и прозрачная работа.</li>
-            <li>Доступность 24/7 без выходных.</li>
-          </ul>
-          <p class="muted">Мы минимизируем стресс при ДТП и ускоряем выплаты по ОСАГО и КАСКО.</p>
+    <section class="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Свяжитесь с нами</h2>
+      <p>Мы всегда на связи и готовы помочь в любое время суток</p>
+
+      <div class="contact-grid" role="group" aria-label="контакты">
+        <div class="contact-item">
+          <div class="icon">📞</div>
+          <h3>Вызов комиссара</h3>
+          <p>Срочный выезд на место ДТП</p>
+          <a class="telbtn red" href="tel:+79957192523">+7 (995) 719-25-23</a>
         </div>
-        <div class="about-stats">
-          <div class="stat anim-zoom">
-            <strong>10 000+</strong>
-            <span>вызовов обработано</span>
-          </div>
-          <div class="stat anim-zoom delay">
-            <strong>24/7</strong>
-            <span>работаем без выходных</span>
-          </div>
+
+        <div class="contact-item">
+          <div class="icon">💬</div>
+          <h3>Консультации</h3>
+          <p>Бесплатная юридическая помощь</p>
+          <a class="telbtn blue" href="tel:+79518703934">+7 951 870-39-34</a>
         </div>
       </div>
+
+      <div style="margin-top:14px;color:var(--muted);font-size:13px;">● Сейчас на линии — звоните прямо сейчас!</div>
     </section>
 
-    <section id="contact" class="section contact">
-      <div class="container contact-inner">
-        <div class="contact-left">
-          <h2>Связаться</h2>
-          <p>Звоните прямо сейчас — оперативный ответ 24/7.</p>
-          <a class="btn btn-primary" href="tel:+79957192523">Вызвать комиссара</a>
-          <a class="btn btn-outline" href="tel:+79518703934">Консультация</a>
-
-          <div class="contact-info">
-            <p><strong>Работаем:</strong> Круглосуточно</p>
-            <p><strong>Город:</strong> Воронеж</p>
-          </div>
-        </div>
-        <div class="contact-right">
-          <form id="contactForm" class="contact-form" novalidate>
-            <label>Ваше имя
-              <input type="text" name="name" placeholder="Иван" required>
-            </label>
-            <label>Телефон
-              <input type="tel" name="phone" placeholder="+7 (999) 000-00-00" required>
-            </label>
-            <label>Сообщение
-              <textarea name="message" rows="4" placeholder="Коротко опишите ситуацию"></textarea>
-            </label>
-            <button type="submit" class="btn btn-primary">Отправить запрос</button>
-            <p class="form-note muted">Или просто позвоните по номеру экстренной связи.</p>
-          </form>
-        </div>
-      </div>
-    </section>
+    <footer class="footer">
+      <div style="font-weight:800;color:var(--accent);">вызовдтп.рф</div>
+      <div style="margin-top:8px;color:var(--muted);">© 2025 Аварийный комиссар. Все права защищены.</div>
+    </footer>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <strong>вызовдтп.рф — Аварийный комиссар</strong>
-        <p class="muted">Вызов: <a href="tel:+79957192523">+7 (995) 719-25-23</a> · Консультация: <a href="tel:+79518703934">+7 951 870 39 34</a></p>
-      </div>
-      <div class="small">© <span id="year"></span> вызовдтп.рф</div>
-    </div>
-  </footer>
-
-  <a class="floating-call" href="tel:+79957192523">
-    <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M6.6 10.2a15.3 15.3 0 0 0 7.2 7.2l2.1-2.1a1 1 0 0 1 1-.3c1.1.4 2.3.6 3.5.6a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.8 21 3 13.2 3 3a1 1 0 0 1 1-1h2.5a1 1 0 0 1 1 1c0 1.2.2 2.4.6 3.5a1 1 0 0 1-.3 1l-2.2 2.2z"/></svg>
-    <span>Вызвать</span>
-  </a>
-
-  <script src="script.js"></script>
+<script>
+// небольшая доступная интерактивность: плавный скролл по якорям (если будут)
+// можно расширить — подсвечивать кнопки, модалки и т.д.
+document.querySelectorAll('a[href^="tel:"]').forEach(a=>{
+  a.addEventListener('click', ()=> {
+    // можно добавить трекинг событий сюда
+  });
+});
+</script>
 </body>
 </html>
