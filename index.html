@@ -1,244 +1,169 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>вызовдтп.рф — Аварийный комиссар Воронеж</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
-
-* { margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; }
-body { font-family:'Montserrat', sans-serif; background:#000; color:#fff; overflow-x:hidden; }
-
-/* HEADER */
-header {
-  position: fixed; top:0; left:0; width:100%; padding:25px 10%;
-  display:flex; justify-content:flex-start; align-items:center;
-  background: rgba(10,10,10,0.75); backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,255,255,0.1); z-index:1000;
-}
-header h1 {
-  font-weight:800; color:#ff4040; font-size:1.6rem; letter-spacing:1px;
-  text-shadow:0 0 25px rgba(255,64,64,0.6);
-}
-
-/* HERO */
-.hero {
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-  background: linear-gradient(120deg, #ff0000, #0000ff, #ff0000);
-  background-size: 400% 400%;
-  animation: policeLights 3s infinite;
-}
-
-/* Анимация мигающего фона */
-@keyframes policeLights {
-  0% { background-position: 0% 50%; }
-  25% { background-position: 50% 50%; }
-  50% { background-position: 100% 50%; }
-  75% { background-position: 50% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Световой эффект поверх */
-.hero::before {
-  content:"";
-  position:absolute;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,0,0,0.2), transparent 60%),
-              radial-gradient(circle at 70% 30%, rgba(0,0,255,0.2), transparent 60%);
-  mix-blend-mode:screen;
-  z-index:1;
-  animation: flashGlow 2s infinite alternate;
-}
-
-@keyframes flashGlow {
-  0% { opacity:0.4; }
-  50% { opacity:0.8; }
-  100% { opacity:0.4; }
-}
-
-.hero h2 {
-  font-size:3rem;
-  font-weight:800;
-  margin-bottom:25px;
-  text-shadow:0 0 25px rgba(255,0,0,0.8), 0 0 25px rgba(0,0,255,0.8);
-  position:relative;
-  z-index:2;
-  animation: fadeIn 1.5s ease;
-}
-
-.hero p {
-  font-size:1.3rem;
-  color:#ddd;
-  margin-bottom:50px;
-  max-width:600px;
-  position:relative;
-  z-index:2;
-  animation: fadeIn 2s ease;
-}
-
-.btn {
-  background: linear-gradient(90deg,#ff3030,#ff5757);
-  color:#fff;
-  padding:20px 55px;
-  border-radius:50px;
-  text-decoration:none;
-  font-weight:700;
-  font-size:1.1rem;
-  letter-spacing:0.5px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 0 25px rgba(255,56,56,0.7);
-  transition:0.3s;
-  animation:pulse 2s infinite;
-  z-index:2;
-}
-.btn:hover { transform:scale(1.08); box-shadow:0 0 45px rgba(255,80,80,0.8); }
-
-/* SERVICES */
-section { padding:100px 10%; }
-.services { display:flex; flex-wrap:wrap; gap:30px; justify-content:center; }
-.service-card {
-  background: rgba(20,20,20,0.9);
-  padding:45px;
-  border-radius:15px;
-  text-align:center;
-  flex:1 1 300px;
-  transition:transform 0.4s, box-shadow 0.4s;
-  box-shadow: inset 0 0 20px rgba(255,56,56,0.05);
-}
-.service-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 20px 50px rgba(255,56,56,0.3);
-}
-.service-card h3 {
-  color:#ff4040;
-  margin-bottom:15px;
-  font-size:1.4rem;
-  text-shadow:0 0 10px rgba(255,56,56,0.5);
-}
-
-/* FOOTER */
-footer {
-  text-align:center;
-  padding:40px 10%;
-  background:#0a0a0a;
-  color:#777;
-  border-top:1px solid rgba(255,255,255,0.1);
-}
-footer a { color:#ff4040; text-decoration:none; }
-
-/* CONSULT BUTTON */
-.consult-btn {
-  position:fixed;
-  right:25px;
-  bottom:25px;
-  background:linear-gradient(100deg,#3dcfff,#6effff);
-  color:#fff;
-  font-weight:700;
-  border-radius:50px;
-  padding:18px 34px;
-  text-decoration:none;
-  box-shadow:0 0 25px rgba(110,255,255,0.6);
-  backdrop-filter:blur(8px);
-  animation:pulseBlue 2.5s infinite;
-  transition:0.3s;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  z-index:9999;
-  overflow:hidden;
-}
-.consult-btn:hover {
-  transform:scale(1.07);
-  box-shadow:0 0 40px rgba(110,255,255,0.8);
-}
-.consult-btn::before {
-  content:'';
-  position:absolute;
-  top:0;
-  left:-75px;
-  width:50px;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.8),transparent);
-  transform:skewX(-20deg);
-  animation:shine 3s infinite;
-}
-
-/* ANIMATIONS */
-@keyframes fadeIn {
-  from {opacity:0; transform:translateY(20px);}
-  to {opacity:1; transform:translateY(0);}
-}
-@keyframes pulse {
-  0%,100% {box-shadow:0 0 0 0 rgba(255,56,56,0.5);}
-  50% {box-shadow:0 0 0 25px rgba(255,56,56,0);}
-}
-@keyframes pulseBlue {
-  0%,100% {box-shadow:0 0 0 0 rgba(110,255,255,0.4);}
-  50% {box-shadow:0 0 0 25px rgba(110,255,255,0);}
-}
-@keyframes shine {
-  0% {left:-75px; opacity:0;}
-  50% {left:100%; opacity:1;}
-  100% {left:100%; opacity:0;}
-}
-
-@media(max-width:768px){
-  .hero h2{font-size:2.2rem;}
-  .btn{padding:15px 35px;}
-  .consult-btn{bottom:15px; right:15px; padding:14px 26px; font-size:14px;}
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>вызовдтп.рф — Аварийный комиссар Воронеж | Вызов 24/7</title>
+  <meta name="description" content="вызовдтп.рф — аварийный комиссар в Воронеже. Срочный выезд, оформление ДТП, консультация 24/7. Звоните: +7 (995) 719-25-23" />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"LocalBusiness",
+    "name":"вызовдтп.рф — Аварийный комиссар Воронеж",
+    "telephone":["+7-995-719-25-23","+7-951-870-39-34"],
+    "areaServed":"Воронеж",
+    "url":"https://вызовдтп.рф",
+    "description":"Срочный выезд аварийного комиссара, оформление ДТП, консультации 24/7."
+  }
+  </script>
 </head>
 <body>
-
-<header>
-  <h1>вызовдтп.рф</h1>
-</header>
-
-<section class="hero">
-  <h2>Аварийный комиссар<br>Воронеж и область</h2>
-  <p>Профессиональная помощь при ДТП 24/7 — приедем быстро, оформим всё правильно и защитим ваши интересы.</p>
-  <a href="tel:+79957192523" class="btn">🚨 Вызвать комиссара</a>
-</section>
-
-<section id="services">
-  <h2 style="text-align:center; margin-bottom:50px;">Наши услуги</h2>
-  <div class="services">
-    <div class="service-card">
-      <h3>Оформление ДТП</h3>
-      <p>Помощь без участия ГИБДД. Всё сделаем по правилам и быстро.</p>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#">вызовдтп.рф</a>
+      <nav class="nav">
+        <a href="#services">Услуги</a>
+        <a href="#about">О нас</a>
+        <a href="#contact" class="btn btn-outline">Контакты</a>
+      </nav>
+      <div class="header-phones">
+        <a class="phone primary" href="tel:+79957192523">Вызвать: +7 (995) 719-25-23</a>
+        <a class="phone" href="tel:+79518703934">Консультация: +7 951 870 39 34</a>
+      </div>
+      <button class="burger" aria-label="Открыть меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <div class="service-card">
-      <h3>Консультации по ОСАГО и КАСКО</h3>
-      <p>Расскажем, как получить максимум от страховой компании.</p>
-    </div>
-    <div class="service-card">
-      <h3>Фото и видеофиксация</h3>
-      <p>Профессиональная фиксация для защиты ваших интересов.</p>
-    </div>
-    <div class="service-card">
-      <h3>Помощь на месте</h3>
-      <p>Приедем мгновенно, решим вопрос на месте и сохраним ваше спокойствие.</p>
-    </div>
-  </div>
-</section>
+  </header>
 
-<footer>
-  <p>© 2025 вызовдтп.рф — Аварийный комиссар Воронеж | Все права защищены</p>
-</footer>
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-inner">
+        <div class="hero-left">
+          <h1>Аварийный комиссар в Воронеже — выезд 24/7</h1>
+          <p>Быстро оформим ДТП, поможем с документами и эвакуацией. Работаем без выходных.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary big" href="tel:+79957192523">Вызвать комиссара</a>
+            <a class="btn btn-secondary big" href="tel:+79518703934">Консультация</a>
+          </div>
+          <ul class="features">
+            <li>Оперативный выезд — <strong>30–60 минут</strong></li>
+            <li>Оформление европротокола</li>
+            <li>Сотрудничество со страховыми</li>
+          </ul>
+        </div>
+        <div class="hero-right">
+          <div class="phone-card anim-drop">
+            <svg class="car-icon" viewBox="0 0 24 24" width="56" height="56">
+              <path fill="currentColor" d="M3 11v5a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1h10v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-5l-1.5-4A2 2 0 0 0 18.5 4H5.5A2 2 0 0 0 3 7z"/>
+            </svg>
+            <div class="card-body">
+              <h3>24/7 — Вызов комиссара</h3>
+              <p class="muted">Номер экстренной связи</p>
+              <a class="big-phone" href="tel:+79957192523">+7 (995) 719-25-23</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- Кнопка консультации -->
-<a href="tel:+79518703934" class="consult-btn">📞 Консультация</a>
+    <section id="services" class="section services">
+      <div class="container">
+        <h2>Наши услуги</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Выезд на ДТП</h3>
+            <p>Быстрый приезд на место, фотофиксация, оформление документов.</p>
+          </article>
+          <article class="card">
+            <h3>Оформление документов</h3>
+            <p>Европротокол, извещения, акты для страховой — всё грамотно и быстро.</p>
+          </article>
+          <article class="card">
+            <h3>Эвакуация и помощь</h3>
+            <p>Организация эвакуатора, помощь при поломке или ДТП.</p>
+          </article>
+          <article class="card">
+            <h3>Консультации</h3>
+            <p>Юридическая и страховая консультация по телефону круглосуточно.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
+    <section id="about" class="section about">
+      <div class="container about-inner">
+        <div class="about-text">
+          <h2>Почему выбирают вызовдтп.рф</h2>
+          <ul>
+            <li>Опытные комиссары с большим стажем.</li>
+            <li>Честные цены и прозрачная работа.</li>
+            <li>Доступность 24/7 без выходных.</li>
+          </ul>
+          <p class="muted">Мы минимизируем стресс при ДТП и ускоряем выплаты по ОСАГО и КАСКО.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat anim-zoom">
+            <strong>10 000+</strong>
+            <span>вызовов обработано</span>
+          </div>
+          <div class="stat anim-zoom delay">
+            <strong>24/7</strong>
+            <span>работаем без выходных</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <div class="container contact-inner">
+        <div class="contact-left">
+          <h2>Связаться</h2>
+          <p>Звоните прямо сейчас — оперативный ответ 24/7.</p>
+          <a class="btn btn-primary" href="tel:+79957192523">Вызвать комиссара</a>
+          <a class="btn btn-outline" href="tel:+79518703934">Консультация</a>
+
+          <div class="contact-info">
+            <p><strong>Работаем:</strong> Круглосуточно</p>
+            <p><strong>Город:</strong> Воронеж</p>
+          </div>
+        </div>
+        <div class="contact-right">
+          <form id="contactForm" class="contact-form" novalidate>
+            <label>Ваше имя
+              <input type="text" name="name" placeholder="Иван" required>
+            </label>
+            <label>Телефон
+              <input type="tel" name="phone" placeholder="+7 (999) 000-00-00" required>
+            </label>
+            <label>Сообщение
+              <textarea name="message" rows="4" placeholder="Коротко опишите ситуацию"></textarea>
+            </label>
+            <button type="submit" class="btn btn-primary">Отправить запрос</button>
+            <p class="form-note muted">Или просто позвоните по номеру экстренной связи.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>вызовдтп.рф — Аварийный комиссар</strong>
+        <p class="muted">Вызов: <a href="tel:+79957192523">+7 (995) 719-25-23</a> · Консультация: <a href="tel:+79518703934">+7 951 870 39 34</a></p>
+      </div>
+      <div class="small">© <span id="year"></span> вызовдтп.рф</div>
+    </div>
+  </footer>
+
+  <a class="floating-call" href="tel:+79957192523">
+    <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M6.6 10.2a15.3 15.3 0 0 0 7.2 7.2l2.1-2.1a1 1 0 0 1 1-.3c1.1.4 2.3.6 3.5.6a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.8 21 3 13.2 3 3a1 1 0 0 1 1-1h2.5a1 1 0 0 1 1 1c0 1.2.2 2.4.6 3.5a1 1 0 0 1-.3 1l-2.2 2.2z"/></svg>
+    <span>Вызвать</span>
+  </a>
+
+  <script src="script.js"></script>
 </body>
 </html>
