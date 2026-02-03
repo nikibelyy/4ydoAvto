@@ -3,123 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аварийный комиссар Воронеж | ВызовДТП.рф</title>
-<meta name="description" content="Аварийный комиссар Воронеж — срочный выезд при ДТП 24/7. Помощь в оформлении аварии, консультации, страховые выплаты. Вызов комиссара быстро.">
-<meta name="keywords" content="Аварийный комиссар Воронеж, помощь при ДТП Воронеж, оформление ДТП, вызвать комиссара Воронеж">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+<title>Админка — ВызовДТП.рф</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{background:linear-gradient(180deg,#0e1621,#0b1118);color:white;overflow-x:hidden;}
-.glass{background:rgba(23,33,43,0.6);backdrop-filter: blur(18px);border:1px solid rgba(255,255,255,0.05);border-radius:20px;}
-header{position:fixed;width:100%;top:0;padding:15px;text-align:center;z-index:100;animation:fadeDown 1s;}
-.logo{color:#2AABEE;font-size:22px;font-weight:700;}
-.hero{padding:140px 20px 80px;text-align:center;animation:fadeUp 1.2s;}
-.hero h1{font-size:40px;margin-bottom:20px;}
-.hero p{opacity:.85;font-size:18px;max-width:650px;margin:auto;}
-.buttons{margin-top:40px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
-.btn{padding:16px 30px;border-radius:14px;font-size:18px;font-weight:600;text-decoration:none;transition:.3s;position:relative;overflow:hidden;}
-.btn:before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:rgba(255,255,255,0.2);transition:.5s;}
-.btn:hover:before{left:100%;}
-.call{background:#2AABEE;color:white;}
-.telegram{background:#229ED9;color:white;}
-.btn:hover{transform:translateY(-4px);}
-.section{padding:80px 20px;text-align:center;animation:fadeUp 1.2s;}
-.section h2{font-size:30px;color:#2AABEE;margin-bottom:30px;}
-.cards{display:flex;justify-content:center;flex-wrap:wrap;gap:25px;}
-.card{width:280px;padding:25px;transition:.4s;cursor:pointer;}
-.card:hover{transform:translateY(-10px) scale(1.02);}
-.address{font-size:18px;opacity:.85;}
-footer{margin-top:40px;padding:25px;text-align:center;opacity:.6;}
-.floating{position:fixed;bottom:25px;right:25px;background:#2AABEE;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;color:white;box-shadow:0 0 20px rgba(42,171,238,0.5);animation:pulse 2s infinite;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(42,171,238,.6)}70%{box-shadow:0 0 0 20px rgba(42,171,238,0)}100%{box-shadow:0 0 0 0 rgba(42,171,238,0)}}
-@media(max-width:600px){.hero h1{font-size:30px}}
+body{margin:0;font-family:'Inter',sans-serif;background:#0B1118;color:white;}
+header{background:#111827;padding:20px;text-align:center;font-size:24px;color:#2AABEE;font-weight:700;letter-spacing:1px;}
+.container{max-width:1000px;margin:40px auto;padding:0 20px;}
+.stats{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:40px;}
+.card{flex:1;background:#1B2735;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:transform .3s;}
+.card:hover{transform:translateY(-5px);}
+.card h3{font-size:20px;color:#2AABEE;margin-bottom:10px;}
+.card p{font-size:28px;font-weight:600;}
+.chart-container{background:#1B2735;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+canvas{background:#0B1118;border-radius:10px;}
 </style>
 </head>
 <body>
 
-<header class="glass">
-<div class="logo">🚗 ВызовДТП.рф</div>
-</header>
+<header>Админ-панель — ВызовДТП.рф</header>
+<div class="container">
+  <div class="stats">
+    <div class="card">
+      <h3>📊 Посетителей всего</h3>
+      <p id="visits">0</p>
+    </div>
+    <div class="card">
+      <h3>📞 Вызов комиссара</h3>
+      <p id="call-count">0</p>
+    </div>
+    <div class="card">
+      <h3>💬 Telegram</h3>
+      <p id="telegram-count">0</p>
+    </div>
+  </div>
 
-<section class="hero">
-<h1>Аварийный комиссар Воронеж</h1>
-<p>Круглосуточная помощь при ДТП. Быстро приедем, оформим аварии, проконсультируем и поможем получить страховые выплаты.</p>
-
-<div class="buttons">
-<a href="tel:+79518703934" class="btn call" onclick="trackClick('call')">📞 Вызвать комиссара</a>
-<a href="https://t.me/blatsphera" class="btn telegram" onclick="trackClick('telegram')">💬 Консультация Telegram</a>
+  <div class="chart-container">
+    <canvas id="clickChart"></canvas>
+  </div>
 </div>
-</section>
-
-<section class="section">
-<h2>Наши услуги</h2>
-<div class="cards">
-<div class="card glass"><h3>Оформление ДТП</h3><p>Профессиональное оформление аварий любой сложности.</p></div>
-<div class="card glass"><h3>Юридическая помощь</h3><p>Консультации и защита ваших интересов.</p></div>
-<div class="card glass"><h3>Работа со страховой</h3><p>Помогаем получить максимальные выплаты.</p></div>
-<div class="card glass"><h3>Выезд 24/7</h3><p>Мы работаем круглосуточно без выходных.</p></div>
-</div>
-</section>
-
-<section class="section">
-<h2>Наш адрес</h2>
-<p class="address">г. Воронеж, улица 45 Стрелковой Дивизии, 236А</p>
-</section>
-
-<footer class="glass">© ВызовДТП.рф — Аварийный комиссар Воронеж</footer>
-
-<a href="tel:+79518703934" class="floating">📞</a>
 
 <script type="module">
 const BIN_ID = '6982762143b1c97be963181b';
 const SECRET_KEY = '$2a$10$eF.toHw0KlZjlT38yizF1OwEIt6dSmQ/tkN3AbIxT6QcIoO2I.g.q';
 
-async function trackClick(type){
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
+async function fetchData(){
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         headers:{'X-Master-Key':SECRET_KEY}
     });
     const data = await res.json();
-    let record = data.record;
+    return data.record;
+}
 
-    if(type === 'call') record.clicks.call++;
-    if(type === 'telegram') record.clicks.telegram++;
+async function renderStats(){
+    const data = await fetchData();
 
-    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
-        method:'PUT',
-        headers:{
-            'Content-Type':'application/json',
-            'X-Master-Key':SECRET_KEY
+    document.getElementById('visits').textContent = data.visits;
+    document.getElementById('call-count').textContent = data.clicks.call;
+    document.getElementById('telegram-count').textContent = data.clicks.telegram;
+
+    const ctx = document.getElementById('clickChart').getContext('2d');
+    new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels:['📞 Вызов','💬 Telegram'],
+            datasets:[{
+                label:'Количество кликов',
+                data:[data.clicks.call,data.clicks.telegram],
+                backgroundColor:['#2AABEE','#229ED9'],
+                borderRadius:10
+            }]
         },
-        body:JSON.stringify(record)
+        options:{
+            responsive:true,
+            plugins:{legend:{display:false}},
+            scales:{y:{beginAtZero:true,ticks:{color:'white'}},x:{ticks:{color:'white'}}}
+        }
     });
 }
 
-async function trackVisit(){
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
-        headers:{'X-Master-Key':SECRET_KEY}
-    });
-    const data = await res.json();
-    let record = data.record;
-
-    if(!sessionStorage.getItem('visited')){
-        record.visits++;
-        sessionStorage.setItem('visited','true');
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
-            method:'PUT',
-            headers:{
-                'Content-Type':'application/json',
-                'X-Master-Key':SECRET_KEY
-            },
-            body:JSON.stringify(record)
-        });
-    }
-}
-
-trackVisit();
+renderStats();
 </script>
-
 </body>
 </html>
