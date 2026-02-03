@@ -3,39 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аварийный комиссар Воронеж | ВызовДТП.рф — помощь при ДТП 24/7</title>
-<meta name="description" content="Аварийный комиссар Воронеж — срочный выезд при ДТП 24/7. Помощь в оформлении аварии, консультации, страховые выплаты. Вызов комиссара быстро.">
-<meta name="keywords" content="Аварийный комиссар Воронеж, помощь при ДТП Воронеж, оформление ДТП, вызвать комиссара Воронеж">
+<title>Аварийный комиссар Воронеж | ВызовДТП.рф</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
 body{background:linear-gradient(180deg,#0e1621,#0b1118);color:white;overflow-x:hidden;}
 .glass{background:rgba(23,33,43,0.6);backdrop-filter: blur(18px);border:1px solid rgba(255,255,255,0.05);border-radius:20px;}
-header{position:fixed;width:100%;top:0;padding:15px;text-align:center;z-index:100;animation:fadeDown 1s;}
+header{position:fixed;width:100%;top:0;padding:15px;text-align:center;z-index:100;}
 .logo{color:#2AABEE;font-size:22px;font-weight:700;}
-.hero{padding:140px 20px 80px;text-align:center;animation:fadeUp 1.2s;}
+.hero{padding:140px 20px 80px;text-align:center;}
 .hero h1{font-size:40px;margin-bottom:20px;}
 .hero p{opacity:.85;font-size:18px;max-width:650px;margin:auto;}
 .buttons{margin-top:40px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
 .btn{padding:16px 30px;border-radius:14px;font-size:18px;font-weight:600;text-decoration:none;transition:.3s;position:relative;overflow:hidden;}
-.btn:before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:rgba(255,255,255,0.2);transition:.5s;}
-.btn:hover:before{left:100%;}
 .call{background:#2AABEE;color:white;}
 .telegram{background:#229ED9;color:white;}
 .btn:hover{transform:translateY(-4px);}
-.section{padding:80px 20px;text-align:center;animation:fadeUp 1.2s;}
+.section{padding:80px 20px;text-align:center;}
 .section h2{font-size:30px;color:#2AABEE;margin-bottom:30px;}
 .cards{display:flex;justify-content:center;flex-wrap:wrap;gap:25px;}
 .card{width:280px;padding:25px;transition:.4s;cursor:pointer;}
 .card:hover{transform:translateY(-10px) scale(1.02);}
 .address{font-size:18px;opacity:.85;}
 footer{margin-top:40px;padding:25px;text-align:center;opacity:.6;}
-.floating{position:fixed;bottom:25px;right:25px;background:#2AABEE;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;color:white;box-shadow:0 0 20px rgba(42,171,238,0.5);animation:pulse 2s infinite;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(42,171,238,.6)}70%{box-shadow:0 0 0 20px rgba(42,171,238,0)}100%{box-shadow:0 0 0 0 rgba(42,171,238,0)}}
-@media(max-width:600px){.hero h1{font-size:30px}}
+.floating{position:fixed;bottom:25px;right:25px;background:#2AABEE;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;color:white;box-shadow:0 0 20px rgba(42,171,238,0.5);}
 </style>
 </head>
 <body>
@@ -65,13 +56,6 @@ footer{margin-top:40px;padding:25px;text-align:center;opacity:.6;}
 </section>
 
 <section class="section">
-<h2>Почему выбирают нас</h2>
-<p style="max-width:700px;margin:auto;opacity:.85">
-Мы экономим ваше время и нервы. Наши специалисты имеют большой опыт работы с ДТП и знают все тонкости страховых выплат.
-</p>
-</section>
-
-<section class="section">
 <h2>Наш адрес</h2>
 <p class="address">г. Воронеж, улица 45 Стрелковой Дивизии, 236А</p>
 </section>
@@ -83,11 +67,20 @@ footer{margin-top:40px;padding:25px;text-align:center;opacity:.6;}
 <script>
 function trackClick(type){
     let clicks = JSON.parse(localStorage.getItem('clicks')) || {call:0, telegram:0};
-    if(type === 'call') clicks.call++;
-    if(type === 'telegram') clicks.telegram++;
+    if(type==='call') clicks.call++;
+    if(type==='telegram') clicks.telegram++;
     localStorage.setItem('clicks', JSON.stringify(clicks));
-    console.log('Клик сохранён!', clicks);
 }
+
+// Счётчик уникальных посетителей по сессии
+(function(){
+    let visits = parseInt(localStorage.getItem('visits')) || 0;
+    if(!sessionStorage.getItem('visited')){
+        visits++;
+        localStorage.setItem('visits', visits);
+        sessionStorage.setItem('visited','true');
+    }
+})();
 </script>
 
 </body>
