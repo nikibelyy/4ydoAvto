@@ -82,7 +82,11 @@ footer{margin-top:40px;padding:25px;text-align:center;opacity:.6;}
 
 <script>
 function trackClick(type){
-    fetch('click.php?type=' + type).catch(e => console.log('Ошибка записи клика'));
+    let clicks = JSON.parse(localStorage.getItem('clicks')) || {call:0, telegram:0};
+    if(type === 'call') clicks.call++;
+    if(type === 'telegram') clicks.telegram++;
+    localStorage.setItem('clicks', JSON.stringify(clicks));
+    console.log('Клик сохранён!', clicks);
 }
 </script>
 
