@@ -7,11 +7,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body{margin:0;font-family:'Inter',sans-serif;background:#0B1118;color:white;}
-header{background:#111827;padding:20px;text-align:center;font-size:24px;color:#2AABEE;font-weight:700;letter-spacing:1px;}
+header{background:#111827;padding:20px;text-align:center;font-size:24px;color:#2AABEE;font-weight:700;}
 .container{max-width:1000px;margin:40px auto;padding:0 20px;}
 .stats{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:40px;}
-.card{flex:1;background:#1B2735;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:transform .3s;}
-.card:hover{transform:translateY(-5px);}
+.card{flex:1;background:#1B2735;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
 .card h3{font-size:20px;color:#2AABEE;margin-bottom:10px;}
 .card p{font-size:28px;font-weight:600;}
 .chart-container{background:#1B2735;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
@@ -42,24 +41,14 @@ canvas{background:#0B1118;border-radius:10px;}
   </div>
 </div>
 
-<script type="module">
-const BIN_ID = '6982762143b1c97be963181b';
-const SECRET_KEY = '$2a$10$eF.toHw0KlZjlT38yizF1OwEIt6dSmQ/tkN3AbIxT6QcIoO2I.g.q';
+<script>
+function loadStats(){
+    let clicks = JSON.parse(localStorage.getItem('clicks')) || {call:0, telegram:0};
+    let visits = parseInt(localStorage.getItem('visits')) || 0;
 
-async function fetchData(){
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers:{'X-Master-Key':SECRET_KEY}
-    });
-    const data = await res.json();
-    return data.record;
-}
-
-async function renderStats(){
-    const data = await fetchData();
-
-    document.getElementById('visits').textContent = data.visits;
-    document.getElementById('call-count').textContent = data.clicks.call;
-    document.getElementById('telegram-count').textContent = data.clicks.telegram;
+    document.getElementById('visits').textContent = visits;
+    document.getElementById('call-count').textContent = clicks.call;
+    document.getElementById('telegram-count').textContent = clicks.telegram;
 
     const ctx = document.getElementById('clickChart').getContext('2d');
     new Chart(ctx,{
@@ -67,8 +56,8 @@ async function renderStats(){
         data:{
             labels:['📞 Вызов','💬 Telegram'],
             datasets:[{
-                label:'Количество кликов',
-                data:[data.clicks.call,data.clicks.telegram],
+                label:'Клики',
+                data:[clicks.call,clicks.telegram],
                 backgroundColor:['#2AABEE','#229ED9'],
                 borderRadius:10
             }]
@@ -81,7 +70,8 @@ async function renderStats(){
     });
 }
 
-renderStats();
+window.onload = loadStats;
 </script>
+
 </body>
 </html>
