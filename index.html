@@ -1,67 +1,125 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ВызовДТП.рф — Аварийный комиссар Воронеж</title>
+
+<title>Аварийный комиссар Воронеж | ВызовДТП.рф — помощь при ДТП 24/7</title>
+
+<meta name="description" content="Аварийный комиссар Воронеж — срочный выезд при ДТП 24/7. Помощь в оформлении аварии, консультации, страховые выплаты. Вызов комиссара быстро.">
+<meta name="keywords" content="Аварийный комиссар Воронеж, помощь при ДТП Воронеж, оформление ДТП, вызвать комиссара Воронеж">
+<meta name="robots" content="index, follow">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+<!-- SEO Schema -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "LocalBusiness",
+ "name": "Аварийный комиссар Воронеж",
+ "telephone": "+79518703934",
+ "address": {
+  "@type": "PostalAddress",
+  "addressLocality": "Воронеж",
+  "streetAddress": "45 Стрелковой Дивизии 236А"
+ }
+}
+</script>
+
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family: 'Inter', sans-serif;
+font-family:'Inter',sans-serif;
 }
 
 body{
-background:#0e1621;
+background:linear-gradient(180deg,#0e1621,#0b1118);
 color:white;
+overflow-x:hidden;
 }
 
+/* Telegram glass style */
+.glass{
+background:rgba(23,33,43,0.6);
+backdrop-filter: blur(18px);
+border:1px solid rgba(255,255,255,0.05);
+border-radius:20px;
+}
+
+/* Header */
 header{
-background:#17212b;
-padding:20px;
+position:fixed;
+width:100%;
+top:0;
+padding:15px;
 text-align:center;
-font-size:26px;
-font-weight:700;
-color:#2AABEE;
-box-shadow:0 0 10px rgba(0,0,0,0.5);
+z-index:100;
+animation:fadeDown 1s;
 }
 
+.logo{
+color:#2AABEE;
+font-size:22px;
+font-weight:700;
+}
+
+/* Hero */
 .hero{
-padding:60px 20px;
+padding:140px 20px 80px;
 text-align:center;
+animation:fadeUp 1.2s;
 }
 
 .hero h1{
-font-size:36px;
+font-size:40px;
 margin-bottom:20px;
 }
 
 .hero p{
-opacity:0.8;
+opacity:.85;
 font-size:18px;
-max-width:600px;
+max-width:650px;
 margin:auto;
 }
 
+/* Buttons */
 .buttons{
 margin-top:40px;
 display:flex;
-flex-wrap:wrap;
 justify-content:center;
 gap:20px;
+flex-wrap:wrap;
 }
 
 .btn{
-padding:15px 30px;
-border-radius:12px;
+padding:16px 30px;
+border-radius:14px;
 font-size:18px;
 font-weight:600;
 text-decoration:none;
-transition:0.3s;
+transition:.3s;
+position:relative;
+overflow:hidden;
+}
+
+.btn:before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:rgba(255,255,255,0.2);
+transition:.5s;
+}
+
+.btn:hover:before{
+left:100%;
 }
 
 .call{
@@ -69,83 +127,121 @@ background:#2AABEE;
 color:white;
 }
 
-.call:hover{
-background:#1e8ec9;
-transform:scale(1.05);
-}
-
 .telegram{
 background:#229ED9;
 color:white;
 }
 
-.telegram:hover{
-background:#1a7fab;
-transform:scale(1.05);
+.btn:hover{
+transform:translateY(-4px);
 }
 
+/* Sections */
 .section{
-padding:60px 20px;
+padding:80px 20px;
 text-align:center;
+animation:fadeUp 1.2s;
 }
 
 .section h2{
-font-size:28px;
-margin-bottom:25px;
+font-size:30px;
 color:#2AABEE;
+margin-bottom:30px;
 }
 
+/* Cards */
 .cards{
 display:flex;
-flex-wrap:wrap;
 justify-content:center;
-gap:20px;
-margin-top:20px;
+flex-wrap:wrap;
+gap:25px;
 }
 
 .card{
-background:#17212b;
+width:280px;
 padding:25px;
-border-radius:15px;
-width:300px;
-transition:0.3s;
+transition:.4s;
+cursor:pointer;
 }
 
 .card:hover{
-transform:translateY(-8px);
+transform:translateY(-10px) scale(1.02);
 }
 
+/* Address */
 .address{
 font-size:18px;
-opacity:0.85;
+opacity:.85;
 }
 
+/* Footer */
 footer{
-background:#17212b;
-padding:20px;
-text-align:center;
 margin-top:40px;
-opacity:0.7;
+padding:25px;
+text-align:center;
+opacity:.6;
 }
-</style>
 
+/* Floating Call Button */
+.floating{
+position:fixed;
+bottom:25px;
+right:25px;
+background:#2AABEE;
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+text-decoration:none;
+color:white;
+box-shadow:0 0 20px rgba(42,171,238,0.5);
+animation:pulse 2s infinite;
+}
+
+/* Animations */
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(40px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes fadeDown{
+from{opacity:0;transform:translateY(-40px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes pulse{
+0%{box-shadow:0 0 0 0 rgba(42,171,238,.6)}
+70%{box-shadow:0 0 0 20px rgba(42,171,238,0)}
+100%{box-shadow:0 0 0 0 rgba(42,171,238,0)}
+}
+
+/* Mobile */
+@media(max-width:600px){
+.hero h1{font-size:30px}
+}
+
+</style>
 </head>
+
 <body>
 
-<header>
-🚗 ВызовДТП.рф — Аварийный комиссар Воронеж
+<header class="glass">
+<div class="logo">🚗 ВызовДТП.рф</div>
 </header>
 
 <section class="hero">
-<h1>Помощь при ДТП 24/7</h1>
+<h1>Аварийный комиссар Воронеж</h1>
 <p>
-Быстро приедем на место аварии, грамотно оформим документы, защитим ваши интересы 
-и поможем получить страховые выплаты без нервов и лишних затрат.
+Круглосуточная помощь при дорожно-транспортных происшествиях. Быстро приедем,
+оформим ДТП, проконсультируем и поможем получить страховые выплаты.
 </p>
 
 <div class="buttons">
-<a class="btn call" href="tel:+79518703934">📞 Вызвать комиссара</a>
-<a class="btn telegram" href="https://t.me/blatsphera">💬 Консультация в Telegram</a>
+<a href="tel:+79518703934" class="btn call">📞 Вызвать комиссара</a>
+<a href="https://t.me/blatsphera" class="btn telegram">💬 Консультация Telegram</a>
 </div>
 </section>
 
@@ -154,24 +250,24 @@ opacity:0.7;
 
 <div class="cards">
 
-<div class="card">
+<div class="card glass">
 <h3>Оформление ДТП</h3>
-<p>Профессиональное оформление аварий без ошибок и задержек.</p>
+<p>Профессиональное оформление аварий любой сложности.</p>
 </div>
 
-<div class="card">
-<h3>Консультации</h3>
-<p>Подробно объясним ваши права и дальнейшие действия после аварии.</p>
+<div class="card glass">
+<h3>Юридическая помощь</h3>
+<p>Консультации и защита ваших интересов.</p>
 </div>
 
-<div class="card">
-<h3>Помощь со страховой</h3>
-<p>Помогаем получить максимальные страховые выплаты.</p>
+<div class="card glass">
+<h3>Работа со страховой</h3>
+<p>Помогаем получить максимальные выплаты.</p>
 </div>
 
-<div class="card">
+<div class="card glass">
 <h3>Выезд 24/7</h3>
-<p>Работаем круглосуточно, без выходных и праздников.</p>
+<p>Мы работаем круглосуточно без выходных.</p>
 </div>
 
 </div>
@@ -179,22 +275,24 @@ opacity:0.7;
 
 <section class="section">
 <h2>Почему выбирают нас</h2>
-<p style="max-width:700px;margin:auto;opacity:0.85;font-size:18px;">
-Мы работаем быстро, честно и профессионально. Наши специалисты имеют большой опыт 
-работы с ДТП любой сложности. Мы помогаем водителям сохранить время, деньги и нервы.
+<p style="max-width:700px;margin:auto;opacity:.85">
+Мы экономим ваше время и нервы. Наши специалисты имеют большой опыт
+работы с ДТП и знают все тонкости страховых выплат.
 </p>
 </section>
 
 <section class="section">
-<h2>Адрес</h2>
+<h2>Наш адрес</h2>
 <p class="address">
 г. Воронеж, улица 45 Стрелковой Дивизии, 236А
 </p>
 </section>
 
-<footer>
-© ВызовДТП.рф | Аварийный комиссар Воронеж
+<footer class="glass">
+© ВызовДТП.рф — Аварийный комиссар Воронеж
 </footer>
+
+<a href="tel:+79518703934" class="floating">📞</a>
 
 </body>
 </html>
