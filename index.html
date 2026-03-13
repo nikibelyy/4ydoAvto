@@ -1,104 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аварийный комиссар Воронеж — помощь при ДТП</title>
+
+<title>Аварийный комиссар Воронеж</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
+html{
+scroll-behavior:smooth;
+}
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+font-family:'Inter',sans-serif;
 }
 
 body{
-background:#0b0b0b;
+background:#000;
 color:white;
 line-height:1.6;
 }
 
-.container{
-max-width:1100px;
-margin:auto;
-padding:20px;
-}
+/* NAVBAR */
 
-header{
-padding:40px 20px;
+nav{
+position:fixed;
+top:0;
+width:100%;
 display:flex;
 justify-content:space-between;
 align-items:center;
+padding:18px 40px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+z-index:100;
 }
 
 .logo{
-font-size:20px;
 font-weight:600;
-letter-spacing:1px;
+font-size:18px;
 }
 
-.call-btn{
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-size:14px;
+}
+
+.call{
 background:white;
 color:black;
-padding:12px 22px;
-border-radius:30px;
-text-decoration:none;
-font-weight:500;
+padding:8px 18px;
+border-radius:20px;
 }
 
+/* HERO */
+
 .hero{
+
+height:100vh;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 text-align:center;
-padding:120px 20px 100px;
-background:linear-gradient(180deg,#0b0b0b,#141414);
+
+background:
+linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.9)),
+url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2000");
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+
+padding:20px;
+
 }
 
 .hero h1{
-font-size:52px;
-font-weight:600;
+font-size:64px;
 margin-bottom:20px;
+animation:fadeUp 1.2s ease;
 }
 
 .hero p{
 font-size:20px;
-color:#cfcfcf;
-max-width:700px;
-margin:auto;
+color:#d0d0d0;
+max-width:650px;
 margin-bottom:40px;
+animation:fadeUp 1.6s ease;
 }
 
-.big-call{
-display:inline-block;
-background:white;
-color:black;
-padding:18px 40px;
-font-size:20px;
+.hero-buttons a{
+margin:10px;
+padding:16px 32px;
 border-radius:40px;
 text-decoration:none;
-font-weight:600;
+font-weight:500;
+transition:0.3s;
 }
 
+.btn-white{
+background:white;
+color:black;
+}
+
+.btn-dark{
+border:1px solid #aaa;
+color:white;
+}
+
+.hero-buttons a:hover{
+transform:scale(1.05);
+}
+
+/* SECTION */
+
 .section{
-padding:90px 20px;
+padding:120px 20px;
+max-width:1100px;
+margin:auto;
 }
 
 .section-title{
-font-size:38px;
+font-size:42px;
 text-align:center;
-margin-bottom:60px;
+margin-bottom:70px;
 }
 
-.features{
+/* GRID */
+
+.grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:25px;
+gap:30px;
 }
 
+/* CARD */
+
 .card{
-background:#161616;
-padding:30px;
-border-radius:18px;
+background:#111;
+padding:35px;
+border-radius:20px;
+
+opacity:0;
+transform:translateY(40px);
+transition:0.8s;
+
+}
+
+.card.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.card:hover{
+transform:translateY(-10px);
+background:#181818;
 }
 
 .card h3{
@@ -107,9 +174,11 @@ font-size:20px;
 }
 
 .card p{
-color:#bfbfbf;
+color:#bdbdbd;
 font-size:15px;
 }
+
+/* STEPS */
 
 .steps{
 display:grid;
@@ -118,135 +187,171 @@ gap:30px;
 }
 
 .step{
-background:#161616;
-padding:35px;
-border-radius:18px;
+
+background:#111;
+padding:40px;
+border-radius:20px;
+
+opacity:0;
+transform:translateY(40px);
+transition:0.8s;
+
 }
 
-.step span{
-font-size:28px;
+.step.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.step-number{
+font-size:32px;
 font-weight:600;
-display:block;
 margin-bottom:10px;
 }
+
+/* CTA */
 
 .cta{
 background:white;
 color:black;
 text-align:center;
-padding:80px 20px;
+padding:120px 20px;
 }
 
 .cta h2{
-font-size:36px;
+font-size:44px;
 margin-bottom:20px;
 }
 
 .cta a{
-display:inline-block;
 background:black;
 color:white;
-padding:18px 35px;
-border-radius:35px;
+padding:18px 36px;
+border-radius:40px;
 text-decoration:none;
-font-size:20px;
+font-size:18px;
+transition:0.3s;
 }
 
-footer{
-background:#0a0a0a;
-padding:40px 20px;
-text-align:center;
-color:#999;
-font-size:14px;
+.cta a:hover{
+transform:scale(1.05);
 }
+
+/* FOOTER */
+
+footer{
+padding:50px 20px;
+text-align:center;
+background:#050505;
+color:#999;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(30px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* MOBILE */
 
 @media(max-width:700px){
 
 .hero h1{
-font-size:34px;
-}
-
-.hero{
-padding:80px 15px;
+font-size:38px;
 }
 
 .section-title{
-font-size:28px;
+font-size:30px;
+}
+
+nav{
+padding:15px 20px;
 }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
-<header class="container">
+
+<nav>
 
 <div class="logo">
-Аварийный комиссар Воронеж
+Аварийный комиссар
 </div>
 
-<a class="call-btn" href="tel:+79518703934">
-Позвонить
-</a>
+<div>
+<a href="#services">Услуги</a>
+<a href="#steps">Как работаем</a>
+<a class="call" href="tel:+79518703934">Позвонить</a>
+</div>
 
-</header>
+</nav>
 
 
 <section class="hero">
 
-<h1>Помощь при ДТП в Воронеже</h1>
+<h1>Помощь при ДТП<br>в Воронеже</h1>
 
 <p>
-Аварийный комиссар приедет на место ДТП, поможет правильно оформить документы,
-защитит ваши интересы перед страховой компанией и проконсультирует по дальнейшим действиям.
-Работаем быстро, профессионально и круглосуточно.
+Аварийный комиссар быстро приедет на место аварии,
+поможет оформить документы и проконсультирует по
+дальнейшим действиям.
 </p>
 
-<a class="big-call" href="tel:+79518703934">
-Позвонить +7 (951) 870-39-34
+<div class="hero-buttons">
+
+<a class="btn-white" href="tel:+79518703934">
+Позвонить
 </a>
+
+<a class="btn-dark" href="#services">
+Наши услуги
+</a>
+
+</div>
 
 </section>
 
 
-<section class="section container">
+
+<section id="services" class="section">
 
 <h2 class="section-title">Наши услуги</h2>
 
-<div class="features">
+<div class="grid">
 
 <div class="card">
 <h3>🚗 Выезд на место ДТП</h3>
-<p>
-Оперативный выезд аварийного комиссара в любую точку Воронежа.
-Поможем разобраться в ситуации и правильно зафиксировать обстоятельства аварии.
-</p>
+<p>Быстро приезжаем на место аварии в любой район Воронежа.</p>
 </div>
 
 <div class="card">
-<h3>📄 Оформление документов</h3>
-<p>
-Помогаем корректно оформить европротокол или документы для ГИБДД,
-чтобы избежать проблем со страховой компанией.
-</p>
+<h3>📄 Оформление ДТП</h3>
+<p>Помогаем правильно оформить европротокол и документы.</p>
 </div>
 
 <div class="card">
 <h3>⚖️ Консультация</h3>
-<p>
-Подскажем как действовать после ДТП,
-какие документы собрать и как получить страховую выплату.
-</p>
+<p>Подскажем как действовать после ДТП и со страховой.</p>
 </div>
 
 <div class="card">
-<h3>⏱ Быстрый приезд</h3>
-<p>
-Мы понимаем, что при аварии важна каждая минута,
-поэтому стараемся прибыть максимально быстро.
-</p>
+<h3>🛡 Защита интересов</h3>
+<p>Помогаем избежать ошибок и защитить права водителя.</p>
 </div>
 
 </div>
@@ -254,56 +359,84 @@ font-size:28px;
 </section>
 
 
-<section class="section container">
 
-<h2 class="section-title">Как мы помогаем</h2>
+<section id="steps" class="section">
+
+<h2 class="section-title">Как мы работаем</h2>
 
 <div class="steps">
 
 <div class="step">
-<span>1</span>
-Позвоните нам сразу после ДТП и сообщите место происшествия.
+<div class="step-number">1</div>
+Позвоните нам и сообщите место ДТП.
 </div>
 
 <div class="step">
-<span>2</span>
-Аварийный комиссар выезжает на место и помогает разобраться в ситуации.
+<div class="step-number">2</div>
+Комиссар выезжает на место аварии.
 </div>
 
 <div class="step">
-<span>3</span>
-Мы помогаем оформить документы и объясняем дальнейшие действия.
+<div class="step-number">3</div>
+Помогаем оформить документы и консультируем.
 </div>
 
 </div>
 
 </section>
+
 
 
 <section class="cta">
 
 <h2>Нужна помощь при ДТП?</h2>
 
-<p style="margin-bottom:30px;">
-Позвоните прямо сейчас и получите консультацию.
-</p>
+<p style="margin-bottom:30px;">Позвоните прямо сейчас</p>
 
 <a href="tel:+79518703934">
-Позвонить +7 (951) 870-39-34
++7 (951) 870-39-34
 </a>
 
 </section>
 
 
+
 <footer>
 
 Аварийный комиссар Воронеж  
-<br>
-Телефон: +7 (951) 870-39-34  
 <br><br>
-Круглосуточная помощь водителям
+Круглосуточная помощь водителям  
+<br>
+Телефон: +7 (951) 870-39-34
 
 </footer>
+
+
+<script>
+
+/* SCROLL ANIMATION */
+
+const observer = new IntersectionObserver(entries => {
+
+entries.forEach(entry => {
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("show")
+
+}
+
+})
+
+})
+
+document.querySelectorAll(".card, .step").forEach(el => {
+
+observer.observe(el)
+
+})
+
+</script>
 
 
 </body>
