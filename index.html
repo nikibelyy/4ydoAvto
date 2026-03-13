@@ -3,92 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аварийный комиссар Воронеж</title>
+<title>Аварийный комиссар Воронеж — помощь при ДТП</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
 body{
-background:#000;
+background:#0b0b0b;
 color:white;
-text-align:center;
+line-height:1.6;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
 }
 
 header{
-padding:60px 20px;
+padding:40px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-h1{
-font-size:34px;
+.logo{
+font-size:20px;
 font-weight:600;
-margin-bottom:15px;
-}
-
-.subtitle{
-font-size:18px;
-color:#cfcfcf;
-margin-bottom:40px;
+letter-spacing:1px;
 }
 
 .call-btn{
+background:white;
+color:black;
+padding:12px 22px;
+border-radius:30px;
+text-decoration:none;
+font-weight:500;
+}
+
+.hero{
+text-align:center;
+padding:120px 20px 100px;
+background:linear-gradient(180deg,#0b0b0b,#141414);
+}
+
+.hero h1{
+font-size:52px;
+font-weight:600;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:20px;
+color:#cfcfcf;
+max-width:700px;
+margin:auto;
+margin-bottom:40px;
+}
+
+.big-call{
 display:inline-block;
 background:white;
 color:black;
-padding:16px 28px;
+padding:18px 40px;
+font-size:20px;
 border-radius:40px;
 text-decoration:none;
-font-size:18px;
-font-weight:500;
-transition:0.3s;
-}
-
-.call-btn:hover{
-background:#e6e6e6;
+font-weight:600;
 }
 
 .section{
-padding:70px 20px;
-background:#111;
+padding:90px 20px;
 }
 
-.section h2{
-font-size:26px;
-margin-bottom:25px;
+.section-title{
+font-size:38px;
+text-align:center;
+margin-bottom:60px;
 }
 
-.services{
-max-width:700px;
-margin:auto;
+.features{
 display:grid;
-gap:15px;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
 }
 
-.service{
-background:#1a1a1a;
-padding:18px;
-border-radius:14px;
-font-size:16px;
+.card{
+background:#161616;
+padding:30px;
+border-radius:18px;
+}
+
+.card h3{
+margin-bottom:15px;
+font-size:20px;
+}
+
+.card p{
+color:#bfbfbf;
+font-size:15px;
+}
+
+.steps{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+}
+
+.step{
+background:#161616;
+padding:35px;
+border-radius:18px;
+}
+
+.step span{
+font-size:28px;
+font-weight:600;
+display:block;
+margin-bottom:10px;
+}
+
+.cta{
+background:white;
+color:black;
+text-align:center;
+padding:80px 20px;
+}
+
+.cta h2{
+font-size:36px;
+margin-bottom:20px;
+}
+
+.cta a{
+display:inline-block;
+background:black;
+color:white;
+padding:18px 35px;
+border-radius:35px;
+text-decoration:none;
+font-size:20px;
 }
 
 footer{
+background:#0a0a0a;
 padding:40px 20px;
-color:#aaa;
+text-align:center;
+color:#999;
 font-size:14px;
 }
 
-@media (max-width:600px){
-h1{
+@media(max-width:700px){
+
+.hero h1{
+font-size:34px;
+}
+
+.hero{
+padding:80px 15px;
+}
+
+.section-title{
 font-size:28px;
 }
 
-.section{
-padding:50px 15px;
-}
 }
 
 </style>
@@ -96,32 +181,130 @@ padding:50px 15px;
 
 <body>
 
-<header>
-<h1>Аварийный комиссар</h1>
-<div class="subtitle">Воронеж • Круглосуточно</div>
+<header class="container">
+
+<div class="logo">
+Аварийный комиссар Воронеж
+</div>
 
 <a class="call-btn" href="tel:+79518703934">
-Позвонить +7 (951) 870-39-34
+Позвонить
 </a>
+
 </header>
 
-<section class="section">
-<h2>Помощь при ДТП</h2>
 
-<div class="services">
-<div class="service">🚗 Выезд на место ДТП</div>
-<div class="service">📄 Оформление документов</div>
-<div class="service">⚖️ Консультация по страховым</div>
-<div class="service">📍 Работаем по всему Воронежу</div>
-<div class="service">⏱ Быстрый приезд</div>
+<section class="hero">
+
+<h1>Помощь при ДТП в Воронеже</h1>
+
+<p>
+Аварийный комиссар приедет на место ДТП, поможет правильно оформить документы,
+защитит ваши интересы перед страховой компанией и проконсультирует по дальнейшим действиям.
+Работаем быстро, профессионально и круглосуточно.
+</p>
+
+<a class="big-call" href="tel:+79518703934">
+Позвонить +7 (951) 870-39-34
+</a>
+
+</section>
+
+
+<section class="section container">
+
+<h2 class="section-title">Наши услуги</h2>
+
+<div class="features">
+
+<div class="card">
+<h3>🚗 Выезд на место ДТП</h3>
+<p>
+Оперативный выезд аварийного комиссара в любую точку Воронежа.
+Поможем разобраться в ситуации и правильно зафиксировать обстоятельства аварии.
+</p>
+</div>
+
+<div class="card">
+<h3>📄 Оформление документов</h3>
+<p>
+Помогаем корректно оформить европротокол или документы для ГИБДД,
+чтобы избежать проблем со страховой компанией.
+</p>
+</div>
+
+<div class="card">
+<h3>⚖️ Консультация</h3>
+<p>
+Подскажем как действовать после ДТП,
+какие документы собрать и как получить страховую выплату.
+</p>
+</div>
+
+<div class="card">
+<h3>⏱ Быстрый приезд</h3>
+<p>
+Мы понимаем, что при аварии важна каждая минута,
+поэтому стараемся прибыть максимально быстро.
+</p>
+</div>
+
 </div>
 
 </section>
 
+
+<section class="section container">
+
+<h2 class="section-title">Как мы помогаем</h2>
+
+<div class="steps">
+
+<div class="step">
+<span>1</span>
+Позвоните нам сразу после ДТП и сообщите место происшествия.
+</div>
+
+<div class="step">
+<span>2</span>
+Аварийный комиссар выезжает на место и помогает разобраться в ситуации.
+</div>
+
+<div class="step">
+<span>3</span>
+Мы помогаем оформить документы и объясняем дальнейшие действия.
+</div>
+
+</div>
+
+</section>
+
+
+<section class="cta">
+
+<h2>Нужна помощь при ДТП?</h2>
+
+<p style="margin-bottom:30px;">
+Позвоните прямо сейчас и получите консультацию.
+</p>
+
+<a href="tel:+79518703934">
+Позвонить +7 (951) 870-39-34
+</a>
+
+</section>
+
+
 <footer>
-Аварийный комиссар Воронеж<br>
-Телефон: +7 (951) 870-39-34
+
+Аварийный комиссар Воронеж  
+<br>
+Телефон: +7 (951) 870-39-34  
+<br><br>
+Круглосуточная помощь водителям
+
 </footer>
+
 
 </body>
 </html>
