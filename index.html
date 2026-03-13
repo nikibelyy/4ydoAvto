@@ -3,85 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аварийный комиссар Воронеж | ВызовДТП.рф</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Аварийный комиссар Воронеж</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{background:linear-gradient(180deg,#0e1621,#0b1118);color:white;overflow-x:hidden;}
-.glass{background:rgba(23,33,43,0.6);backdrop-filter: blur(18px);border:1px solid rgba(255,255,255,0.05);border-radius:20px;}
-header{position:fixed;width:100%;top:0;padding:15px;text-align:center;z-index:100;}
-.logo{color:#2AABEE;font-size:22px;font-weight:700;}
-.hero{padding:140px 20px 80px;text-align:center;}
-.hero h1{font-size:40px;margin-bottom:20px;}
-.hero p{opacity:.85;font-size:18px;max-width:650px;margin:auto;}
-.buttons{margin-top:40px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
-.btn{padding:16px 30px;border-radius:14px;font-size:18px;font-weight:600;text-decoration:none;transition:.3s;position:relative;overflow:hidden;}
-.call{background:#2AABEE;color:white;}
-.telegram{background:#229ED9;color:white;}
-.btn:hover{transform:translateY(-4px);}
-.section{padding:80px 20px;text-align:center;}
-.section h2{font-size:30px;color:#2AABEE;margin-bottom:30px;}
-.cards{display:flex;justify-content:center;flex-wrap:wrap;gap:25px;}
-.card{width:280px;padding:25px;transition:.4s;cursor:pointer;}
-.card:hover{transform:translateY(-10px) scale(1.02);}
-.address{font-size:18px;opacity:.85;}
-footer{margin-top:40px;padding:25px;text-align:center;opacity:.6;}
-.floating{position:fixed;bottom:25px;right:25px;background:#2AABEE;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;color:white;box-shadow:0 0 20px rgba(42,171,238,0.5);}
-</style>
-</head>
-<body>
-
-<header class="glass">
-<div class="logo">🚗 ВызовДТП.рф</div>
-</header>
-
-<section class="hero">
-<h1>Аварийный комиссар Воронеж</h1>
-<p>Круглосуточная помощь при ДТП. Быстро приедем, оформим аварии, проконсультируем и поможем получить страховые выплаты.</p>
-
-<div class="buttons">
-<a href="tel:+79518703934" class="btn call" onclick="trackClick('call')">📞 Вызвать комиссара</a>
-<a href="https://t.me/blatsphera" class="btn telegram" onclick="trackClick('telegram')">💬 Консультация Telegram</a>
-</div>
-</section>
-
-<section class="section">
-<h2>Наши услуги</h2>
-<div class="cards">
-<div class="card glass"><h3>Оформление ДТП</h3><p>Профессиональное оформление аварий любой сложности.</p></div>
-<div class="card glass"><h3>Юридическая помощь</h3><p>Консультации и защита ваших интересов.</p></div>
-<div class="card glass"><h3>Работа со страховой</h3><p>Помогаем получить максимальные выплаты.</p></div>
-<div class="card glass"><h3>Выезд 24/7</h3><p>Мы работаем круглосуточно без выходных.</p></div>
-</div>
-</section>
-
-<section class="section">
-<h2>Наш адрес</h2>
-<p class="address">г. Воронеж, улица 45 Стрелковой Дивизии, 236А</p>
-</section>
-
-<footer class="glass">© ВызовДТП.рф — Аварийный комиссар Воронеж</footer>
-
-<a href="tel:+79518703934" class="floating">📞</a>
-
-<script>
-function trackClick(type){
-    let clicks = JSON.parse(localStorage.getItem('clicks')) || {call:0, telegram:0};
-    if(type==='call') clicks.call++;
-    if(type==='telegram') clicks.telegram++;
-    localStorage.setItem('clicks', JSON.stringify(clicks));
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
 }
 
-// Счётчик уникальных посетителей по сессии
-(function(){
-    let visits = parseInt(localStorage.getItem('visits')) || 0;
-    if(!sessionStorage.getItem('visited')){
-        visits++;
-        localStorage.setItem('visits', visits);
-        sessionStorage.setItem('visited','true');
-    }
-})();
-</script>
+body{
+background:#000;
+color:white;
+text-align:center;
+}
+
+header{
+padding:60px 20px;
+}
+
+h1{
+font-size:34px;
+font-weight:600;
+margin-bottom:15px;
+}
+
+.subtitle{
+font-size:18px;
+color:#cfcfcf;
+margin-bottom:40px;
+}
+
+.call-btn{
+display:inline-block;
+background:white;
+color:black;
+padding:16px 28px;
+border-radius:40px;
+text-decoration:none;
+font-size:18px;
+font-weight:500;
+transition:0.3s;
+}
+
+.call-btn:hover{
+background:#e6e6e6;
+}
+
+.section{
+padding:70px 20px;
+background:#111;
+}
+
+.section h2{
+font-size:26px;
+margin-bottom:25px;
+}
+
+.services{
+max-width:700px;
+margin:auto;
+display:grid;
+gap:15px;
+}
+
+.service{
+background:#1a1a1a;
+padding:18px;
+border-radius:14px;
+font-size:16px;
+}
+
+footer{
+padding:40px 20px;
+color:#aaa;
+font-size:14px;
+}
+
+@media (max-width:600px){
+h1{
+font-size:28px;
+}
+
+.section{
+padding:50px 15px;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Аварийный комиссар</h1>
+<div class="subtitle">Воронеж • Круглосуточно</div>
+
+<a class="call-btn" href="tel:+79518703934">
+Позвонить +7 (951) 870-39-34
+</a>
+</header>
+
+<section class="section">
+<h2>Помощь при ДТП</h2>
+
+<div class="services">
+<div class="service">🚗 Выезд на место ДТП</div>
+<div class="service">📄 Оформление документов</div>
+<div class="service">⚖️ Консультация по страховым</div>
+<div class="service">📍 Работаем по всему Воронежу</div>
+<div class="service">⏱ Быстрый приезд</div>
+</div>
+
+</section>
+
+<footer>
+Аварийный комиссар Воронеж<br>
+Телефон: +7 (951) 870-39-34
+</footer>
 
 </body>
 </html>
