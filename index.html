@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Аварийный комиссар Воронеж</title>
+<title>вызовдтп.рф — Аварийный комиссар Воронеж</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -35,10 +35,10 @@ position:fixed;
 top:0;
 width:100%;
 display:flex;
-justify-content:space-between;
+justify-content:center;
 align-items:center;
-padding:18px 40px;
-background:rgba(0,0,0,0.6);
+padding:18px;
+background:rgba(0,0,0,0.7);
 backdrop-filter:blur(10px);
 z-index:100;
 }
@@ -46,20 +46,7 @@ z-index:100;
 .logo{
 font-weight:600;
 font-size:18px;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-margin-left:20px;
-font-size:14px;
-}
-
-.call{
-background:white;
-color:black;
-padding:8px 18px;
-border-radius:20px;
+letter-spacing:1px;
 }
 
 /* HERO */
@@ -67,22 +54,14 @@ border-radius:20px;
 .hero{
 
 height:100vh;
-
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-
-background:
-linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.9)),
-url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2000");
-
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-
 padding:20px;
+
+background:linear-gradient(180deg,#000,#0a0a0a);
 
 }
 
@@ -274,10 +253,6 @@ font-size:38px;
 font-size:30px;
 }
 
-nav{
-padding:15px 20px;
-}
-
 }
 
 </style>
@@ -290,13 +265,7 @@ padding:15px 20px;
 <nav>
 
 <div class="logo">
-Аварийный комиссар
-</div>
-
-<div>
-<a href="#services">Услуги</a>
-<a href="#steps">Как работаем</a>
-<a class="call" href="tel:+79518703934">Позвонить</a>
+вызовдтп.рф
 </div>
 
 </nav>
@@ -304,12 +273,11 @@ padding:15px 20px;
 
 <section class="hero">
 
-<h1>Помощь при ДТП<br>в Воронеже</h1>
+<h1>Аварийный комиссар<br>в Воронеже</h1>
 
 <p>
-Аварийный комиссар быстро приедет на место аварии,
-поможет оформить документы и проконсультирует по
-дальнейшим действиям.
+Круглосуточная помощь при ДТП. Быстрый выезд аварийного комиссара,
+оформление документов и консультация по страховым выплатам.
 </p>
 
 <div class="hero-buttons">
@@ -403,9 +371,9 @@ padding:15px 20px;
 
 <footer>
 
-Аварийный комиссар Воронеж  
+вызовдтп.рф  
 <br><br>
-Круглосуточная помощь водителям  
+Аварийный комиссар Воронеж  
 <br>
 Телефон: +7 (951) 870-39-34
 
@@ -413,8 +381,6 @@ padding:15px 20px;
 
 
 <script>
-
-/* SCROLL ANIMATION */
 
 const observer = new IntersectionObserver(entries => {
 
