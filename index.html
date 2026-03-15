@@ -3,267 +3,255 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ДТП Эксперт</title>
+<title>вызовдтп.рф — Аварийный комиссар Воронеж</title>
 
-<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
+html{
+scroll-behavior:smooth;
+}
+
 *{
+margin:0;
+padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+font-family:'Inter',sans-serif;
 }
 
 body{
-
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI";
-background:#0b0b0b;
+background:#000;
 color:white;
-
+line-height:1.6;
 }
 
-/* container */
+/* NAVBAR */
 
-.container{
-
-max-width:450px;
-margin:auto;
-padding:20px 16px 120px;
-
-}
-
-/* header */
-
-.header{
-
-font-size:32px;
-font-weight:700;
-letter-spacing:-0.5px;
-margin-bottom:20px;
-
-}
-
-/* search */
-
-.search input{
-
+nav{
+position:fixed;
+top:0;
 width:100%;
-padding:16px;
-
-border-radius:14px;
-
-border:none;
-
-background:#1c1c1e;
-
-color:white;
-
-font-size:16px;
-
-outline:none;
-
-margin-bottom:18px;
-
-}
-
-/* cards */
-
-.card{
-
-background:#151515;
-
-border-radius:20px;
-
-padding:18px;
-
-margin-bottom:14px;
-
-box-shadow:
-
-0 0 0 1px rgba(255,255,255,0.04),
-
-0 10px 30px rgba(0,0,0,0.6);
-
-transition:0.25s;
-
-position:relative;
-
-}
-
-.card:active{
-
-transform:scale(.96);
-
-}
-
-.name{
-
-font-size:18px;
-
-font-weight:600;
-
-margin-bottom:6px;
-
-}
-
-.row{
-
-opacity:.65;
-
-font-size:14px;
-
-margin-top:3px;
-
-}
-
-/* swipe delete */
-
-.delete{
-
-position:absolute;
-
-right:0;
-
-top:0;
-
-bottom:0;
-
-width:90px;
-
-background:#ff3b30;
-
 display:flex;
-
-align-items:center;
-
 justify-content:center;
-
-border-radius:0 20px 20px 0;
-
-font-weight:600;
-
-}
-
-/* buttons */
-
-.addBtn{
-
-position:fixed;
-
-right:20px;
-
-bottom:30px;
-
-background:white;
-
-color:black;
-
-border-radius:16px;
-
-padding:16px 22px;
-
-font-weight:600;
-
-box-shadow:0 10px 30px rgba(0,0,0,0.8);
-
-}
-
-/* modal */
-
-.modal{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-right:0;
-
-bottom:0;
-
+align-items:center;
+padding:18px;
 background:rgba(0,0,0,0.7);
+backdrop-filter:blur(10px);
+z-index:100;
+}
 
-display:none;
+.logo{
+font-weight:600;
+font-size:18px;
+letter-spacing:1px;
+}
 
-align-items:center;
+/* HERO */
 
+.hero{
+
+height:100vh;
+display:flex;
+flex-direction:column;
 justify-content:center;
-
+align-items:center;
+text-align:center;
 padding:20px;
 
-}
-
-.form{
-
-background:#151515;
-
-border-radius:24px;
-
-padding:24px;
-
-width:100%;
-
-max-width:360px;
-
-box-shadow:0 30px 60px rgba(0,0,0,0.8);
+background:linear-gradient(180deg,#000,#0a0a0a);
 
 }
 
-.field{
-
-margin-bottom:14px;
-
+.hero h1{
+font-size:64px;
+margin-bottom:20px;
+animation:fadeUp 1.2s ease;
 }
 
-.field label{
-
-font-size:12px;
-
-opacity:.6;
-
-display:block;
-
-margin-bottom:4px;
-
+.hero p{
+font-size:20px;
+color:#d0d0d0;
+max-width:650px;
+margin-bottom:40px;
+animation:fadeUp 1.6s ease;
 }
 
-.field input{
-
-width:100%;
-
-padding:14px;
-
-border-radius:12px;
-
-border:none;
-
-background:#1c1c1e;
-
-color:white;
-
+.hero-buttons a{
+margin:10px;
+padding:16px 32px;
+border-radius:40px;
+text-decoration:none;
+font-weight:500;
+transition:0.3s;
 }
 
-.form button{
-
-width:100%;
-
-padding:15px;
-
-border:none;
-
-border-radius:14px;
-
+.btn-white{
 background:white;
-
 color:black;
+}
 
+.btn-dark{
+border:1px solid #aaa;
+color:white;
+}
+
+.hero-buttons a:hover{
+transform:scale(1.05);
+}
+
+/* SECTION */
+
+.section{
+padding:120px 20px;
+max-width:1100px;
+margin:auto;
+}
+
+.section-title{
+font-size:42px;
+text-align:center;
+margin-bottom:70px;
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:30px;
+}
+
+/* CARD */
+
+.card{
+background:#111;
+padding:35px;
+border-radius:20px;
+
+opacity:0;
+transform:translateY(40px);
+transition:0.8s;
+
+}
+
+.card.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.card:hover{
+transform:translateY(-10px);
+background:#181818;
+}
+
+.card h3{
+margin-bottom:15px;
+font-size:20px;
+}
+
+.card p{
+color:#bdbdbd;
+font-size:15px;
+}
+
+/* STEPS */
+
+.steps{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+}
+
+.step{
+
+background:#111;
+padding:40px;
+border-radius:20px;
+
+opacity:0;
+transform:translateY(40px);
+transition:0.8s;
+
+}
+
+.step.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.step-number{
+font-size:32px;
 font-weight:600;
+margin-bottom:10px;
+}
 
-font-size:16px;
+/* CTA */
+
+.cta{
+background:white;
+color:black;
+text-align:center;
+padding:120px 20px;
+}
+
+.cta h2{
+font-size:44px;
+margin-bottom:20px;
+}
+
+.cta a{
+background:black;
+color:white;
+padding:18px 36px;
+border-radius:40px;
+text-decoration:none;
+font-size:18px;
+transition:0.3s;
+}
+
+.cta a:hover{
+transform:scale(1.05);
+}
+
+/* FOOTER */
+
+footer{
+padding:50px 20px;
+text-align:center;
+background:#050505;
+color:#999;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(30px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.hero h1{
+font-size:38px;
+}
+
+.section-title{
+font-size:30px;
+}
 
 }
 
@@ -273,257 +261,148 @@ font-size:16px;
 
 <body>
 
-<div class="container">
 
-<div class="header">ДТП Эксперт</div>
+<nav>
 
-<div class="search">
+<div class="logo">
+вызовдтп.рф
+</div>
 
-<input id="searchInput" placeholder="Поиск клиента">
+</nav>
+
+
+<section class="hero">
+
+<h1>Аварийный комиссар<br>в Воронеже</h1>
+
+<p>
+Круглосуточная помощь при ДТП. Быстрый выезд аварийного комиссара,
+оформление документов и консультация по страховым выплатам.
+</p>
+
+<div class="hero-buttons">
+
+<a class="btn-white" href="tel:+79518703934">
+Позвонить
+</a>
+
+<a class="btn-dark" href="#services">
+Наши услуги
+</a>
 
 </div>
 
-<div id="list"></div>
+</section>
 
+
+
+<section id="services" class="section">
+
+<h2 class="section-title">Наши услуги</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>🚗 Выезд на место ДТП</h3>
+<p>Быстро приезжаем на место аварии в любой район Воронежа.</p>
 </div>
 
-<div class="addBtn" onclick="openForm()">Клиент</div>
-
-<div class="modal" id="modal">
-
-<div class="form">
-
-<div class="field">
-
-<label>ФИО</label>
-
-<input id="nameInput">
-
+<div class="card">
+<h3>📄 Оформление ДТП</h3>
+<p>Помогаем правильно оформить европротокол и документы.</p>
 </div>
 
-<div class="field">
-
-<label>Марка</label>
-
-<input id="brandInput">
-
+<div class="card">
+<h3>⚖️ Консультация</h3>
+<p>Подскажем как действовать после ДТП и со страховой.</p>
 </div>
 
-<div class="field">
-
-<label>Госномер</label>
-
-<input id="numberInput">
-
-</div>
-
-<div class="field">
-
-<label>Телефон</label>
-
-<input id="phoneInput">
-
-</div>
-
-<button onclick="saveClient()">Сохранить</button>
-
+<div class="card">
+<h3>🛡 Защита интересов</h3>
+<p>Помогаем избежать ошибок и защитить права водителя.</p>
 </div>
 
 </div>
+
+</section>
+
+
+
+<section id="steps" class="section">
+
+<h2 class="section-title">Как мы работаем</h2>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-number">1</div>
+Позвоните нам и сообщите место ДТП.
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+Комиссар выезжает на место аварии.
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+Помогаем оформить документы и консультируем.
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="cta">
+
+<h2>Нужна помощь при ДТП?</h2>
+
+<p style="margin-bottom:30px;">Позвоните прямо сейчас</p>
+
+<a href="tel:+79518703934">
++7 (951) 870-39-34
+</a>
+
+</section>
+
+
+
+<footer>
+
+вызовдтп.рф  
+<br><br>
+Аварийный комиссар Воронеж  
+<br>
+Телефон: +7 (951) 870-39-34
+
+</footer>
+
 
 <script>
 
-let clients=JSON.parse(localStorage.getItem("clients"))||[]
+const observer = new IntersectionObserver(entries => {
 
-let editing=null
+entries.forEach(entry => {
 
-const list=document.getElementById("list")
+if(entry.isIntersecting){
 
-function save(){
-
-localStorage.setItem("clients",JSON.stringify(clients))
-
-}
-
-/* render */
-
-function render(data){
-
-list.innerHTML=""
-
-data.forEach(c=>{
-
-let card=document.createElement("div")
-
-card.className="card"
-
-card.innerHTML=`
-
-<div class="name">${c.name}</div>
-
-<div class="row">${c.brand}</div>
-
-<div class="row">${c.number}</div>
-
-<div class="row">${c.phone}</div>
-
-`
-
-/* edit */
-
-card.onclick=()=>openForm(c)
-
-/* swipe */
-
-let startX
-
-card.addEventListener("touchstart",e=>{
-
-startX=e.touches[0].clientX
-
-})
-
-card.addEventListener("touchend",e=>{
-
-let endX=e.changedTouches[0].clientX
-
-if(startX-endX>100){
-
-if(confirm("Удалить клиента?")){
-
-clients=clients.filter(x=>x.id!==c.id)
-
-save()
-
-render(clients)
-
-}
+entry.target.classList.add("show")
 
 }
 
 })
 
-list.appendChild(card)
-
 })
 
-}
+document.querySelectorAll(".card, .step").forEach(el => {
 
-/* form */
-
-function openForm(c){
-
-modal.style.display="flex"
-
-if(c){
-
-editing=c.id
-
-nameInput.value=c.name
-
-brandInput.value=c.brand
-
-numberInput.value=c.number
-
-phoneInput.value=c.phone
-
-}else{
-
-editing=null
-
-nameInput.value=""
-
-brandInput.value=""
-
-numberInput.value=""
-
-phoneInput.value=""
-
-}
-
-}
-
-function saveClient(){
-
-let n=nameInput.value.trim()
-
-let b=brandInput.value.trim()
-
-let num=numberInput.value.trim()
-
-let p=phoneInput.value.trim()
-
-if(!n||!b||!num||!p)return
-
-if(editing){
-
-let c=clients.find(x=>x.id===editing)
-
-c.name=n
-
-c.brand=b
-
-c.number=num
-
-c.phone=p
-
-}else{
-
-clients.push({
-
-id:Date.now(),
-
-name:n,
-
-brand:b,
-
-number:num,
-
-phone:p
+observer.observe(el)
 
 })
-
-}
-
-save()
-
-render(clients)
-
-modal.style.display="none"
-
-}
-
-/* search */
-
-searchInput.oninput=e=>{
-
-let q=e.target.value.toLowerCase()
-
-let f=clients.filter(c=>
-
-c.name.toLowerCase().includes(q)||
-
-c.number.toLowerCase().includes(q)||
-
-c.phone.toLowerCase().includes(q)
-
-)
-
-render(f)
-
-}
-
-render(clients)
-
-/* PWA */
-
-if("serviceWorker" in navigator){
-
-navigator.serviceWorker.register("sw.js")
-
-}
 
 </script>
 
+
 </body>
-</html>
