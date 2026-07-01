@@ -4,657 +4,437 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>вызовдтп.рф | Служба аварийных комиссаров Воронеж | Срочный выезд при ДТП</title>
-    <meta name="description" content="Служба аварийных комиссаров вызовдтп.рф в Воронеже. Срочный выезд за 15 минут. Юридически грамотное оформление Европротокола с лимитом выплат до 100 000 и 400 000 рублей без очередей в ГИБДД.">
-    <meta name="keywords" content="вызовдтп.рф, аварийный комиссар воронеж, вызов комиссара дтп воронеж, европротокол 400 тысяч воронеж, оформить дтп без гибдд, карпинского 39 комиссары">
+    <!-- SEO Оптимизация для Яндекса и Google -->
+    <title>Аварийный Комиссар Воронеж | Вызов при ДТП | вызовдтп.рф</title>
+    <meta name="description" content="Оперативный выезд аварийного комиссара в Воронеже. Оформление ДТП без ГИБДД за 30 минут. Помощь в получении выплат по ОСАГО и КАСКО. Звоните: +7 (951) 870-39-34">
+    <meta name="keywords" content="аварийный комиссар воронеж, вызов при дтп, оформление дтп, помощь при дтп, европротокол, выплаты осаго, каско воронеж, вызовдтп.рф">
     <meta name="robots" content="index, follow">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://вызовдтп.рф/">
-    <meta property="og:title" content="Аварийный Комиссар Воронеж | вызовдтп.рф">
-    <meta property="og:description" content="Экстренное и безошибочное оформление ДТП. Получите до 400 000 ₽ выплаты от страховой без поездки в ГИБДД.">
-    
-    <meta name="yandex-verification" content="ВСТАВЬТЕ_КОД_ПОДТВЕРЖДЕНИЯ" />
+    <link rel="canonical" href="https://вызовдтп.рф" />
 
+    <!-- Шрифты и Иконки -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
-        /* СТУДИЙНАЯ МИНИМАЛИСТИЧНАЯ ПАЛИТРА */
         :root {
-            --bg-base: #f8fafc;        /* Мягкий светлый студийный фон */
-            --bg-card: #ffffff;        /* Чистый белый для элементов */
-            --text-main: #0f172a;      /* Глубокий чернильно-черный */
-            --text-muted: #475569;     /* Сдержанный стальной серый */
-            --accent-primary: #1d4ed8;  /* Строгий королевский синий */
-            --accent-secondary: #2563eb;/* Дополнительный синий для интерактивного ховера */
-            --accent-emergency: #dc2626;/* Благородный благородно-красный для экстренных элементов */
-            --accent-success: #16a34a;  /* Приглушенный зеленый для выплат */
-            --border-light: #e2e8f0;    /* Изящные тонкие границы */
-            --shadow-premium: 0 10px 30px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.03);
-            --shadow-hover: 0 20px 40px -15px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.04);
+            --primary: #0a192f; /* Темно-синий, доверие */
+            --accent: #ff4757; /* Красный, срочность/внимание */
+            --accent-hover: #ff6b81;
+            --text-light: #f1f2f6;
+            --text-dark: #2f3542;
+            --bg-light: #ffffff;
+            --bg-gray: #f4f6f8;
+            --transition: all 0.3s ease;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
             line-height: 1.6;
-            letter-spacing: -0.01em;
             overflow-x: hidden;
         }
 
-        html {
-            scroll-behavior: smooth;
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
-        /* ЭЛЕГАНТНАЯ СТРОГАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ */
-        .fade-in-up {
+        /* Анимации */
+        .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
         }
-
-        .fade-in-up.visible {
+        .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* ПРЕМИАЛЬНЫЙ СВЕТЛЫЙ HEADER (Матовое стекло) */
+        /* Шапка */
         header {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            background: rgba(248, 250, 252, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-light);
-            padding: 16px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--text-light);
             z-index: 1000;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        .logo {
-            color: var(--text-main);
-            font-size: 1.3rem;
-            font-weight: 800;
-            text-decoration: none;
-            letter-spacing: -0.04em;
-        }
-        
-        .logo span {
-            color: var(--accent-primary);
-        }
-
-        .header-phone {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            background: var(--text-main);
-            padding: 10px 24px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .header-phone:hover {
-            background: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        /* МИНИМАЛИСТИЧНЫЙ ГЛАВНЫЙ ЭКРАН */
-        .hero {
-            padding: 180px 24px 100px 24px;
-            text-align: center;
-            max-width: 900px;
+        .container {
+            width: 90%;
+            max-width: 1200px;
             margin: 0 auto;
         }
-
-        .hero-badge {
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--accent-primary);
-            letter-spacing: 0.1em;
-            margin-bottom: 20px;
-            display: inline-block;
-            background: rgba(29, 78, 216, 0.06);
-            padding: 6px 14px;
-            border-radius: 6px;
-            border: 1px solid rgba(29, 78, 216, 0.1);
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: -0.04em;
-            color: var(--text-main);
-            margin-bottom: 24px;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            font-weight: 400;
-            max-width: 750px;
-            margin: 0 auto 40px auto;
-            line-height: 1.6;
-        }
-
-        /* Кнопка вызова — Контрастная, чистая, заметная */
-        .btn-call {
-            background: var(--accent-emergency);
-            color: #ffffff;
-            padding: 18px 40px;
-            font-size: 1.15rem;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.25);
-            transition: all 0.2s ease;
-        }
-
-        .btn-call:hover {
-            background: #b91c1c;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px -5px rgba(220, 38, 38, 0.4);
-        }
-
-        /* ГЕОМЕТРИЧЕСКИЙ БЛОК BENTO GRID (Европротоколы) */
-        .section-layout {
-            padding: 80px 24px;
-            max-width: 1140px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2.4rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 12px;
-            text-align: center;
-            color: var(--text-main);
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto 50px auto;
-        }
-
-        .bento-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        .bento-item {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 40px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-premium);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        .header-content {
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
+            align-items: center;
         }
-
-        .bento-item:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-            border-color: #cbd5e1;
-        }
-
-        /* Акцент на максимальную выплату */
-        .bento-featured {
-            border-left: 4px solid var(--accent-primary);
-        }
-
-        .bento-meta {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        .bento-featured .bento-meta {
-            color: var(--accent-primary);
-        }
-
-        .bento-value {
-            font-size: 3.2rem;
+        .logo {
+            font-size: 24px;
             font-weight: 800;
-            line-height: 1;
-            letter-spacing: -0.04em;
-            margin-bottom: 16px;
-            color: var(--text-main);
+            color: var(--text-light);
         }
-
-        .bento-featured .bento-value {
-            color: var(--accent-primary);
+        .logo span {
+            color: var(--accent);
         }
-
-        .bento-heading {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--text-main);
-        }
-
-        .bento-text {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        /* КАРТОЧКИ ХАРАКТЕРИСТИК (Чистая сетка) */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            margin-top: 20px;
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            padding: 40px;
-            border-radius: 16px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-premium);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .feature-icon {
-            width: 52px;
-            height: 52px;
-            background: #f1f5f9;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            color: var(--accent-primary);
-            font-size: 1.4rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: -0.01em;
-        }
-
-        /* СТРОГИЙ СОВРЕМЕННЫЙ ТАЙМЛАЙН */
-        .timeline-section {
-            background: #ffffff;
-            border-top: 1px solid var(--border-light);
-            border-bottom: 1px solid var(--border-light);
-            padding: 90px 24px;
-        }
-
-        .timeline-box {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline-step {
-            display: flex;
-            gap: 32px;
-            position: relative;
-            padding-bottom: 40px;
-        }
-
-        .timeline-step:last-child {
-            padding-bottom: 0;
-        }
-
-        .timeline-step::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 40px;
-            width: 2px;
-            height: calc(100% - 20px);
-            background: var(--border-light);
-        }
-
-        .timeline-step:last-child::before { display: none; }
-
-        .step-number {
-            width: 42px;
-            height: 42px;
-            border-radius: 8px;
-            background: var(--bg-base);
-            border: 1px solid var(--border-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: var(--text-main);
-            flex-shrink: 0;
-        }
-
-        .step-info h4 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        .step-info p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        /* КОНТАКТНЫЙ УЗЕЛ (STUDIO HUB) */
-        .contacts-hub {
-            padding: 90px 24px 120px 24px;
-            max-width: 750px;
-            margin: 0 auto;
-        }
-
-        .info-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 16px 32px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-premium);
-            margin-bottom: 40px;
-        }
-
-        .info-block {
+        .header-contacts {
             display: flex;
             align-items: center;
             gap: 20px;
-            padding: 24px 0;
-            border-bottom: 1px solid var(--border-light);
+        }
+        .phone-number {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .btn-call {
+            background: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-call:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
         }
 
-        .info-block:last-child { border-bottom: none; }
-
-        .info-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--bg-base);
-            border-radius: 8px;
+        /* Главный экран (Hero) */
+        .hero {
+            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.85)), url('https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&q=80&w=1920') center/cover;
+            height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            font-size: 1.2rem;
-            border: 1px solid var(--border-light);
-        }
-
-        .info-text span {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 2px;
-        }
-
-        .info-text strong, .info-text a {
-            font-size: 1.2rem;
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 700;
-        }
-        
-        .info-text a {
-            color: var(--accent-primary);
-        }
-        .info-text a:hover { text-decoration: underline; }
-
-        .leader-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-main);
+            color: var(--text-light);
+            padding-top: 80px;
             text-align: center;
-            margin-bottom: 20px;
         }
-
-        .social-buttons {
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .hero h1 span {
+            color: var(--accent);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .hero-buttons {
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 20px;
             flex-wrap: wrap;
         }
-
-        .btn-social {
-            padding: 14px 28px;
+        .btn-primary, .btn-secondary {
+            padding: 15px 30px;
+            font-size: 18px;
             border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-weight: 700;
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.2s ease;
-            border: 1px solid var(--border-light);
-            background: #ffffff;
-            color: var(--text-main);
         }
-
-        .btn-social:hover {
-            transform: translateY(-1px);
-            background: var(--bg-base);
-            border-color: #cbd5e1;
+        .btn-primary {
+            background: var(--accent);
+            color: white;
         }
-
-        .btn-social i {
-            font-size: 1.1rem;
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
         }
+        .btn-secondary {
+            background: #2ea44f; /* Цвет Телеграм/Мессенджеров */
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #258a40;
+        }
+        .btn-tg {
+            background: #0088cc;
+        }
+        .btn-tg:hover { background: #0077b3; }
 
-        /* ПОДВАЛ */
-        footer {
+        /* Преимущества / Почему мы */
+        .benefits {
+            padding: 80px 0;
+            background: var(--bg-gray);
+        }
+        .section-title {
             text-align: center;
-            padding: 40px 24px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-light);
-            background: #ffffff;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .benefit-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: var(--transition);
+        }
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .benefit-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
         }
 
-        /* ИДЕАЛЬНАЯ АДАПТИВНОСТЬ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА */
-        @media (max-width: 992px) {
-            .bento-grid { grid-template-columns: 1fr; gap: 20px; }
-            .hero h1 { font-size: 2.8rem; }
-            .hero p { font-size: 1.15rem; }
-            header { padding: 16px 24px; }
+        /* Выплаты ОСАГО / КАСКО */
+        .info-section {
+            padding: 80px 0;
+        }
+        .info-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        .info-text {
+            flex: 1;
+        }
+        .info-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        .info-text ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+        .info-text ul li {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .info-text ul li i {
+            color: #2ea44f;
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        .info-image {
+            flex: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .info-image img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
-        @media (max-width: 576px) {
-            header { padding: 12px 16px; }
-            .logo { font-size: 1.15rem; }
-            .header-phone { padding: 8px 16px; font-size: 0.85rem; }
-            .hero { padding-top: 140px; }
-            .hero h1 { font-size: 2.2rem; }
-            .hero p { font-size: 1.05rem; }
-            .section-title { font-size: 1.9rem; }
-            .bento-value { font-size: 2.5rem; }
-            .bento-item { padding: 30px 20px; }
-            .info-card { padding: 8px 20px; }
-            .info-text strong, .info-text a { font-size: 1.05rem; }
-            .timeline-step { gap: 16px; }
+        /* Контакты */
+        .contacts {
+            padding: 80px 0;
+            background: var(--primary);
+            color: var(--text-light);
+            text-align: center;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+        .contact-item i {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        .footer-socials {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .social-btn {
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            transition: var(--transition);
+        }
+        .social-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        /* Адаптивность для телефонов */
+        @media (max-width: 768px) {
+            .header-contacts .phone-number { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .info-content { flex-direction: column; }
+            .hero-buttons { flex-direction: column; width: 100%; padding: 0 20px; }
+            .btn-primary, .btn-secondary, .btn-tg { width: 100%; justify-content: center; }
+            .section-title { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Шапка сайта -->
     <header>
-        <a href="#" class="logo">вызовдтп<span>.рф</span></a>
-        <a href="tel:+79518703934" class="header-phone">
-            <i class="fa-solid fa-phone"></i> +7 (951) 870-39-34
-        </a>
+        <div class="container header-content">
+            <div class="logo">вызовдтп<span>.рф</span></div>
+            <div class="header-contacts">
+                <a href="tel:+79518703934" class="phone-number"><i class="fas fa-phone-alt"></i> +7 (951) 870-39-34</a>
+                <a href="tel:+79518703934" class="btn-call">Вызвать</a>
+            </div>
+        </div>
     </header>
 
+    <!-- Главный экран -->
     <section class="hero">
-        <span class="hero-badge fade-in-up">Правовая поддержка водителей</span>
-        <h1 class="fade-in-up">Служба аварийных комиссаров в Воронеже</h1>
-        <p class="fade-in-up">Оперативный выезд на место происшествия. Помогаем юридически грамотно зафиксировать аварию за 20 минут, избежать споров со страховыми компаниями и очередей в ГИБДД.</p>
-        <a href="tel:+79518703934" class="btn-call fade-in-up">
-            <i class="fa-solid fa-phone"></i> Вызвать комиссара
-        </a>
+        <div class="container hero-content reveal">
+            <h1>Аварийный комиссар <span>в Воронеже</span></h1>
+            <p>Случилось ДТП? Не паникуйте! Приедем за 15-30 минут. Профессиональное оформление, защита от штрафов и гарантия полных выплат по ОСАГО и КАСКО.</p>
+            <div class="hero-buttons">
+                <a href="tel:+79518703934" class="btn-primary"><i class="fas fa-car-crash"></i> Срочный вызов</a>
+                <a href="https://t.me/blatsphera" target="_blank" class="btn-primary btn-tg"><i class="fab fa-telegram-plane"></i> Написать в Telegram</a>
+            </div>
+        </div>
     </section>
 
-    <section class="section-layout fade-in-up">
-        <h2 class="section-title">Оформление ДТП без участия ГИБДД</h2>
-        <p class="section-subtitle">Действующее законодательство позволяет зафиксировать факт аварии по Европротоколу. Мы обеспечим соблюдение всех нормативов для получения компенсаций.</p>
-        
-        <div class="bento-grid">
-            <div class="bento-item">
-                <div>
-                    <span class="bento-meta">Стандартный регламент</span>
-                    <div class="bento-value">до 100 000 ₽</div>
-                    <div class="bento-heading">Базовая компенсация</div>
-                    <p class="bento-text">Применяется, если у участников ДТП присутствуют разногласия по обстоятельствам происшествия, либо отсутствует техническая возможность провести фотофиксацию через сертифицированные приложения.</p>
+    <!-- Блок: Почему выбирают нас -->
+    <section class="benefits" id="about">
+        <div class="container">
+            <h2 class="section-title reveal">Почему оформлять ДТП лучше с нами?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card reveal">
+                    <i class="fas fa-stopwatch"></i>
+                    <h3>Экономия времени</h3>
+                    <p>Не нужно часами ждать ГИБДД. Мы прибываем на место быстрее и оформляем европротокол за 30-40 минут по всем правилам.</p>
                 </div>
-            </div>
-            
-            <div class="bento-item bento-featured">
-                <div>
-                    <span class="bento-meta">Максимальный регламент (ФЗ №40)</span>
-                    <div class="bento-value">до 400 000 ₽</div>
-                    <div class="bento-heading">Полное страховое возмещение</div>
-                    <p class="bento-text">Доступно при полном согласии сторон И проведении фотофиксации повреждений автомобилей через государственные мобильные сервисы. Комиссар проконтролирует выполнение всех требований закона прямо на месте.</p>
+                <div class="benefit-card reveal">
+                    <i class="fas fa-file-signature"></i>
+                    <h3>Гарантия выплат</h3>
+                    <p>Правильно заполним все документы и схему ДТП. У страховой не будет повода отказать вам в выплате или занизить сумму.</p>
+                </div>
+                <div class="benefit-card reveal">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Никакого стресса</h3>
+                    <p>Берем на себя общение со вторым участником. Поможем избежать конфликтов, давления и скрытых подвохов.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section-layout fade-in-up">
-        <h2 class="section-title">Преимущества службы</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
-                <h3>Прибытие за 15 минут</h3>
-                <p>Продуманное дежурство экипажей во всех районах Воронежа гарантирует мгновенный доезд.</p>
+    <!-- Блок: ОСАГО и КАСКО -->
+    <section class="info-section">
+        <div class="container info-content">
+            <div class="info-text reveal">
+                <h2>Помощь с <span>ОСАГО и КАСКО</span></h2>
+                <p>Страховые компании часто пользуются шоковым состоянием водителей после аварии и малейшими ошибками в документах, чтобы урезать выплату. С нами это исключено.</p>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> <strong>Независимая оценка:</strong> Зафиксируем скрытые повреждения, которые не видны на первый взгляд.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Полное сопровождение:</strong> Расскажем, как правильно подать документы в страховую.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Фото- и видеофиксация:</strong> Соберем железобетонную доказательную базу с места происшествия.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Консультация:</strong> Бесплатно проконсультируем по дальнейшим действиям после оформления.</li>
+                </ul>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-shield"></i></div>
-                <h3>Защита от отказов СК</h3>
-                <p>Ошибки в бланках — частая причина отказа в выплатах. Мы гарантируем идеальную точность документов.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-business-time"></i></div>
-                <h3>Экономия вашего времени</h3>
-                <p>Вам не придется часами ожидать сотрудников ДПС и стоять в очередях в дежурной части.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="timeline-section fade-in-up">
-        <div class="timeline-box">
-            <h2 class="section-title" style="margin-bottom: 45px;">План действий на месте</h2>
-            
-            <div class="timeline-step">
-                <div class="step-number">1</div>
-                <div class="step-info">
-                    <h4>Обезопасьте периметр</h4>
-                    <p>Немедленно остановите транспортное средство, включите аварийную сигнализацию и выставьте знак аварийной остановки.</p>
-                </div>
-            </div>
-            
-            <div class="timeline-step">
-                <div class="step-number">2</div>
-                <div class="step-info">
-                    <h4>Свяжитесь с диспетчером</h4>
-                    <p>Позвоните по круглосуточному номеру +7 (951) 870-39-34. Оператор сориентирует вас и направит ближайший экипаж.</p>
-                </div>
-            </div>
-            
-            <div class="timeline-step">
-                <div class="step-number">3</div>
-                <div class="step-info">
-                    <h4>Фиксация и разъезд</h4>
-                    <p>Комиссар проведет круговую фотосъемку, составит точную схему ДТП, заполнит извещения, после чего вы сможете покинуть место аварии.</p>
-                </div>
+            <div class="info-image reveal">
+                <!-- Плейсхолдер картинки, можно заменить на реальное фото работы/документов -->
+                <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=800" alt="Оформление ДТП">
             </div>
         </div>
     </section>
 
-    <section class="contacts-hub fade-in-up">
-        <h2 class="section-title">Контакты и адрес</h2>
-        <p class="section-subtitle" style="margin-bottom: 35px;">Круглосуточный прием обращений и экстренные консультации.</p>
-        
-        <div class="info-card">
-            <div class="info-block">
-                <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
-                <div class="info-text">
-                    <span>Главный офис</span>
-                    <strong>г. Воронеж, ул. Карпинского, 39</strong>
-                </div>
-            </div>
-            <div class="info-block">
-                <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
-                <div class="info-text">
-                    <span>Горячая линия 24/7</span>
+    <!-- Контакты -->
+    <section class="contacts">
+        <div class="container reveal">
+            <h2 class="section-title" style="color: white;">Наши Контакты</h2>
+            <p style="font-size: 1.2rem;">Работаем оперативно. Выезжаем в любую точку Воронежа.</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <strong>Телефон:</strong>
                     <a href="tel:+79518703934">+7 (951) 870-39-34</a>
                 </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <strong>Адрес офиса:</strong>
+                    <span>г. Воронеж, ул. Карпинского, 39</span>
+                </div>
             </div>
-        </div>
 
-        <div class="leader-title">Прямая связь с руководителем (Максим):</div>
-        <div class="social-buttons">
-            <a href="https://t.me/blatsphera" target="_blank" class="btn-social">
-                <i class="fa-brands fa-telegram" style="color: #24A1DE;"></i> Telegram канал
-            </a>
-            <a href="https://max.ru/u/f9LHodD0cOKIaamMJAxuAhEaXfungcGvD5wDwjxEN-BFYhuEuoaKyYZ4pY8" target="_blank" class="btn-social">
-                <i class="fa-solid fa-comments" style="color: #AF52DE;"></i> Мессенджер MAX
-            </a>
+            <div class="footer-socials">
+                <a href="https://t.me/blatsphera" target="_blank" class="social-btn" style="color: #00a8ff;">
+                    <i class="fab fa-telegram"></i> Telegram (@blatsphera)
+                </a>
+                <a href="https://max.ru/u/f9LHodD0cOKIaamMJAxuAhEaXfungcGvD5wDwjxEN-BFYhuEuoaKyYZ4pY8" target="_blank" class="social-btn" style="color: #44bd32;">
+                    <i class="fas fa-comment-dots"></i> Написать в MAX
+                </a>
+            </div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2026 вызовдтп.рф — Единая служба аварийных комиссаров Воронежа. Все права защищены.</p>
-    </footer>
-
+    <!-- Скрипт для анимации появления при прокрутке -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const observerOptions = {
-                root: null,
-                threshold: 0.05
-            };
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
 
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 100;
+
+                reveals.forEach((reveal) => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
                     }
                 });
-            }, observerOptions);
+            };
 
-            const animatedElements = document.querySelectorAll('.fade-in-up');
-            animatedElements.forEach(el => observer.observe(el));
+            window.addEventListener('scroll', revealOnScroll);
+            // Запуск при загрузке для элементов первого экрана
+            revealOnScroll();
         });
     </script>
 </body>
