@@ -3,36 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аварийный Комиссар Воронеж | Быстрое оформление ДТП</title>
-    <!-- Подключение красивых шрифтов -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Подключение иконок -->
+    
+    <title>вызовдтп.рф | Аварийный комиссар Воронеж. Срочный выезд при ДТП</title>
+    <meta name="description" content="Служба аварийных комиссаров в Воронеже вызовдтп.рф. Быстрый выезд за 15 минут. Оформление Европротокола до 100 000 и 400 000 рублей без ошибок и очередей в ГИБДД.">
+    <meta name="keywords" content="вызовдтп.рф, аварийный комиссар воронеж, вызов комиссара дтп воронеж, европротокол 400 тысяч, оформить дтп воронеж, карпинского 39 комиссар">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://вызовдтп.рф/">
+    <meta property="og:title" content="Аварийный Комиссар Воронеж | вызовдтп.рф">
+    <meta property="og:description" content="Профессиональное оформление ДТП без ГИБДД за 15 минут. Лимиты выплат до 400 000 рублей.">
+    
+    <meta name="yandex-verification" content="ДЛЯ_КОДА_ПОДТВЕРЖДЕНИЯ_ЯНДЕКСА" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Базовые настройки и переменные цветов */
+        /* iOS Цветовая палитра и системные шрифты Apple */
         :root {
-            --primary-color: #1a2530; /* Темно-синий, строгий */
-            --accent-color: #e74c3c; /* Красный для срочности */
-            --accent-hover: #c0392b;
-            --text-light: #ffffff;
-            --text-dark: #333333;
-            --bg-light: #f8f9fa;
+            --ios-bg: #f5f5f7; /* Легкий серый фон Apple */
+            --ios-card: #ffffff;
+            --ios-text-main: #1d1d1f; /* Глубокий черный */
+            --ios-text-secondary: #86868b; /* Благородный серый */
+            --ios-accent: #0071e3; /* Фирменный синий Apple */
+            --ios-danger: #ff3b30; /* Системный красный iOS */
+            --ios-blur-bg: rgba(255, 255, 255, 0.75);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
+            background-color: var(--ios-bg);
+            color: var(--ios-text-main);
+            line-height: 1.47059;
+            letter-spacing: -0.022em;
             overflow-x: hidden;
         }
 
@@ -40,425 +50,513 @@
             scroll-behavior: smooth;
         }
 
-        /* Анимации */
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(231, 76, 60, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
-        }
-
-        .hidden-anim {
+        /* Анимация появления в стиле iOS (плавный наплыв с эффектом пружины) */
+        .ios-anim {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
+            transform: scale(0.96) translateY(20px);
+            transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .hidden-anim.show {
+        .ios-anim.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: scale(1) translateY(0);
         }
 
-        /* Шапка */
+        /* Премиальная iOS Шапка (Транслюцентное стекло) */
         header {
-            background-color: rgba(26, 37, 48, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--ios-blur-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            padding: 15px 5%;
+            padding: 14px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
         }
 
         .logo {
-            color: var(--text-light);
-            font-size: 1.2rem;
-            font-weight: 800;
+            color: var(--ios-text-main);
+            font-size: 1.15rem;
+            font-weight: 700;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            letter-spacing: -0.03em;
         }
-
-        .logo i {
-            color: var(--accent-color);
-            font-size: 1.5rem;
+        
+        .logo span {
+            color: var(--ios-danger);
         }
 
         .header-phone {
-            color: var(--text-light);
+            color: var(--ios-accent);
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 0.95rem;
+            background: rgba(0, 113, 227, 0.08);
+            padding: 6px 14px;
+            border-radius: 100px;
+            transition: background 0.2s;
+        }
+
+        .header-phone:hover {
+            background: rgba(0, 113, 227, 0.15);
         }
 
         /* Главный экран (Hero) */
         .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(26, 37, 48, 0.85), rgba(26, 37, 48, 0.7)), url('https://images.unsplash.com/photo-1563223552-30d01b80c355?q=80&w=1920&auto=format&fit=crop') center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 140px 24px 60px 24px;
             text-align: center;
-            padding: 0 5%;
-            color: var(--text-light);
-            margin-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--ios-danger);
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+            display: inline-block;
         }
 
         .hero h1 {
             font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            line-height: 1.08349;
+            letter-spacing: -0.043em;
+            margin-bottom: 18px;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin-bottom: 40px;
+            font-size: 1.3rem;
+            color: var(--ios-text-secondary);
+            font-weight: 500;
+            margin-bottom: 35px;
+            line-height: 1.381
         }
 
-        .btn-call {
-            background-color: var(--accent-color);
-            color: var(--text-light);
-            padding: 20px 40px;
-            font-size: 1.3rem;
-            font-weight: 800;
+        /* Кнопка в стиле iOS Action Button */
+        .btn-ios-main {
+            background-color: var(--ios-text-main);
+            color: #fff;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
             text-decoration: none;
-            border-radius: 50px;
+            border-radius: 100px;
             display: inline-flex;
             align-items: center;
-            gap: 15px;
-            animation: pulse 2s infinite;
-            transition: background 0.3s;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s, opacity 0.2s;
         }
 
-        .btn-call:hover {
-            background-color: var(--accent-hover);
+        .btn-ios-main:sticky {
+            transform: scale(0.98);
         }
 
-        /* Секция преимуществ */
-        .benefits {
-            padding: 80px 5%;
-            text-align: center;
+        .btn-ios-main:hover {
+            opacity: 0.9;
         }
 
-        .section-title {
-            font-size: 2.2rem;
-            color: var(--primary-color);
-            margin-bottom: 50px;
-            font-weight: 800;
-        }
-
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
+        /* Секция: Лимиты Европротокола (Новый ключевой блок) */
+        .euro-limits {
+            padding: 40px 24px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .card {
-            background: #fff;
-            padding: 40px 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
+        .euro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .limit-card {
+            background: var(--ios-card);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.02);
             position: relative;
             overflow: hidden;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        .limit-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
         }
 
-        .card i {
-            font-size: 3rem;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-        }
+        .limit-100::before { background: var(--ios-text-secondary); }
+        .limit-400::before { background: #34c759; /* Системный зеленый iOS */ }
 
-        .card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-        }
-
-        .card p {
-            font-size: 0.95rem;
-            color: #666;
-        }
-
-        /* Как мы работаем */
-        .steps {
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            padding: 80px 5%;
-        }
-
-        .steps-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .step-num {
+        .limit-val {
             font-size: 2.5rem;
             font-weight: 800;
-            color: var(--accent-color);
-            opacity: 0.8;
+            letter-spacing: -0.04em;
+            margin-bottom: 5px;
+        }
+        .limit-100 .limit-val { color: var(--ios-text-main); }
+        .limit-400 .limit-val { color: #34c759; }
+
+        .limit-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
 
-        /* Контакты */
-        .contact {
-            padding: 80px 5%;
-            background: #fff;
+        .limit-desc {
+            font-size: 0.95rem;
+            color: var(--ios-text-secondary);
+        }
+
+        /* Раздел: Преимущества (Карточки) */
+        .section-container {
+            padding: 60px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .ios-heading {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 35px;
             text-align: center;
         }
 
-        .contact-info {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
-            max-width: 1000px;
-            margin: 0 auto 50px auto;
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
-        .contact-item {
+        .ios-card {
+            background: var(--ios-card);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .ios-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .ios-card i {
+            font-size: 1.8rem;
+            color: var(--ios-accent);
+            margin-bottom: 20px;
+            background: rgba(0, 113, 227, 0.06);
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+        }
+
+        .ios-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .ios-card p {
+            font-size: 0.95rem;
+            color: var(--ios-text-secondary);
+        }
+
+        /* Раздел: Инструкция / Шаги */
+        .steps-wrapper {
+            background-color: #ffffff;
+            padding: 60px 24px;
+            border-radius: 32px;
+            margin: 20px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
+        }
+
+        .steps-list {
+            max-width: 800px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
+            gap: 25px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding-bottom: 20px;
+            border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .step-circle {
+            background: var(--ios-bg);
+            color: var(--ios-text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
-        .contact-item i {
-            font-size: 2rem;
-            color: var(--primary-color);
+        .step-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
 
-        .contact-item strong {
+        .step-content p {
+            font-size: 0.95rem;
+            color: var(--ios-text-secondary);
+        }
+
+        /* Контакты */
+        .contacts-section {
+            padding: 60px 24px 100px 24px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .info-pill-box {
+            background: var(--ios-card);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            margin-bottom: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-row i {
+            color: var(--ios-accent);
             font-size: 1.2rem;
+            width: 24px;
         }
 
-        .messengers {
+        .info-row a {
+            color: var(--ios-text-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .messenger-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ios-text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .social-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
         }
 
-        .btn-social {
-            padding: 15px 30px;
-            border-radius: 50px;
+        .social-btn {
+            padding: 14px 28px;
+            border-radius: 100px;
             text-decoration: none;
             color: #fff;
             font-weight: 600;
+            font-size: 0.95rem;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            transition: opacity 0.3s;
+            gap: 8px;
+            transition: opacity 0.2s;
         }
 
-        .btn-social:hover {
-            opacity: 0.8;
+        .social-btn:hover { opacity: 0.9; }
+        .tg-style { background-color: #24A1DE; }
+        .max-style { background-color: #5856D6; /* Элегантный iOS фиолетовый */ }
+
+        /* Футер */
+        footer {
+            text-align: center;
+            padding: 30px 24px;
+            font-size: 0.85rem;
+            color: var(--ios-text-secondary);
+            border-top: 0.5px solid rgba(0, 0, 0, 0.08);
         }
 
-        .btn-telegram { background-color: #0088cc; }
-        .btn-max { background-color: #8e44ad; } /* Цвет для MAX messenger */
-
-        /* Плавающая кнопка звонка для мобильных */
-        .fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--accent-color);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.5);
-            z-index: 999;
-            animation: pulse 2s infinite;
-            text-decoration: none;
-        }
-
-        /* Адаптивность под телефоны */
+        /* Мобильная адаптация */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .hero p { font-size: 1rem; }
-            .btn-call { font-size: 1.1rem; padding: 15px 25px; }
-            .header-phone { display: none; /* Прячем номер в шапке на мобилках, чтобы не перегружать */ }
-            .step { flex-direction: column; text-align: center; border-left: none; border-top: 4px solid var(--accent-color); }
-            .contact-info { flex-direction: column; }
+            .hero h1 { font-size: 2.1rem; }
+            .hero p { font-size: 1.1rem; }
+            .euro-grid { grid-template-columns: 1fr; }
+            .ios-heading { font-size: 1.75rem; }
+            .limit-card { padding: 25px; }
+            .limit-val { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Шапка -->
     <header>
-        <a href="#" class="logo">
-            <i class="fa-solid fa-car-burst"></i>
-            КОМИССАР ВОРОНЕЖ
-        </a>
+        <a href="#" class="logo">вызовдтп<span>.рф</span></a>
         <a href="tel:+79518703934" class="header-phone">
             <i class="fa-solid fa-phone"></i> +7 (951) 870-39-34
         </a>
     </header>
 
-    <!-- Главный экран -->
     <section class="hero">
-        <h1 class="hidden-anim">Попали в ДТП?<br>Сохраним ваши нервы и время</h1>
-        <p class="hidden-anim">Оперативный выезд аварийного комиссара в любую точку Воронежа. Правильное оформление документов без ожидания ГИБДД. Гарантия выплат от страховой.</p>
-        <a href="tel:+79518703934" class="btn-call hidden-anim">
-            <i class="fa-solid fa-phone-volume"></i> СРОЧНЫЙ ВЫЗОВ
+        <span class="hero-tag ios-anim">Экстренная помощь на дорогах</span>
+        <h1 class="ios-anim">Защитим ваши интересы при ДТП в Воронеже</h1>
+        <p class="ios-anim">Профессиональный аварийный комиссар. Избавим от стресса, сэкономим часы ожидания ГИБДД и гарантируем юридически безупречное оформление.</p>
+        <a href="tel:+79518703934" class="btn-ios-main ios-anim">
+            <i class="fa-solid fa-phone"></i> Вызвать комиссара
         </a>
     </section>
 
-    <!-- Почему лучше выбрать комиссара -->
-    <section class="benefits">
-        <h2 class="section-title hidden-anim">Почему оформить ДТП через комиссара — это правильный выбор?</h2>
-        <div class="cards-container">
-            <div class="card hidden-anim">
-                <i class="fa-solid fa-stopwatch"></i>
-                <h3>Экономия 4-6 часов</h3>
-                <p>Вам не нужно часами стоять на дороге в ожидании экипажа ДПС. Мы приезжаем за 15-20 минут и оформляем всё на месте.</p>
-            </div>
-            <div class="card hidden-anim">
-                <i class="fa-solid fa-file-signature"></i>
-                <h3>Грамотный Европротокол</h3>
-                <p>90% самостоятельных оформлений содержат ошибки, из-за которых страховые отказывают в выплате. Мы оформляем всё по закону со 100% гарантией.</p>
-            </div>
-            <div class="card hidden-anim">
-                <i class="fa-solid fa-shield-halved"></i>
-                <h3>Защита от мошенников</h3>
-                <p>Берем на себя общение со вторым участником ДТП, исключаем психологическое давление и автоподставы.</p>
-            </div>
-            <div class="card hidden-anim">
-                <i class="fa-solid fa-camera-retro"></i>
-                <h3>Точная фиксация</h3>
-                <p>Составляем подробную схему ДТП, делаем правильную фото- и видеофиксацию положения машин и повреждений.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Как мы работаем -->
-    <section class="steps">
-        <div style="text-align: center;">
-            <h2 class="section-title hidden-anim" style="color: #fff;">Порядок действий при ДТП</h2>
-        </div>
-        <div class="steps-container">
-            <div class="step hidden-anim">
-                <div class="step-num">01</div>
-                <div>
-                    <h3>Включите аварийку и выставьте знак</h3>
-                    <p>Обезопасьте место происшествия. Ни в коем случае не перемещайте автомобили и предметы, относящиеся к ДТП.</p>
-                </div>
-            </div>
-            <div class="step hidden-anim">
-                <div class="step-num">02</div>
-                <div>
-                    <h3>Позвоните нам: +7 (951) 870-39-34</h3>
-                    <p>Наш диспетчер бесплатно проконсультирует вас и немедленно направит ближайшего комиссара на место аварии.</p>
-                </div>
-            </div>
-            <div class="step hidden-anim">
-                <div class="step-num">03</div>
-                <div>
-                    <h3>Дождитесь комиссара (15-20 минут)</h3>
-                    <p>Комиссар берет всю работу на себя: общается с участниками, фотографирует, составляет схему и заполняет извещение о ДТП.</p>
-                </div>
-            </div>
-            <div class="step hidden-anim">
-                <div class="step-num">04</div>
-                <div>
-                    <h3>Получите готовый пакет документов</h3>
-                    <p>Вы разъезжаетесь по своим делам с готовыми документами, которые сразу можно нести в страховую компанию.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Контакты -->
-    <section class="contact" id="contacts">
-        <h2 class="section-title hidden-anim">Свяжитесь с нами</h2>
+    <section class="euro-limits ios-anim">
+        <h2 class="ios-heading" style="margin-bottom: 10px;">Оформление Европротокола без ГИБДД</h2>
+        <p style="text-align: center; color: var(--ios-text-secondary); max-width: 700px; margin: 0 auto 25px auto;">По закону вы имеете право разъехаться без вызова полиции. Наш комиссар поможет зафиксировать аварию и получить максимальную выплату:</p>
         
-        <div class="contact-info hidden-anim">
-            <div class="contact-item">
-                <i class="fa-solid fa-location-dot"></i>
-                <strong>Наш офис:</strong>
-                <span>г. Воронеж, ул. Карпинского, 39</span>
+        <div class="euro-grid">
+            <div class="limit-card limit-100">
+                <div class="limit-val">до 100 000 ₽</div>
+                <div class="limit-title">Стандартный лимит выплат</div>
+                <div class="limit-desc">Оформляется при наличии разногласий между водителями, либо если у участников нет технической возможности произвести корректную фотофиксацию через спецприложения.</div>
             </div>
-            <div class="contact-item">
+            
+            <div class="limit-card limit-400">
+                <div class="limit-val">до 400 000 ₽</div>
+                <div class="limit-title">Максимальный лимит выплат</div>
+                <div class="limit-desc">Возможен при полном отсутствии разногласий И обязательном выполнении фотофиксации повреждений через сертифицированные мобильные сервисы. Комиссар обеспечит выполнение всех условий для этого лимита.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container ios-anim">
+        <h2 class="ios-heading">Зачем нужен комиссар?</h2>
+        <div class="cards-grid">
+            <div class="ios-card">
+                <i class="fa-solid fa-bolt"></i>
+                <h3>Прибытие за 15 минут</h3>
+                <p>Ближайший специалист немедленно выезжает на место сразу после вашего звонка.</p>
+            </div>
+            <div class="ios-card">
+                <i class="fa-solid fa-shield-cat"></i>
+                <h3>Защита от ошибок</h3>
+                <p>Неверная галочка в бланке — причина отказа страховой. Мы заполняем документы со 100% точностью.</p>
+            </div>
+            <div class="ios-card">
+                <i class="fa-solid fa-clock"></i>
+                <h3>Сохранение времени</h3>
+                <p>Вместо 5 часов стояния в пробке и очередей в дежурной части — оформление за 20 минут.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="steps-wrapper ios-anim">
+        <h2 class="ios-heading">План действий на месте аварии</h2>
+        <div class="steps-list">
+            <div class="step-item">
+                <div class="step-circle">1</div>
+                <div class="step-content">
+                    <h4>Остановитесь и обезопасьте место</h4>
+                    <p>Заглушите мотор, включите аварийную световую сигнализацию и выставьте знак аварийной остановки.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-circle">2</div>
+                <div class="step-content">
+                    <h4>Свяжитесь со специалистом</h4>
+                    <p>Позвоните по номеру +7 (951) 870-39-34. Диспетчер зафиксирует адрес и проинструктирует вас.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-circle">3</div>
+                <div class="step-content">
+                    <h4>Фиксация и разъезд</h4>
+                    <p>Комиссар зафиксирует геопозицию, составит схему ДТП, заполнит документы, и вы сможете сразу покинуть место происшествия.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contacts-section ios-anim" id="contacts">
+        <h2 class="ios-heading">Контакты службы</h2>
+        
+        <div class="info-pill-box">
+            <div class="info-row">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <span style="color: var(--ios-text-secondary); font-size: 0.85rem; display: block;">Адрес главного офиса</span>
+                    <strong>г. Воронеж, ул. Карпинского, 39</strong>
+                </div>
+            </div>
+            <div class="info-row">
                 <i class="fa-solid fa-phone"></i>
-                <strong>Телефон диспетчерской:</strong>
-                <a href="tel:+79518703934" style="color: var(--text-dark); text-decoration: none; font-size: 1.2rem; font-weight: bold;">+7 (951) 870-39-34</a>
+                <div>
+                    <span style="color: var(--ios-text-secondary); font-size: 0.85rem; display: block;">Круглосуточный телефон</span>
+                    <a href="tel:+79518703934">+7 (951) 870-39-34</a>
+                </div>
             </div>
         </div>
 
-        <h3 style="margin-bottom: 20px; color: var(--primary-color);" class="hidden-anim">Написать нам в мессенджеры:</h3>
-        <div class="messengers hidden-anim">
-            <a href="https://t.me/blatsphera" target="_blank" class="btn-social btn-telegram">
-                <i class="fa-brands fa-telegram"></i> Написать в Telegram
+        <div class="messenger-title">Прямая связь с Максом (руководитель):</div>
+        <div class="social-buttons">
+            <a href="https://t.me/blatsphera" target="_blank" class="social-btn tg-style">
+                <i class="fa-brands fa-telegram"></i> Telegram
             </a>
-            <a href="https://max.ru/u/f9LHodD0cOKIaamMJAxuAhEaXfungcGvD5wDwjxEN-BFYhuEuoaKyYZ4pY8" target="_blank" class="btn-social btn-max">
-                <i class="fa-solid fa-comment-dots"></i> Написать в MAX
+            <a href="https://max.ru/u/f9LHodD0cOKIaamMJAxuAhEaXfungcGvD5wDwjxEN-BFYhuEuoaKyYZ4pY8" target="_blank" class="social-btn max-style">
+                <i class="fa-solid fa-message"></i> Мессенджер MAX
             </a>
         </div>
     </section>
 
-    <!-- Плавающая кнопка для телефонов -->
-    <a href="tel:+79518703934" class="fab">
-        <i class="fa-solid fa-phone"></i>
-    </a>
+    <footer>
+        <p>&copy; 2026 вызовдтп.рф — Служба аварийных комиссаров Воронежа. Все права защищены.</p>
+    </footer>
 
-    <!-- Скрипт для анимации при прокрутке -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const observerOptions = {
+            const options = {
                 root: null,
-                rootMargin: '0px',
-                threshold: 0.15
+                threshold: 0.08
             };
 
-            const observer = new IntersectionObserver((entries, observer) => {
+            const io = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('show');
+                        entry.target.classList.add('visible');
                         observer.unobserve(entry.target);
                     }
                 });
-            }, observerOptions);
+            }, options);
 
-            const hiddenElements = document.querySelectorAll('.hidden-anim');
-            hiddenElements.forEach((el) => observer.observe(el));
+            const targets = document.querySelectorAll('.ios-anim');
+            targets.forEach(target => io.observe(target));
         });
     </script>
 </body>
