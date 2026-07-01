@@ -19,15 +19,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* iOS Цветовая палитра и системные шрифты Apple */
+        /* Игры с цветом: iOS Pro Dark Theme */
         :root {
-            --ios-bg: #f5f5f7; /* Легкий серый фон Apple */
-            --ios-card: #ffffff;
-            --ios-text-main: #1d1d1f; /* Глубокий черный */
-            --ios-text-secondary: #86868b; /* Благородный серый */
-            --ios-accent: #0071e3; /* Фирменный синий Apple */
-            --ios-danger: #ff3b30; /* Системный красный iOS */
-            --ios-blur-bg: rgba(255, 255, 255, 0.75);
+            --ios-bg: #000000; /* Абсолютно черный, как на OLED экранах iPhone */
+            --ios-bg-secondary: #0a0a0c; 
+            --ios-card: #1c1c1e; /* Системный темный цвет карточек Apple */
+            --ios-card-hover: #2c2c2e;
+            --ios-text-main: #ffffff; /* Кристально белый */
+            --ios-text-secondary: #8e8e93; /* Мягкий серый */
+            --ios-accent: #0a84ff; /* Яркий синий iOS для Темной темы */
+            --ios-danger: #ff453a; /* Насыщенный красный */
+            --ios-success: #30d158; /* Изумрудный зеленый */
+            --ios-blur-bg: rgba(28, 28, 30, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         * {
@@ -41,7 +45,7 @@
         body {
             background-color: var(--ios-bg);
             color: var(--ios-text-main);
-            line-height: 1.47059;
+            line-height: 1.5;
             letter-spacing: -0.022em;
             overflow-x: hidden;
         }
@@ -50,11 +54,11 @@
             scroll-behavior: smooth;
         }
 
-        /* Анимация появления в стиле iOS (плавный наплыв с эффектом пружины) */
+        /* Кинематографичная iOS анимация (Пружинный наплыв со свечением) */
         .ios-anim {
             opacity: 0;
-            transform: scale(0.96) translateY(20px);
-            transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: scale(0.95) translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .ios-anim.visible {
@@ -62,55 +66,73 @@
             transform: scale(1) translateY(0);
         }
 
-        /* Премиальная iOS Шапка (Транслюцентное стекло) */
+        /* Премиальная Навигация (Эффект матового темного стекла) */
         header {
             background: var(--ios-blur-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            padding: 14px 24px;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .logo {
             color: var(--ios-text-main);
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             font-weight: 700;
             text-decoration: none;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.04em;
         }
         
         .logo span {
             color: var(--ios-danger);
+            text-shadow: 0 0 15px rgba(255, 69, 58, 0.4);
         }
 
         .header-phone {
-            color: var(--ios-accent);
+            color: #ffffff;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.95rem;
-            background: rgba(0, 113, 227, 0.08);
-            padding: 6px 14px;
+            background: var(--ios-accent);
+            padding: 8px 18px;
             border-radius: 100px;
-            transition: background 0.2s;
+            box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
+            transition: all 0.3s ease;
         }
 
         .header-phone:hover {
-            background: rgba(0, 113, 227, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 132, 255, 0.5);
         }
 
-        /* Главный экран (Hero) */
+        /* Главный Экран с глубоким космическим градиентом */
         .hero {
-            padding: 140px 24px 60px 24px;
+            padding: 170px 24px 80px 24px;
             text-align: center;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        /* Фоновое неоновое свечение (Абсолютно не скучно) */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(10,132,255,0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         .hero-tag {
@@ -118,54 +140,64 @@
             font-weight: 600;
             text-transform: uppercase;
             color: var(--ios-danger);
-            letter-spacing: 0.08em;
-            margin-bottom: 12px;
+            letter-spacing: 0.12em;
+            margin-bottom: 16px;
             display: inline-block;
+            background: rgba(255, 69, 58, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
         }
 
+        /* Дорогой градиентный текст */
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            line-height: 1.08349;
-            letter-spacing: -0.043em;
-            margin-bottom: 18px;
+            line-height: 1.1;
+            letter-spacing: -0.045em;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #ffffff 30%, #a1a1a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             color: var(--ios-text-secondary);
-            font-weight: 500;
-            margin-bottom: 35px;
-            line-height: 1.381
+            font-weight: 400;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Кнопка в стиле iOS Action Button */
+        /* Кнопка вызова iOS Luxury Action */
         .btn-ios-main {
-            background-color: var(--ios-text-main);
-            color: #fff;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            background: linear-gradient(180deg, #ffffff 0%, #e5e5ea 100%);
+            color: #000000;
+            padding: 18px 38px;
+            font-size: 1.15rem;
+            font-weight: 700;
             text-decoration: none;
             border-radius: 100px;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            transition: transform 0.2s, opacity 0.2s;
-        }
-
-        .btn-ios-main:sticky {
-            transform: scale(0.98);
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+            transition: all 0.2s ease;
         }
 
         .btn-ios-main:hover {
-            opacity: 0.9;
+            transform: scale(1.03);
+            box-shadow: 0 12px 35px rgba(255,255,255,0.2);
         }
 
-        /* Секция: Лимиты Европротокола (Новый ключевой блок) */
+        .btn-ios-main i {
+            color: var(--ios-danger);
+        }
+
+        /* Интерактивные лимиты Европротокола */
         .euro-limits {
-            padding: 40px 24px;
+            padding: 60px 24px;
             max-width: 1100px;
             margin: 0 auto;
         }
@@ -173,115 +205,117 @@
         .euro-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 25px;
+            gap: 24px;
+            margin-top: 35px;
         }
 
         .limit-card {
             background: var(--ios-card);
-            border-radius: 24px;
-            padding: 35px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.02);
+            border-radius: 28px;
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
-            overflow: hidden;
         }
 
-        .limit-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 5px;
+        .limit-card:hover {
+            transform: translateY(-4px);
+            background: var(--ios-card-hover);
         }
-
-        .limit-100::before { background: var(--ios-text-secondary); }
-        .limit-400::before { background: #34c759; /* Системный зеленый iOS */ }
 
         .limit-val {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 800;
             letter-spacing: -0.04em;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
-        .limit-100 .limit-val { color: var(--ios-text-main); }
-        .limit-400 .limit-val { color: #34c759; }
+        
+        .limit-100 .limit-val { 
+            color: #ffffff; 
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        .limit-400 .limit-val { 
+            color: var(--ios-success); 
+            text-shadow: 0 0 25px rgba(48, 209, 88, 0.3);
+        }
 
         .limit-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 15px;
+            color: #f5f5f7;
         }
 
         .limit-desc {
             font-size: 0.95rem;
             color: var(--ios-text-secondary);
+            line-height: 1.5;
         }
 
-        /* Раздел: Преимущества (Карточки) */
+        /* Преимущества с неоновым контуром */
         .section-container {
-            padding: 60px 24px;
+            padding: 80px 24px;
             max-width: 1100px;
             margin: 0 auto;
         }
 
         .ios-heading {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             letter-spacing: -0.03em;
-            margin-bottom: 35px;
+            margin-bottom: 45px;
             text-align: center;
+            background: linear-gradient(180deg, #ffffff 50%, #8e8e93 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
         }
 
         .ios-card {
             background: var(--ios-card);
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.02);
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 35px;
+            border-radius: 28px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
         }
 
         .ios-card:hover {
-            transform: translateY(-5px);
+            border-color: rgba(10, 132, 255, 0.3);
+            background: var(--ios-card-hover);
         }
 
         .ios-card i {
             font-size: 1.8rem;
             color: var(--ios-accent);
-            margin-bottom: 20px;
-            background: rgba(0, 113, 227, 0.06);
-            width: 55px;
-            height: 55px;
+            margin-bottom: 24px;
+            background: rgba(10, 132, 255, 0.15);
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 16px;
+            border-radius: 18px;
+            box-shadow: 0 0 20px rgba(10, 132, 255, 0.2);
         }
 
         .ios-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: -0.01em;
+            margin-bottom: 12px;
         }
 
-        .ios-card p {
-            font-size: 0.95rem;
-            color: var(--ios-text-secondary);
-        }
-
-        /* Раздел: Инструкция / Шаги */
+        /* Инструкция на темном фоне */
         .steps-wrapper {
-            background-color: #ffffff;
-            padding: 60px 24px;
-            border-radius: 32px;
+            background-color: var(--ios-bg-secondary);
+            padding: 80px 24px;
+            border-radius: 40px;
             margin: 20px 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--glass-border);
         }
 
         .steps-list {
@@ -289,15 +323,15 @@
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 30px;
         }
 
         .step-item {
             display: flex;
-            gap: 20px;
+            gap: 24px;
             align-items: flex-start;
-            padding-bottom: 20px;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .step-item:last-child {
@@ -306,116 +340,134 @@
         }
 
         .step-circle {
-            background: var(--ios-bg);
-            color: var(--ios-text-main);
-            width: 40px;
-            height: 40px;
+            background: rgba(255,255,255,0.05);
+            color: var(--ios-accent);
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             flex-shrink: 0;
+            border: 1px solid rgba(10, 132, 255, 0.2);
         }
 
         .step-content h4 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .step-content p {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--ios-text-secondary);
         }
 
-        /* Контакты */
+        /* Контакты / Футуристичный вид */
         .contacts-section {
-            padding: 60px 24px 100px 24px;
+            padding: 80px 24px 120px 24px;
             text-align: center;
-            max-width: 700px;
+            max-width: 750px;
             margin: 0 auto;
         }
 
         .info-pill-box {
             background: var(--ios-card);
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
-            margin-bottom: 35px;
+            border-radius: 28px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 45px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             text-align: left;
         }
 
         .info-row {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .info-row i {
             color: var(--ios-accent);
-            font-size: 1.2rem;
-            width: 24px;
+            font-size: 1.3rem;
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .info-row a {
-            color: var(--ios-text-main);
+            color: var(--ios-accent);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .messenger-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             color: var(--ios-text-secondary);
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .social-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
         .social-btn {
-            padding: 14px 28px;
+            padding: 16px 32px;
             border-radius: 100px;
             text-decoration: none;
             color: #fff;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 1rem;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: opacity 0.2s;
+            gap: 10px;
+            transition: all 0.3s ease;
         }
 
-        .social-btn:hover { opacity: 0.9; }
-        .tg-style { background-color: #24A1DE; }
-        .max-style { background-color: #5856D6; /* Элегантный iOS фиолетовый */ }
+        .social-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+        
+        .tg-style { 
+            background: #24A1DE; 
+            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.3);
+        }
+        .max-style { 
+            background: linear-gradient(135deg, #5856D6 0%, #AF52DE 100%); 
+            box-shadow: 0 4px 15px rgba(175, 82, 222, 0.3);
+        }
 
-        /* Футер */
         footer {
             text-align: center;
-            padding: 30px 24px;
+            padding: 40px 24px;
             font-size: 0.85rem;
             color: var(--ios-text-secondary);
-            border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+            border-top: 1px solid var(--glass-border);
+            background: var(--ios-bg-secondary);
         }
 
-        /* Мобильная адаптация */
+        /* Идеальная адаптивность для экранов смартфонов */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.1rem; }
+            .hero h1 { font-size: 2.3rem; }
             .hero p { font-size: 1.1rem; }
-            .euro-grid { grid-template-columns: 1fr; }
-            .ios-heading { font-size: 1.75rem; }
-            .limit-card { padding: 25px; }
-            .limit-val { font-size: 2rem; }
+            .euro-grid { grid-template-columns: 1fr; gap: 16px; }
+            .ios-heading { font-size: 1.85rem; }
+            .limit-card { padding: 30px 20px; }
+            .limit-val { font-size: 2.3rem; }
+            .steps-wrapper { margin: 10px 12px; padding: 40px 16px; }
         }
     </style>
 </head>
@@ -438,20 +490,20 @@
     </section>
 
     <section class="euro-limits ios-anim">
-        <h2 class="ios-heading" style="margin-bottom: 10px;">Оформление Европротокола без ГИБДД</h2>
-        <p style="text-align: center; color: var(--ios-text-secondary); max-width: 700px; margin: 0 auto 25px auto;">По закону вы имеете право разъехаться без вызова полиции. Наш комиссар поможет зафиксировать аварию и получить максимальную выплату:</p>
+        <h2 class="ios-heading" style="margin-bottom: 12px;">Оформление Европротокола без ГИБДД</h2>
+        <p style="text-align: center; color: var(--ios-text-secondary); max-width: 700px; margin: 0 auto 35px auto; font-size: 1.05rem;">По закону вы имеете полное право разъехаться без вызова полиции. Наш комиссар поможет зафиксировать аварию и законно претендовать на выплату:</p>
         
         <div class="euro-grid">
             <div class="limit-card limit-100">
                 <div class="limit-val">до 100 000 ₽</div>
                 <div class="limit-title">Стандартный лимит выплат</div>
-                <div class="limit-desc">Оформляется при наличии разногласий между водителями, либо если у участников нет технической возможности произвести корректную фотофиксацию через спецприложения.</div>
+                <div class="limit-desc">Оформляется, если у водителей возникли разногласия по поводу виновника, либо отсутствует техническая возможность сделать фотофиксацию через специальные государственные приложения.</div>
             </div>
             
             <div class="limit-card limit-400">
                 <div class="limit-val">до 400 000 ₽</div>
                 <div class="limit-title">Максимальный лимит выплат</div>
-                <div class="limit-desc">Возможен при полном отсутствии разногласий И обязательном выполнении фотофиксации повреждений через сертифицированные мобильные сервисы. Комиссар обеспечит выполнение всех условий для этого лимита.</div>
+                <div class="limit-desc">Возможен при полном отсутствии разногласий между водителями И обязательном выполнении фотофиксации повреждений через сертифицированные мобильные сервисы. Комиссар выполнит все условия прямо на месте ради этого лимита.</div>
             </div>
         </div>
     </section>
@@ -465,14 +517,14 @@
                 <p>Ближайший специалист немедленно выезжает на место сразу после вашего звонка.</p>
             </div>
             <div class="ios-card">
-                <i class="fa-solid fa-shield-cat"></i>
+                <i class="fa-solid fa-shield-halved"></i>
                 <h3>Защита от ошибок</h3>
                 <p>Неверная галочка в бланке — причина отказа страховой. Мы заполняем документы со 100% точностью.</p>
             </div>
             <div class="ios-card">
                 <i class="fa-solid fa-clock"></i>
                 <h3>Сохранение времени</h3>
-                <p>Вместо 5 часов стояния в пробке и очередей в дежурной части — оформление за 20 минут.</p>
+                <p>Вместо 5 часов ожидания ДПС и очередей в дежурной части — оформление за 20 минут.</p>
             </div>
         </div>
     </section>
@@ -512,14 +564,14 @@
                 <i class="fa-solid fa-location-dot"></i>
                 <div>
                     <span style="color: var(--ios-text-secondary); font-size: 0.85rem; display: block;">Адрес главного офиса</span>
-                    <strong>г. Воронеж, ул. Карпинского, 39</strong>
+                    <strong style="font-size: 1.1rem;">г. Воронеж, ул. Карпинского, 39</strong>
                 </div>
             </div>
             <div class="info-row">
                 <i class="fa-solid fa-phone"></i>
                 <div>
                     <span style="color: var(--ios-text-secondary); font-size: 0.85rem; display: block;">Круглосуточный телефон</span>
-                    <a href="tel:+79518703934">+7 (951) 870-39-34</a>
+                    <a href="tel:+79518703934" style="font-size: 1.2rem;">+7 (951) 870-39-34</a>
                 </div>
             </div>
         </div>
@@ -543,7 +595,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const options = {
                 root: null,
-                threshold: 0.08
+                threshold: 0.05
             };
 
             const io = new IntersectionObserver((entries, observer) => {
