@@ -19,142 +19,106 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* РОСКОШНАЯ КИНЕМАТОГРАФИЧЕСКАЯ ПАЛИТРА */
+        /* СТУДИЙНАЯ МИНИМАЛИСТИЧНАЯ ПАЛИТРА */
         :root {
-            --bg-main: #0b0c10;        /* Глубокий обсидиановый */
-            --bg-card: #13151a;        /* Компонентный графит */
-            --bg-card-glow: #1a1d24;   /* Свечение при ховере */
-            --text-pure: #ffffff;      /* Кристальный белый */
-            --text-muted: #94a3b8;     /* Дорогой стальной */
-            --accent-blue: #2f80ed;    /* Электрический синий Apple */
-            --accent-neon: #00f2fe;    /* Неоновый циан для хай-тек акцентов */
-            --accent-green: #00ff87;   /* Изумрудный для лимита 400к */
-            --accent-red: #ff3366;     /* Импульсивный красный */
-            --glass-border: rgba(255, 255, 255, 0.05);
+            --bg-base: #f8fafc;        /* Мягкий светлый студийный фон */
+            --bg-card: #ffffff;        /* Чистый белый для элементов */
+            --text-main: #0f172a;      /* Глубокий чернильно-черный */
+            --text-muted: #475569;     /* Сдержанный стальной серый */
+            --accent-primary: #1d4ed8;  /* Строгий королевский синий */
+            --accent-secondary: #2563eb;/* Дополнительный синий для интерактивного ховера */
+            --accent-emergency: #dc2626;/* Благородный благородно-красный для экстренных элементов */
+            --accent-success: #16a34a;  /* Приглушенный зеленый для выплат */
+            --border-light: #e2e8f0;    /* Изящные тонкие границы */
+            --shadow-premium: 0 10px 30px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.03);
+            --shadow-hover: 0 20px 40px -15px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.04);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
 
         body {
-            background-color: var(--bg-main);
-            color: var(--text-pure);
+            background-color: var(--bg-base);
+            color: var(--text-main);
             line-height: 1.6;
             letter-spacing: -0.01em;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        /* ЭМБИЕНТ-СВЕЧЕНИЕ НА ФОНЕ (Интерфейс выглядит живым и объемным) */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(47, 128, 237, 0.12) 0%, rgba(0,0,0,0) 70%);
-            top: -100px;
-            left: -200px;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, rgba(0,0,0,0) 70%);
-            top: 600px;
-            right: -200px;
-            z-index: -1;
-            pointer-events: none;
         }
 
         html {
             scroll-behavior: smooth;
         }
 
-        /* ПЛАВНАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ ЭЛЕМЕНТОВ */
-        .premium-anim {
+        /* ЭЛЕГАНТНАЯ СТРОГАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ */
+        .fade-in-up {
             opacity: 0;
-            transform: translateY(40px) scale(0.98);
-            transition: opacity 1.2s cubic-bezier(0.215, 0.610, 0.355, 1), transform 1.2s cubic-bezier(0.215, 0.610, 0.355, 1);
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .premium-anim.visible {
+        .fade-in-up.visible {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
 
-        /* КАПСУЛЬНАЯ ТРАНСЛЮЦЕНТНАЯ НАВИГАЦИЯ (Floating Glass Header) */
+        /* ПРЕМИАЛЬНЫЙ СВЕТЛЫЙ HEADER (Матовое стекло) */
         header {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 1200px;
-            background: rgba(19, 21, 26, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            padding: 14px 28px;
-            border-radius: 100px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         .logo {
-            color: var(--text-pure);
+            color: var(--text-main);
             font-size: 1.3rem;
             font-weight: 800;
             text-decoration: none;
-            letter-spacing: -0.05em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            letter-spacing: -0.04em;
         }
         
         .logo span {
-            background: linear-gradient(135deg, var(--accent-neon), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--accent-primary);
         }
 
         .header-phone {
-            color: var(--text-pure);
+            color: #ffffff;
             text-decoration: none;
             font-weight: 700;
             font-size: 0.95rem;
-            background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+            background: var(--text-main);
             padding: 10px 24px;
-            border-radius: 100px;
-            box-shadow: 0 8px 24px rgba(47, 128, 237, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 8px;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .header-phone:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(47, 128, 237, 0.5);
-            filter: brightness(1.1);
+            background: var(--accent-primary);
+            transform: translateY(-1px);
         }
 
-        /* ГЛАВНЫЙ ЭКРАН (HERO SECTION) */
+        /* МИНИМАЛИСТИЧНЫЙ ГЛАВНЫЙ ЭКРАН */
         .hero {
-            padding: 200px 24px 100px 24px;
+            padding: 180px 24px 100px 24px;
             text-align: center;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -162,435 +126,384 @@
             font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            color: var(--accent-neon);
-            letter-spacing: 0.15em;
-            margin-bottom: 24px;
+            color: var(--accent-primary);
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
             display: inline-block;
-            background: rgba(0, 242, 254, 0.08);
-            padding: 6px 16px;
-            border-radius: 100px;
-            border: 1px solid rgba(0, 242, 254, 0.15);
+            background: rgba(29, 78, 216, 0.06);
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(29, 78, 216, 0.1);
         }
 
-        /* Объёмный трехмерный заголовок */
         .hero h1 {
-            font-size: 4.2rem;
-            font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: -0.05em;
-            margin-bottom: 28px;
-            background: linear-gradient(180deg, #ffffff 40%, #64748b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+            margin-bottom: 24px;
         }
 
         .hero p {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--text-muted);
             font-weight: 400;
-            max-width: 800px;
-            margin: 0 auto 45px auto;
-            line-height: 1.5;
+            max-width: 750px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
         }
 
-        /* Кнопка вызова - Шедевр детализации */
-        .btn-luxury {
-            background: #ffffff;
-            color: #000000;
-            padding: 20px 46px;
-            font-size: 1.2rem;
-            font-weight: 800;
+        /* Кнопка вызова — Контрастная, чистая, заметная */
+        .btn-call {
+            background: var(--accent-emergency);
+            color: #ffffff;
+            padding: 18px 40px;
+            font-size: 1.15rem;
+            font-weight: 700;
             text-decoration: none;
-            border-radius: 100px;
+            border-radius: 8px;
             display: inline-flex;
             align-items: center;
-            gap: 14px;
-            box-shadow: 0 20px 40px rgba(255,255,255,0.1), inset 0 -4px 0px rgba(0,0,0,0.15);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
+            gap: 12px;
+            box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.25);
+            transition: all 0.2s ease;
         }
 
-        .btn-luxury::after {
-            content: '';
-            position: absolute;
-            width: 100%; height: 100%;
-            border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.5);
-            top: 0; left: 0;
-            transform: scale(1);
-            opacity: 0;
-            transition: all 0.5s ease;
+        .btn-call:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(220, 38, 38, 0.4);
         }
 
-        .btn-luxury:hover {
-            transform: scale(1.05) translateY(-3px);
-            box-shadow: 0 25px 50px rgba(255,255,255,0.2), inset 0 -4px 0px rgba(0,0,0,0.15);
-        }
-        
-        .btn-luxury:hover::after {
-            transform: scale(1.15);
-            opacity: 0;
-        }
-
-        .btn-luxury i {
-            color: var(--accent-red);
-            animation: pulse-phone 1.5s infinite;
-        }
-
-        @keyframes pulse-phone {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        /* СЕКЦИЯ: BENTO GRID ЕВРОПРОТОКОЛЫ */
-        .bento-section {
-            padding: 60px 24px;
-            max-width: 1200px;
+        /* ГЕОМЕТРИЧЕСКИЙ БЛОК BENTO GRID (Европротоколы) */
+        .section-layout {
+            padding: 80px 24px;
+            max-width: 1140px;
             margin: 0 auto;
         }
 
         .section-title {
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             font-weight: 800;
-            letter-spacing: -0.04em;
-            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
             text-align: center;
-            background: linear-gradient(135deg, #ffffff 0%, var(--text-muted) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
         }
 
         .section-subtitle {
             text-align: center;
             color: var(--text-muted);
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             max-width: 700px;
             margin: 0 auto 50px auto;
         }
 
-        .bento-grid-limits {
+        .bento-grid {
             display: grid;
-            grid-template-columns: 1fr 1.2fr;
+            grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
 
-        .bento-card {
+        .bento-item {
             background: var(--bg-card);
-            border-radius: 32px;
-            padding: 45px;
-            border: 1px solid var(--glass-border);
-            position: relative;
-            overflow: hidden;
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-premium);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .bento-card:hover {
-            transform: translateY(-5px);
-            background: var(--bg-card-glow);
-            border-color: rgba(255, 255, 255, 0.12);
+        .bento-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: #cbd5e1;
         }
 
-        /* Карточка Максимального Лимита (Супер-Премиум акцент) */
-        .card-exclusive {
-            background: linear-gradient(145deg, #13151a 0%, #0d1b15 100%);
-            border-color: rgba(0, 255, 135, 0.1);
-        }
-        
-        .card-exclusive:hover {
-            border-color: rgba(0, 255, 135, 0.3);
-            box-shadow: 0 30px 60px rgba(0, 255, 135, 0.04);
+        /* Акцент на максимальную выплату */
+        .bento-featured {
+            border-left: 4px solid var(--accent-primary);
         }
 
-        .card-meta {
-            font-size: 0.85rem;
+        .bento-meta {
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            display: block;
         }
 
-        .card-exclusive .card-meta {
-            color: var(--accent-green);
+        .bento-featured .bento-meta {
+            color: var(--accent-primary);
         }
 
-        .card-huge-val {
-            font-size: 3.8rem;
-            font-weight: 900;
+        .bento-value {
+            font-size: 3.2rem;
+            font-weight: 800;
             line-height: 1;
-            letter-spacing: -0.05em;
-            margin-bottom: 20px;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
+            color: var(--text-main);
         }
 
-        .limit-100-val { color: #ffffff; }
-        .limit-400-val { 
-            color: var(--accent-green);
-            text-shadow: 0 0 40px rgba(0, 255, 135, 0.2);
+        .bento-featured .bento-value {
+            color: var(--accent-primary);
         }
 
-        .card-heading {
-            font-size: 1.4rem;
+        .bento-heading {
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
+            color: var(--text-main);
         }
 
-        .card-body-text {
+        .bento-text {
             color: var(--text-muted);
             font-size: 1rem;
             line-height: 1.6;
         }
 
-        /* КАРТОЧКИ ХАРАКТЕРИСТИК (High-End Grid) */
+        /* КАРТОЧКИ ХАРАКТЕРИСТИК (Чистая сетка) */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
-            margin-top: 40px;
+            margin-top: 20px;
         }
 
-        .feature-item {
+        .feature-card {
             background: var(--bg-card);
             padding: 40px;
-            border-radius: 32px;
-            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-premium);
             transition: all 0.3s ease;
         }
 
-        .feature-item:hover {
-            border-color: rgba(47, 128, 237, 0.3);
-            background: var(--bg-card-glow);
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
 
-        .feature-icon-box {
-            width: 65px;
-            height: 65px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 20px;
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            background: #f1f5f9;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 28px;
-            border: 1px solid var(--glass-border);
-            color: var(--accent-blue);
-            font-size: 1.6rem;
-            box-shadow: inset 0 2px 6px rgba(255,255,255,0.05);
-        }
-
-        .feature-item:nth-child(2) .feature-icon-box { color: var(--accent-neon); }
-        .feature-item:nth-child(3) .feature-icon-box { color: var(--accent-green); }
-
-        .feature-item h3 {
+            margin-bottom: 24px;
+            color: var(--accent-primary);
             font-size: 1.4rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
         }
 
-        /* ШАГИ ОФОРМЛЕНИЯ В СТИЛЕ НАУЧНОЙ ХРОНИКИ */
-        .timeline-wrapper {
-            background: linear-gradient(180deg, var(--bg-main) 0%, #0d0f14 100%);
+        /* СТРОГИЙ СОВРЕМЕННЫЙ ТАЙМЛАЙН */
+        .timeline-section {
+            background: #ffffff;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
             padding: 90px 24px;
-            border-radius: 48px;
-            margin: 40px 24px;
-            border: 1px solid var(--glass-border);
         }
 
-        .timeline-container {
-            max-width: 900px;
+        .timeline-box {
+            max-width: 800px;
             margin: 0 auto;
-            position: relative;
         }
 
-        .timeline-node {
+        .timeline-step {
             display: flex;
-            gap: 40px;
+            gap: 32px;
             position: relative;
-            padding-bottom: 50px;
+            padding-bottom: 40px;
         }
 
-        .timeline-node:last-child {
+        .timeline-step:last-child {
             padding-bottom: 0;
         }
 
-        .timeline-node::before {
+        .timeline-step::before {
             content: '';
             position: absolute;
-            left: 24px;
-            top: 48px;
-            width: 1px;
-            height: calc(100% - 24px);
-            background: rgba(255, 255, 255, 0.08);
+            left: 20px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% - 20px);
+            background: var(--border-light);
         }
 
-        .timeline-node:last-child::before { display: none; }
+        .timeline-step:last-child::before { display: none; }
 
-        .node-index {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #161920;
-            border: 1px solid var(--glass-border);
+        .step-number {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            color: var(--accent-neon);
-            flex-shrink: 0;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);
-        }
-
-        .node-info h4 {
-            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            color: var(--text-main);
+            flex-shrink: 0;
         }
 
-        .node-info p {
+        .step-info h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .step-info p {
             color: var(--text-muted);
-            font-size: 1.05rem;
+            font-size: 1rem;
         }
 
-        /* ТЕХНОЛОГИЧНЫЙ КУБ С КОНТАКТАМИ */
+        /* КОНТАКТНЫЙ УЗЕЛ (STUDIO HUB) */
         .contacts-hub {
-            padding: 80px 24px 140px 24px;
-            max-width: 800px;
+            padding: 90px 24px 120px 24px;
+            max-width: 750px;
             margin: 0 auto;
-            text-align: center;
         }
 
-        .hub-box {
-            background: linear-gradient(135deg, #13151a 0%, #1a1d24 100%);
-            border-radius: 40px;
-            padding: 50px;
-            border: 1px solid var(--glass-border);
-            text-align: left;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-            margin-bottom: 45px;
+        .info-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px 32px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-premium);
+            margin-bottom: 40px;
         }
 
-        .hub-row {
+        .info-block {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 20px;
             padding: 24px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid var(--border-light);
         }
 
-        .hub-row:last-child { border-bottom: none; }
+        .info-block:last-child { border-bottom: none; }
 
-        .hub-icon {
-            width: 55px;
-            height: 55px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 50%;
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-base);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent-blue);
-            font-size: 1.3rem;
-            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            border: 1px solid var(--border-light);
         }
 
-        .hub-detail span {
+        .info-text span {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
-        .hub-detail strong, .hub-detail a {
-            font-size: 1.3rem;
-            color: var(--text-pure);
+        .info-text strong, .info-text a {
+            font-size: 1.2rem;
+            color: var(--text-main);
             text-decoration: none;
             font-weight: 700;
         }
         
-        .hub-detail a {
-            color: var(--accent-blue);
-            transition: color 0.2s;
+        .info-text a {
+            color: var(--accent-primary);
         }
-        .hub-detail a:hover { color: var(--accent-neon); }
+        .info-text a:hover { text-decoration: underline; }
 
-        .social-title {
-            font-size: 1.2rem;
+        .leader-title {
+            font-size: 1.1rem;
             font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 24px;
+            color: var(--text-main);
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .social-row {
+        .social-buttons {
             display: flex;
             justify-content: center;
             gap: 16px;
             flex-wrap: wrap;
         }
 
-        .btn-social-luxury {
-            padding: 18px 36px;
-            border-radius: 100px;
+        .btn-social {
+            padding: 14px 28px;
+            border-radius: 8px;
             text-decoration: none;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.05);
+            gap: 10px;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-light);
+            background: #ffffff;
+            color: var(--text-main);
         }
 
-        .btn-social-luxury:hover {
-            transform: translateY(-3px);
-            filter: brightness(1.15);
+        .btn-social:hover {
+            transform: translateY(-1px);
+            background: var(--bg-base);
+            border-color: #cbd5e1;
         }
 
-        .tg-lux {
-            background: rgba(36, 161, 222, 0.1);
-            border-color: rgba(36, 161, 222, 0.3);
-            color: #24A1DE;
-        }
-        
-        .max-lux {
-            background: rgba(175, 82, 222, 0.1);
-            border-color: rgba(175, 82, 222, 0.3);
-            color: #AF52DE;
+        .btn-social i {
+            font-size: 1.1rem;
         }
 
         /* ПОДВАЛ */
         footer {
             text-align: center;
-            padding: 50px 24px;
-            font-size: 0.9rem;
+            padding: 40px 24px;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            border-top: 1px solid var(--glass-border);
-            background: #090a0d;
+            border-top: 1px solid var(--border-light);
+            background: #ffffff;
         }
 
-        /* ИДЕАЛЬНАЯ АДАПТИВНОСТЬ ПОД ТЕЛЕФОНЫ */
+        /* ИДЕАЛЬНАЯ АДАПТИВНОСТЬ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА */
         @media (max-width: 992px) {
-            .bento-grid-limits { grid-template-columns: 1fr; gap: 20px; }
+            .bento-grid { grid-template-columns: 1fr; gap: 20px; }
             .hero h1 { font-size: 2.8rem; }
             .hero p { font-size: 1.15rem; }
-            .section-title { font-size: 2.1rem; }
+            header { padding: 16px 24px; }
         }
 
         @media (max-width: 576px) {
-            header { padding: 10px 16px; top: 10px; width: calc(100% - 20px); }
-            .logo { font-size: 1.1rem; }
+            header { padding: 12px 16px; }
+            .logo { font-size: 1.15rem; }
             .header-phone { padding: 8px 16px; font-size: 0.85rem; }
-            .hero h1 { font-size: 2.3rem; }
-            .card-huge-val { font-size: 2.8rem; }
-            .bento-card { padding: 30px 20px; }
-            .hub-box { padding: 30px 20px; }
-            .hub-detail strong, .hub-detail a { font-size: 1.1rem; }
-            .timeline-wrapper { margin: 20px 10px; padding: 40px 16px; }
-            .timeline-node { gap: 16px; }
+            .hero { padding-top: 140px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1.05rem; }
+            .section-title { font-size: 1.9rem; }
+            .bento-value { font-size: 2.5rem; }
+            .bento-item { padding: 30px 20px; }
+            .info-card { padding: 8px 20px; }
+            .info-text strong, .info-text a { font-size: 1.05rem; }
+            .timeline-step { gap: 16px; }
         }
     </style>
 </head>
@@ -604,124 +517,124 @@
     </header>
 
     <section class="hero">
-        <span class="hero-badge premium-anim">Круглосуточная правовая поддержка</span>
-        <h1 class="premium-anim">Защита ваших прав<br>при ДТП в Воронеже</h1>
-        <p class="premium-anim">Экстренный выезд профессионального аварийного комиссара. Оформим все документы за 20 минут, освободим от очередей в ГИБДД и защитим от уловок страховых компаний.</p>
-        <a href="tel:+79518703934" class="btn-luxury premium-anim">
-            <i class="fa-solid fa-phone-flip"></i> Экстренный вызов комиссара
+        <span class="hero-badge fade-in-up">Правовая поддержка водителей</span>
+        <h1 class="fade-in-up">Служба аварийных комиссаров в Воронеже</h1>
+        <p class="fade-in-up">Оперативный выезд на место происшествия. Помогаем юридически грамотно зафиксировать аварию за 20 минут, избежать споров со страховыми компаниями и очередей в ГИБДД.</p>
+        <a href="tel:+79518703934" class="btn-call fade-in-up">
+            <i class="fa-solid fa-phone"></i> Вызвать комиссара
         </a>
     </section>
 
-    <section class="bento-section premium-anim">
-        <h2 class="section-title">Оформление без сотрудников ГИБДД</h2>
-        <p class="section-subtitle">Закон позволяет официально зафиксировать происшествие по Европротоколу. Мы берём на себя контроль выполнения условий для получения максимальных выплат.</p>
+    <section class="section-layout fade-in-up">
+        <h2 class="section-title">Оформление ДТП без участия ГИБДД</h2>
+        <p class="section-subtitle">Действующее законодательство позволяет зафиксировать факт аварии по Европротоколу. Мы обеспечим соблюдение всех нормативов для получения компенсаций.</p>
         
-        <div class="bento-grid-limits">
-            <div class="bento-card">
+        <div class="bento-grid">
+            <div class="bento-item">
                 <div>
-                    <div class="card-meta">Базовый регламент</div>
-                    <div class="card-huge-val limit-100-val">до 100 000 ₽</div>
-                    <div class="card-heading">Стандартная компенсация</div>
-                    <p class="card-body-text">Применяется в случаях, когда у участников ДТП есть разногласия относительно виновности, либо отсутствует техническая возможность выполнить специальную фотофиксацию через сертифицированные приложения.</p>
+                    <span class="bento-meta">Стандартный регламент</span>
+                    <div class="bento-value">до 100 000 ₽</div>
+                    <div class="bento-heading">Базовая компенсация</div>
+                    <p class="bento-text">Применяется, если у участников ДТП присутствуют разногласия по обстоятельствам происшествия, либо отсутствует техническая возможность провести фотофиксацию через сертифицированные приложения.</p>
                 </div>
             </div>
             
-            <div class="bento-card card-exclusive">
+            <div class="bento-item bento-featured">
                 <div>
-                    <div class="card-meta">Максимальный регламент (Закон ФЗ №40)</div>
-                    <div class="card-huge-val limit-400-val">до 400 000 ₽</div>
-                    <div class="card-heading">Полная страховая выплата</div>
-                    <p class="card-body-text">Доступно при полном отсутствии разногласий сторон И обязательном проведении некорректируемой фотофиксации повреждений через государственные мобильные сервисы. Наш комиссар обеспечит соблюдение всех юридических нюансов прямо на месте для активации данного лимита.</p>
+                    <span class="bento-meta">Максимальный регламент (ФЗ №40)</span>
+                    <div class="bento-value">до 400 000 ₽</div>
+                    <div class="bento-heading">Полное страховое возмещение</div>
+                    <p class="bento-text">Доступно при полном согласии сторон И проведении фотофиксации повреждений автомобилей через государственные мобильные сервисы. Комиссар проконтролирует выполнение всех требований закона прямо на месте.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="bento-section premium-anim">
-        <h2 class="section-title">Почему выбирают нас</h2>
+    <section class="section-layout fade-in-up">
+        <h2 class="section-title">Преимущества службы</h2>
         <div class="features-grid">
-            <div class="feature-item">
-                <div class="feature-icon-box"><i class="fa-solid fa-bolt-lightning"></i></div>
-                <h3>Выезд за 15 минут</h3>
-                <p>Патрульные экипажи распределены по всем районам Воронежа, обеспечивая моментальное прибытие.</p>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
+                <h3>Прибытие за 15 минут</h3>
+                <p>Продуманное дежурство экипажей во всех районах Воронежа гарантирует мгновенный доезд.</p>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon-box"><i class="fa-solid fa-file-shield"></i></div>
-                <h3>Юридическая точность</h3>
-                <p>Любая ошибка в заполнении — повод для отказа страховой. Мы гарантируем 100% чистоту документов.</p>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-shield"></i></div>
+                <h3>Защита от отказов СК</h3>
+                <p>Ошибки в бланках — частая причина отказа в выплатах. Мы гарантируем идеальную точность документов.</p>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon-box"><i class="fa-solid fa-hourglass-end"></i></div>
-                <h3>Без потери времени</h3>
-                <p>Вам больше не нужно часами дожидаться полицию и стоять в очередях в дежурную часть.</p>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-business-time"></i></div>
+                <h3>Экономия вашего времени</h3>
+                <p>Вам не придется часами ожидать сотрудников ДПС и стоять в очередях в дежурной части.</p>
             </div>
         </div>
     </section>
 
-    <section class="timeline-wrapper premium-anim">
-        <div class="timeline-container">
-            <h2 class="section-title" style="margin-bottom: 45px;">Порядок Ваших действий</h2>
+    <section class="timeline-section fade-in-up">
+        <div class="timeline-box">
+            <h2 class="section-title" style="margin-bottom: 45px;">План действий на месте</h2>
             
-            <div class="timeline-node">
-                <div class="node-index">1</div>
-                <div class="node-info">
-                    <h4>Безопасность прежде всего</h4>
-                    <p>Немедленно остановите автомобиль, включите аварийную сигнализацию и установите знак аварийной остановки.</p>
+            <div class="timeline-step">
+                <div class="step-number">1</div>
+                <div class="step-info">
+                    <h4>Обезопасьте периметр</h4>
+                    <p>Немедленно остановите транспортное средство, включите аварийную сигнализацию и выставьте знак аварийной остановки.</p>
                 </div>
             </div>
             
-            <div class="timeline-node">
-                <div class="node-index">2</div>
-                <div class="node-info">
-                    <h4>Звонок диспетчеру</h4>
-                    <p>Свяжитесь с нами по номеру +7 (951) 870-39-34. Опишите ситуацию, и к вам выедет ближайший комиссар.</p>
+            <div class="timeline-step">
+                <div class="step-number">2</div>
+                <div class="step-info">
+                    <h4>Свяжитесь с диспетчером</h4>
+                    <p>Позвоните по круглосуточному номеру +7 (951) 870-39-34. Оператор сориентирует вас и направит ближайший экипаж.</p>
                 </div>
             </div>
             
-            <div class="timeline-node">
-                <div class="node-index">3</div>
-                <div class="node-info">
+            <div class="timeline-step">
+                <div class="step-number">3</div>
+                <div class="step-info">
                     <h4>Фиксация и разъезд</h4>
-                    <p>Специалист сделает круговую фотосъемку, составит корректную схему ДТП, заполнит извещения, после чего вы сможете продолжить движение.</p>
+                    <p>Комиссар проведет круговую фотосъемку, составит точную схему ДТП, заполнит извещения, после чего вы сможете покинуть место аварии.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="contacts-hub premium-anim">
-        <h2 class="section-title">Единый центр координации</h2>
-        <p class="section-subtitle" style="margin-bottom: 35px;">Свяжитесь удобным способом для получения экстренной консультации или вызова экипажа.</p>
+    <section class="contacts-hub fade-in-up">
+        <h2 class="section-title">Контакты и адрес</h2>
+        <p class="section-subtitle" style="margin-bottom: 35px;">Круглосуточный прием обращений и экстренные консультации.</p>
         
-        <div class="hub-box">
-            <div class="hub-row">
-                <div class="hub-icon"><i class="fa-solid fa-location-crosshairs"></i></div>
-                <div class="hub-detail">
+        <div class="info-card">
+            <div class="info-block">
+                <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="info-text">
                     <span>Главный офис</span>
                     <strong>г. Воронеж, ул. Карпинского, 39</strong>
                 </div>
             </div>
-            <div class="hub-row">
-                <div class="hub-icon"><i class="fa-solid fa-phone-volume"></i></div>
-                <div class="hub-detail">
+            <div class="info-block">
+                <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+                <div class="info-text">
                     <span>Горячая линия 24/7</span>
                     <a href="tel:+79518703934">+7 (951) 870-39-34</a>
                 </div>
             </div>
         </div>
 
-        <div class="social-title">Связаться напрямую с руководителем (Максим):</div>
-        <div class="social-row">
-            <a href="https://t.me/blatsphera" target="_blank" class="btn-social-luxury tg-lux">
-                <i class="fa-brands fa-telegram"></i> Telegram канал
+        <div class="leader-title">Прямая связь с руководителем (Максим):</div>
+        <div class="social-buttons">
+            <a href="https://t.me/blatsphera" target="_blank" class="btn-social">
+                <i class="fa-brands fa-telegram" style="color: #24A1DE;"></i> Telegram канал
             </a>
-            <a href="https://max.ru/u/f9LHodD0cOKIaamMJAxuAhEaXfungcGvD5wDwjxEN-BFYhuEuoaKyYZ4pY8" target="_blank" class="btn-social-luxury max-lux">
-                <i class="fa-solid fa-comments"></i> Мессенджер MAX
+            <a href="https://max.ru/u/f9LHodD0cOKIaamMJAxuAhEaXfungcGvD5wDwjxEN-BFYhuEuoaKyYZ4pY8" target="_blank" class="btn-social">
+                <i class="fa-solid fa-comments" style="color: #AF52DE;"></i> Мессенджер MAX
             </a>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 вызовдтп.рф — Служба экстренной помощи при ДТП в Воронежской области. Все права защищены.</p>
+        <p>&copy; 2026 вызовдтп.рф — Единая служба аварийных комиссаров Воронежа. Все права защищены.</p>
     </footer>
 
     <script>
@@ -740,7 +653,7 @@
                 });
             }, observerOptions);
 
-            const animatedElements = document.querySelectorAll('.premium-anim');
+            const animatedElements = document.querySelectorAll('.fade-in-up');
             animatedElements.forEach(el => observer.observe(el));
         });
     </script>
