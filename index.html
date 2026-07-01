@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- ================= SEO & META ТЕГИ ================= -->
-    <title>вызовдтп.рф — Аварийный комиссар в Воронеже | Круглосуточно</title>
+    <title>вызовдтп.рф — Аварийный комиссар в Воронеже | Выезд 15 минут</title>
     <meta name="description" content="Официальный аварийный комиссар в Воронеже. Выезд на ДТП за 15 минут. Оформление европротокола, оценка ущерба, помощь со страховой МАКС и другими СК.">
     <meta name="keywords" content="аварийный комиссар воронеж, вызовдтп.рф, аварком воронеж, дтп воронеж, европротокол, независимая оценка дтп, страховая макс, помощь при дтп, никита аварком">
     <meta name="author" content="Никита - Аварийный комиссар">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://вызовдтп.рф/">
     
-    <!-- Open Graph (для красивых ссылок в соцсетях и мессенджерах) -->
     <meta property="og:title" content="вызовдтп.рф — Аварийный комиссар Воронеж">
     <meta property="og:description" content="ДТП? Без паники. Выезд за 15 минут, правильное оформление для страховой, помощь с СК МАКС.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://вызовдтп.рф/">
     <meta property="og:locale" content="ru_RU">
-    <!-- =================================================== -->
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,262 +25,264 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        /* Базовые настройки и шрифты */
-        :root {
-            --apple-blue: #0A84FF;
-            --apple-purple: #5E5CE6;
-            --apple-cyan: #32ADE6;
-            --maks-red: #E63946;
-            --glass-bg: rgba(30, 30, 32, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.1);
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        apple: { blue: '#0A84FF', purple: '#5E5CE6', cyan: '#32ADE6' },
+                        dark: '#09090b', // zinc-950
+                    },
+                    animation: {
+                        'blob': 'blob 15s infinite alternate',
+                        'shimmer': 'shimmer 3s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '100%': { transform: 'translate(30px, 50px) scale(1.2)' }
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%) skewX(-15deg)' },
+                            '50%, 100%': { transform: 'translateX(200%) skewX(-15deg)' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
         }
-        
+    </script>
+
+    <style>
         body { 
-            background-color: #000; 
-            color: #fff; 
+            background-color: #09090b; 
+            color: #f4f4f5; 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-            overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Анимированный фон (Aurora) */
-        .ambient-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-            background: #000;
-        }
-        .ambient-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.35;
-            animation: float 12s infinite ease-in-out alternate;
-        }
-        .blob-1 { top: -10%; left: -10%; width: 55vw; height: 55vw; background: var(--apple-blue); }
-        .blob-2 { bottom: 10%; right: -10%; width: 65vw; height: 65vw; background: var(--apple-purple); animation-delay: -4s; }
-        .blob-3 { top: 40%; left: 30%; width: 40vw; height: 40vw; background: var(--apple-cyan); animation-delay: -8s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(15%, 15%) scale(1.15); }
+        /* Фоновая сетка */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
 
         /* Glassmorphism Карточки */
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.7);
         }
 
-        /* Главная кнопка с бликом и пульсацией */
+        /* Премиальная кнопка */
         .btn-magic {
-            background: linear-gradient(135deg, var(--apple-blue), var(--apple-cyan));
-            color: white;
-            padding: 18px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 18px;
-            box-shadow: 0 8px 24px rgba(10, 132, 255, 0.4);
-            transition: all 0.2s ease;
+            background: linear-gradient(135deg, #0A84FF, #32ADE6);
+            box-shadow: 0 0 20px rgba(10, 132, 255, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
             position: relative;
             overflow: hidden;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            animation: pulse-shadow 2s infinite;
+            transition: all 0.2s ease;
         }
-        .btn-magic::after {
+        .btn-magic::before {
             content: '';
             position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-20deg);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-100%) skewX(-15deg);
             animation: shimmer 3s infinite;
         }
-        @keyframes shimmer {
-            0% { left: -100%; }
-            20% { left: 200%; }
-            100% { left: 200%; }
+        .btn-magic:hover {
+            box-shadow: 0 0 30px rgba(10, 132, 255, 0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+            transform: scale(1.02);
         }
-        @keyframes pulse-shadow {
-            0% { box-shadow: 0 0 0 0 rgba(10, 132, 255, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(10, 132, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(10, 132, 255, 0); }
-        }
-        .btn-magic:active {
-            transform: scale(0.96);
-        }
+        .btn-magic:active { transform: scale(0.98); }
 
-        /* Мессенджеры и спец.кнопки */
-        .btn-maks { background: rgba(230, 57, 70, 0.15); color: #FF4D4D; border: 1px solid rgba(230, 57, 70, 0.3); }
-        .btn-tg { background: rgba(0, 136, 204, 0.15); color: #0088cc; border: 1px solid rgba(0, 136, 204, 0.3); }
-
-        /* Анимации появления */
-        .fade-in-up {
-            animation: fadeInUp 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* Иконки в карточках */
         .icon-box {
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
             box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
         }
+        
+        /* Градиентный текст */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
     </style>
 </head>
-<body class="pb-32 pt-8">
+<body class="pb-32 md:pb-12 pt-6 md:pt-12 min-h-screen relative overflow-x-hidden selection:bg-apple-blue selection:text-white">
 
-    <!-- Анимированный задний фон -->
-    <div class="ambient-bg">
-        <div class="ambient-blob blob-1"></div>
-        <div class="ambient-blob blob-2"></div>
-        <div class="ambient-blob blob-3"></div>
+    <div class="fixed inset-0 z-[-2] bg-dark"></div>
+    <div class="fixed inset-0 z-[-1] bg-grid opacity-60"></div>
+    
+    <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-apple-blue/20 blur-[100px] animate-blob z-[-1] mix-blend-screen pointer-events-none"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-apple-purple/20 blur-[120px] animate-blob z-[-1] mix-blend-screen pointer-events-none" style="animation-delay: -5s;"></div>
+
+    <div class="max-w-5xl mx-auto px-5 md:px-8">
+
+        <header class="mb-12 md:mb-20 animate-fade-in-up md:text-center mt-2 md:mt-10" style="animation-delay: 0.1s; opacity: 0;">
+            <div class="flex items-center justify-between md:justify-center md:gap-6 mb-6">
+                <span class="text-zinc-500 font-bold tracking-widest text-xs md:text-sm uppercase">вызовдтп.рф</span>
+                <div class="inline-flex items-center gap-2 bg-zinc-800/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-zinc-700/50 shadow-lg">
+                    <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+                    <span class="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-zinc-300">Воронеж • 24/7</span>
+                </div>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-5 leading-tight md:leading-tight">
+                Аварийный <br class="md:hidden">
+                <span class="text-gradient bg-gradient-to-r from-apple-blue via-apple-cyan to-apple-purple">Комиссар</span>
+            </h1>
+            <p class="text-zinc-400 text-base md:text-xl font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+                Официальное оформление ДТП. Приеду за <span class="text-white font-bold border-b border-apple-cyan/50 pb-0.5">15 минут</span>, зафиксирую ущерб по закону и гарантирую правильную подачу документов в страховую.
+            </p>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 max-w-md mx-auto md:max-w-none">
+                <a href="tel:+79518703934" class="btn-magic w-full md:w-auto px-8 py-4 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    +7 (951) 870-39-34
+                </a>
+            </div>
+        </header>
+
+        <section class="mb-10 animate-fade-in-up max-w-3xl mx-auto" style="animation-delay: 0.2s; opacity: 0;">
+            <div class="glass-card rounded-2xl p-5 md:p-6 border-l-4 border-l-green-500 bg-green-500/5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <i class="fa-solid fa-shield-check text-8xl text-green-500"></i>
+                </div>
+                <div class="flex items-start gap-4 relative z-10">
+                    <div class="bg-green-500/20 p-2 rounded-lg mt-0.5 text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+                        <i class="fa-solid fa-shield-check text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base md:text-lg text-white mb-1.5">Защита от отказа в выплате</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed">Страховые ищут малейшие ошибки в протоколах. Я составляю схему ДТП так, чтобы вы гарантированно получили <span class="text-zinc-200 font-semibold">100% компенсации</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 animate-fade-in-up" style="animation-delay: 0.3s; opacity: 0;">
+            <div class="flex items-center gap-3 mb-6 px-1">
+                <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent flex-1 md:hidden"></div>
+                <h2 class="text-xl md:text-2xl font-bold tracking-tight text-white/90 text-center md:text-left">Мои компетенции</h2>
+                <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent flex-1 md:hidden"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="w-12 h-12 rounded-xl icon-box flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-file-signature text-apple-blue text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-base mb-2 text-zinc-100">Европротокол</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Оформление без участия ГИБДД. Существенно экономим ваше время на дороге.</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="w-12 h-12 rounded-xl icon-box flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-camera text-apple-purple text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-base mb-2 text-zinc-100">Фиксация</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Детальная фото- и видеосъемка места происшествия со строгим соблюдением ГОСТа.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="w-12 h-12 rounded-xl icon-box flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-scale-balanced text-green-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-base mb-2 text-zinc-100">Оценка ущерба</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Точный и независимый расчет реальной стоимости восстановления вашего автомобиля.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="w-12 h-12 rounded-xl icon-box flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-gavel text-apple-cyan text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-base mb-2 text-zinc-100">Спорные ДТП</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Поиск очевидцев, сбор видео с камер наблюдения и аргументированная защита вашей правоты.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="animate-fade-in-up max-w-3xl mx-auto mb-10" style="animation-delay: 0.4s; opacity: 0;">
+            <div class="glass-card rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-apple-blue via-apple-cyan to-apple-purple opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    
+                    <div class="flex-1">
+                        <div class="flex items-center gap-4 mb-5">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[2px] shadow-[0_0_20px_rgba(94,92,230,0.3)]">
+                                <div class="w-full h-full rounded-full bg-zinc-900 flex items-center justify-center text-2xl font-black text-white">Н</div>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold tracking-tight text-white">Никита</h2>
+                                <p class="text-sm text-apple-cyan font-medium mt-0.5">Эксперт по разбору ДТП</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-zinc-800/40 border border-zinc-700/50 w-full md:w-max">
+                            <div class="w-10 h-10 rounded-lg bg-zinc-700/50 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-location-dot text-zinc-300"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-zinc-400 uppercase font-bold tracking-widest mb-0.5">Офис в Воронеже</p>
+                                <p class="text-sm font-semibold text-zinc-100">ул. Карпинского, 39</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 w-full">
+                        <p class="text-xs text-zinc-400 mb-3 font-medium uppercase tracking-wider md:text-center">Связь и консультации:</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            
+                            <a href="tel:+79518703934" class="flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 hover:border-red-500/40 transition-all active:scale-95 text-center group/btn">
+                                <i class="fa-solid fa-car-burst text-2xl group-hover/btn:scale-110 transition-transform"></i>
+                                <span class="text-[11px] font-bold uppercase tracking-wider leading-tight">Помощь по<br>СК «МАКС»</span>
+                            </a>
+                            
+                            <a href="https://t.me/+79518703934" target="_blank" class="flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/40 transition-all active:scale-95 text-center group/btn">
+                                <i class="fa-brands fa-telegram text-2xl group-hover/btn:scale-110 transition-transform"></i>
+                                <span class="text-[11px] font-bold uppercase tracking-wider leading-tight">Написать в<br>Telegram</span>
+                            </a>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center pb-6 opacity-50 text-xs text-zinc-500 hidden md:block">
+            © 2026 вызовдтп.рф — Аварийный комиссар в Воронеже.<br>Оперативный выезд и независимая оценка.
+        </footer>
+
     </div>
 
-    <!-- Главный экран -->
-    <header class="px-6 mb-8 mt-4 fade-in-up" style="animation-delay: 0.1s;">
-        <!-- Домен как логотип -->
-        <div class="flex items-center justify-between mb-4">
-            <span class="text-white/40 font-bold tracking-widest text-sm uppercase">вызовдтп.рф</span>
-            <div class="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/10">
-                <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                <span class="text-xs font-semibold tracking-wider uppercase text-white/80">Воронеж • 24/7</span>
-            </div>
-        </div>
-        
-        <h1 class="text-[38px] leading-[1.1] font-bold tracking-tight text-white drop-shadow-md mb-4">
-            Аварийный<br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Комиссар</span>
-        </h1>
-        <p class="text-white/70 text-lg font-medium mb-6 leading-relaxed">
-            Официальное оформление ДТП. Приеду за 15 минут, зафиксирую ущерб по закону и <span class="text-white font-bold">гарантирую</span> правильную подачу документов в страховую.
-        </p>
-
-        <!-- Главная кнопка вызова -->
-        <a href="tel:+79518703934" class="btn-magic w-full block text-center">
-            <i class="fa-solid fa-phone-volume"></i>
-            Вызвать: +7 (951) 870-39-34
-        </a>
-    </header>
-
-    <!-- Блок доверия и гарантий -->
-    <section class="px-6 mb-8 fade-in-up" style="animation-delay: 0.15s;">
-        <div class="glass-card p-4 border border-green-500/20 bg-green-500/5">
-            <div class="flex items-start gap-3">
-                <i class="fa-solid fa-shield-check text-green-400 text-xl mt-0.5"></i>
-                <div>
-                    <h3 class="font-bold text-[15px] text-white mb-1">Защита от отказа в выплате</h3>
-                    <p class="text-[12px] text-white/60 leading-relaxed">Страховые ищут ошибки в протоколах. Я составляю схему ДТП так, чтобы вы гарантированно получили 100% компенсации.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Блок Услуг -->
-    <section class="px-6 mb-8 fade-in-up" style="animation-delay: 0.2s;">
-        <h2 class="text-xl font-bold tracking-tight mb-4 px-1">Мои компетенции:</h2>
-        
-        <div class="grid grid-cols-2 gap-3">
-            <div class="glass-card p-4">
-                <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center mb-3">
-                    <i class="fa-solid fa-file-signature text-blue-400 text-lg"></i>
-                </div>
-                <h3 class="font-bold text-[15px] mb-1 leading-tight">Европротокол</h3>
-                <p class="text-[12px] text-white/50 leading-relaxed">Оформление без ГИБДД. Экономим ваше время на дороге.</p>
-            </div>
-            
-            <div class="glass-card p-4">
-                <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center mb-3">
-                    <i class="fa-solid fa-camera text-purple-400 text-lg"></i>
-                </div>
-                <h3 class="font-bold text-[15px] mb-1 leading-tight">Фиксация</h3>
-                <p class="text-[12px] text-white/50 leading-relaxed">Детальная фото и видео съемка места происшествия по ГОСТу.</p>
-            </div>
-
-            <div class="glass-card p-4">
-                <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center mb-3">
-                    <i class="fa-solid fa-scale-balanced text-green-400 text-lg"></i>
-                </div>
-                <h3 class="font-bold text-[15px] mb-1 leading-tight">Оценка</h3>
-                <p class="text-[12px] text-white/50 leading-relaxed">Точный расчет стоимости восстановления вашего авто.</p>
-            </div>
-
-            <div class="glass-card p-4">
-                <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center mb-3">
-                    <i class="fa-solid fa-gavel text-cyan-400 text-lg"></i>
-                </div>
-                <h3 class="font-bold text-[15px] mb-1 leading-tight">Спорные ДТП</h3>
-                <p class="text-[12px] text-white/50 leading-relaxed">Поиск свидетелей, видео с камер и защита вашей правоты.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Карточка контактов и МАКС -->
-    <section class="px-6 mb-8 fade-in-up" style="animation-delay: 0.3s;">
-        <div class="glass-card p-5 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500/50 via-cyan-400/50 to-purple-500/50"></div>
-            
-            <div class="flex items-center gap-4 mb-6">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 p-0.5 shadow-lg">
-                    <div class="w-full h-full rounded-full bg-[#1c1c1e] flex items-center justify-center text-xl font-bold">Н</div>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold tracking-tight">Никита</h2>
-                    <p class="text-sm text-blue-400 font-medium">Эксперт по разбору ДТП</p>
-                </div>
-            </div>
-
-            <!-- Адрес -->
-            <div class="flex gap-3 mb-5 p-3 rounded-2xl bg-white/5 border border-white/5">
-                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <i class="fa-solid fa-location-dot text-white/70 text-sm"></i>
-                </div>
-                <div>
-                    <p class="text-[11px] text-white/40 uppercase font-bold tracking-wider mb-0.5">Офис в Воронеже</p>
-                    <p class="text-[15px] font-medium leading-tight">ул. Карпинского, 39</p>
-                </div>
-            </div>
-
-            <!-- Кнопки связи (МАКС и Телеграм) -->
-            <p class="text-center text-[12px] text-white/50 mb-3 font-medium">Бесплатная поддержка и консультации:</p>
-            <div class="grid grid-cols-2 gap-3">
-                
-                <!-- Кнопка МАКС -->
-                <a href="tel:+79518703934" class="flex flex-col items-center justify-center gap-2 py-3 px-2 rounded-2xl btn-maks transition-transform active:scale-95 text-center">
-                    <i class="fa-solid fa-car-burst text-2xl"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider leading-tight">Помощь по<br>СК «МАКС»</span>
-                </a>
-                
-                <!-- Кнопка Telegram -->
-                <a href="https://t.me/+79518703934" target="_blank" class="flex flex-col items-center justify-center gap-2 py-3 px-2 rounded-2xl btn-tg transition-transform active:scale-95 text-center">
-                    <i class="fa-brands fa-telegram text-2xl"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider leading-tight">Написать в<br>Telegram</span>
-                </a>
-                
-            </div>
-        </div>
-    </section>
-
-    <!-- Плавающая нижняя панель для мобильных -->
-    <div class="fixed bottom-0 left-0 w-full p-6 pb-8 bg-gradient-to-t from-black via-black/80 to-transparent z-50 fade-in-up" style="animation-delay: 0.5s;">
-        <a href="tel:+79518703934" class="w-full glass-card border border-blue-500/30 bg-blue-500/20 backdrop-blur-xl p-4 flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-[0_0_20px_rgba(10,132,255,0.2)]">
-            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center animate-pulse">
-                <i class="fa-solid fa-phone text-white"></i>
+    <div class="fixed bottom-0 left-0 w-full p-4 pb-6 bg-gradient-to-t from-dark via-dark/90 to-transparent z-50 md:hidden animate-fade-in-up" style="animation-delay: 0.6s; opacity: 0;">
+        <a href="tel:+79518703934" class="w-full glass-card border border-apple-blue/40 bg-apple-blue/10 backdrop-blur-xl p-4 rounded-2xl flex items-center justify-center gap-4 transition-transform active:scale-95 shadow-[0_0_25px_rgba(10,132,255,0.25)]">
+            <div class="w-12 h-12 rounded-full bg-apple-blue flex items-center justify-center animate-pulse shadow-[0_0_15px_rgba(10,132,255,0.5)]">
+                <i class="fa-solid fa-phone text-white text-lg"></i>
             </div>
             <div class="text-left">
-                <p class="text-[11px] text-blue-200 uppercase font-bold tracking-wider mb-0.5">Дежурный комиссар</p>
-                <p class="text-[18px] font-bold text-white tracking-tight">+7 (951) 870-39-34</p>
+                <p class="text-[10px] text-apple-cyan uppercase font-bold tracking-widest mb-0.5">Дежурный комиссар</p>
+                <p class="text-[19px] font-black text-white tracking-tight leading-none">+7 (951) 870-39-34</p>
             </div>
         </a>
     </div>
