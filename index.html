@@ -1,19 +1,59 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <!-- Базовые мета-теги для мобильных устройств -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аварийный комиссар Воронеж | вызовдтп.рф</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- SEO Оптимизация -->
+    <title>Аварийный комиссар Воронеж | Оформление ДТП | вызовдтп.рф</title>
+    <meta name="description" content="Вызов аварийного комиссара в Воронеже. Быстрое оформление ДТП до 400 тыс. рублей (Госуслуги). Полное юридическое сопровождение, помощь с выплатами, без цессий. Приезд от 15 минут!">
+    <meta name="keywords" content="аварийный комиссар воронеж, аварком воронеж, вызов дтп, оформление дтп воронеж, помощь при дтп, европротокол воронеж, дтп без гибдд, комиссар дтп круглосуточно">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://вызовдтп.рф/">
+
+    <!-- Open Graph для красивого отображения ссылок в мессенджерах и соцсетях -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Аварийный комиссар в Воронеже | Круглосуточно">
+    <meta property="og:description" content="Оформление ДТП по закону с гарантией выплат. Приедем за 15 минут. Не занимаемся цессией!">
+    <meta property="og:url" content="https://вызовдтп.рф/">
+    <meta property="og:site_name" content="ВызовДТП.рф">
+
+    <!-- Микроразметка Schema.org для поисковиков -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Аварийный комиссар Воронеж - ВызовДТП.рф",
+      "image": "",
+      "telephone": "+79518703934",
+      "url": "https://вызовдтп.рф",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Воронеж",
+        "addressCountry": "RU"
+      },
+      "priceRange": "₽",
+      "description": "Профессиональное оформление ДТП в Воронеже. Европротокол, сопровождение, помощь с выплатами.",
+      "areaServed": "Воронеж"
+    }
+    </script>
+
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        /* Базовые настройки и переменные (Черно-красный стиль) */
+        /* Современные CSS переменные */
         :root {
-            --primary: #E53935; /* Ярко-красный */
-            --primary-hover: #C62828; /* Темно-красный при наведении */
-            --dark: #0a0a0a; /* Очень темный фон */
-            --darker: #000000; /* Глубокий черный */
-            --light: #F5F5F5;
-            --gray: #9e9e9e;
+            --red: #ff003c; /* Токсичный современный красный */
+            --red-glow: rgba(255, 0, 60, 0.4);
+            --red-dark: #cc0030;
+            --black: #050505;
+            --black-light: #121212;
+            --glass: rgba(25, 25, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
         }
 
         * {
@@ -21,278 +61,276 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--dark);
-            color: var(--light);
+            background-color: var(--black);
+            color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
+            padding-bottom: 80px; /* Отступ для мобильной панели */
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
+        /* Декоративное фоновое свечение */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, var(--red-glow) 0%, transparent 70%);
+            opacity: 0.3;
+            z-index: -1;
+            filter: blur(100px);
         }
 
-        /* Анимации */
-        .hidden {
+        a { text-decoration: none; color: inherit; }
+
+        /* Анимации появления */
+        .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s ease-out;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
         }
-
-        .show {
+        .reveal.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
-        /* Шапка сайта */
+        /* Шапка Glassmorphism */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 5%;
-            background: rgba(0, 0, 0, 0.95);
+            padding: 15px 5%;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(229, 57, 53, 0.2);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: #fff;
+            font-size: clamp(20px, 4vw, 26px);
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+        .logo span { color: var(--red); text-shadow: 0 0 15px var(--red-glow); }
 
-        .logo span {
-            color: var(--primary);
-        }
-
-        .header-contacts {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .phone {
+        .header-phone {
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .header-phone:hover { color: var(--red); }
+
+        /* Современные кнопки (UI) */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            z-index: 1;
+        }
+
+        /* Красная пульсирующая кнопка */
+        .btn-red {
+            background: linear-gradient(135deg, var(--red), var(--red-dark));
             color: #fff;
-            transition: color 0.3s;
+            box-shadow: 0 8px 25px var(--red-glow), inset 0 2px 0 rgba(255,255,255,0.2);
+        }
+        .btn-red::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease; z-index: -1;
+        }
+        .btn-red:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px var(--red-glow);
+        }
+        .btn-red:hover::before { left: 100%; }
+        .btn-red:active { transform: translateY(1px); }
+
+        /* Темная неоновая кнопка (для мессенджера) */
+        .btn-dark {
+            background: var(--black-light);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+        .btn-dark:hover {
+            border-color: var(--red);
+            box-shadow: 0 0 20px var(--red-glow);
+            transform: translateY(-3px);
         }
 
-        .phone:hover {
-            color: var(--primary);
+        /* Анимация пульсации для акцента */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 var(--red-glow); }
+            70% { box-shadow: 0 0 0 20px rgba(255,0,60,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,0,60,0); }
         }
+        .pulse-effect { animation: pulse 2s infinite; }
 
-        /* Главный экран (Hero) */
+        /* Главный экран */
         .hero {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
-            padding: 100px 5% 40px;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1563223696-2917726de3e8?q=80&w=2000&auto=format&fit=crop') center/cover;
+            padding: 120px 5% 60px;
+            background: radial-gradient(circle at center, rgba(18,18,18,0.8) 0%, var(--black) 100%);
+            position: relative;
         }
+        
+        .hero-content { max-width: 900px; z-index: 2; position: relative; }
 
         .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
+            font-size: clamp(32px, 6vw, 65px);
+            font-weight: 900;
             line-height: 1.1;
-            margin-bottom: 20px;
-            max-width: 900px;
+            margin-bottom: 25px;
         }
-
-        .hero h1 span {
-            color: var(--primary);
-        }
+        .hero h1 span { color: var(--red); text-shadow: 0 0 20px var(--red-glow); }
 
         .hero p {
-            font-size: 1.2rem;
-            color: #ddd;
+            font-size: clamp(16px, 2.5vw, 20px);
+            color: var(--text-muted);
             margin-bottom: 40px;
             max-width: 700px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 18px 35px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 16px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: #fff;
-            border: none;
-            box-shadow: 0 10px 20px rgba(229, 57, 53, 0.3);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(229, 57, 53, 0.5);
-        }
-
-        .btn-messenger {
-            background-color: #1a1a1a;
-            color: #fff;
-            border: 1px solid #333;
-        }
-
-        .btn-messenger:hover {
-            background-color: #2a2a2a;
-            border-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* Услуги и О нас */
-        .section {
-            padding: 100px 5%;
-            background-color: var(--darker);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 800;
-        }
-        
-        .section-subtitle {
-            text-align: center;
-            color: var(--gray);
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto 60px auto;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: #111;
-            padding: 40px 30px;
-            border-radius: 12px;
-            text-align: left;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #222;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(229, 57, 53, 0.1);
-            border-color: #333;
-        }
-        
-        .card:hover::before {
-            width: 100%;
-            opacity: 0.05;
-        }
-
-        .card-icon {
-            font-size: 40px;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-
-        .card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .card p {
-            color: var(--gray);
-            font-size: 1rem;
             line-height: 1.7;
         }
 
-        .highlight {
-            color: #fff;
-            font-weight: 600;
+        .btn-group { display: flex; gap: 20px; flex-wrap: wrap; }
+
+        /* Карточки услуг (UI Glassmorphism) */
+        .section { padding: 100px 5%; position: relative; }
+        .section-title {
+            text-align: center;
+            font-size: clamp(28px, 5vw, 45px);
+            font-weight: 900;
+            margin-bottom: 20px;
         }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(30,30,30,0.4) 0%, rgba(10,10,10,0.6) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 24px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red), transparent);
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 60, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px var(--red-glow);
+        }
+        .card:hover::before { opacity: 1; }
+
+        .card-icon {
+            font-size: 45px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px var(--red-glow));
+        }
+
+        .card h3 { font-size: 22px; margin-bottom: 15px; font-weight: 700; }
+        .card p { color: var(--text-muted); font-size: 16px; line-height: 1.6; }
+        .highlight { color: #fff; font-weight: 700; border-bottom: 1px solid var(--red); }
 
         /* Подвал */
         footer {
-            background-color: #050505;
-            padding: 60px 5%;
+            background: #000;
+            padding: 80px 5%;
             text-align: center;
-            border-top: 1px solid #222;
+            border-top: 1px solid var(--glass-border);
         }
-
-        .footer-content h2 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-        }
-
         .footer-phone {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--primary);
+            font-size: clamp(35px, 6vw, 60px);
+            font-weight: 900;
+            color: var(--text-main);
             display: block;
-            margin-bottom: 30px;
+            margin: 30px 0;
+            text-shadow: 0 0 30px rgba(255,255,255,0.2);
+            transition: 0.3s;
         }
+        .footer-phone:hover { color: var(--red); text-shadow: 0 0 30px var(--red-glow); }
 
-        /* Адаптив под мобильные телефоны */
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ (iPhone / Android) --- */
+        .mobile-action-bar { display: none; }
+
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            .header-contacts {
-                display: none; 
-            }
-            .btn-group {
-                flex-direction: column;
+            .header-phone { display: none; } /* Скрываем в шапке, переносим вниз */
+            .btn-group { flex-direction: column; width: 100%; }
+            .btn { width: 100%; padding: 18px; font-size: 15px; }
+            .section { padding: 60px 5%; }
+            .card { padding: 30px 20px; border-radius: 16px; }
+            
+            /* Плавающая панель кнопок снизу (Спец для UI телефонов) */
+            .mobile-action-bar {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
                 width: 100%;
+                background: rgba(10, 10, 10, 0.9);
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                padding: 10px 5% calc(10px + env(safe-area-inset-bottom)); /* Учет "челки" снизу на iPhone */
+                gap: 10px;
+                z-index: 1000;
+                border-top: 1px solid rgba(255,0,60,0.2);
             }
-            .btn {
-                width: 100%;
+            .mobile-action-bar .btn {
+                flex: 1;
+                padding: 12px;
+                font-size: 14px;
+                border-radius: 10px;
             }
-            .section {
-                padding: 70px 5%;
-            }
-            .footer-phone {
-                font-size: 2rem;
-            }
-            .card {
-                padding: 30px 20px;
-            }
+            .btn-icon { font-size: 20px; }
+            
+            /* Убираем hover эффекты для тач-устройств, оставляем active */
+            .card:hover { transform: none; box-shadow: none; border-color: var(--glass-border); }
+            .card:active { transform: scale(0.98); border-color: var(--red); }
         }
     </style>
 </head>
@@ -301,77 +339,93 @@
     <!-- Шапка -->
     <header>
         <div class="logo">Вызов<span>ДТП</span>.рф</div>
-        <div class="header-contacts">
-            <a href="tel:+79518703934" class="phone">+7 (951) 870-39-34</a>
-            <a href="tel:+79518703934" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Вызвать комиссара</a>
-        </div>
+        <a href="tel:+79518703934" class="header-phone">📞 +7 (951) 870-39-34</a>
     </header>
 
     <!-- Главный экран -->
-    <section class="hero hidden">
-        <h1>Профессиональное <span>оформление ДТП</span> в Воронеже</h1>
-        <p>Полное юридическое сопровождение от вызова на место аварии до получения страховой выплаты. Быстро, грамотно, без участия ГИБДД.</p>
-        <div class="btn-group">
-            <a href="tel:+79518703934" class="btn btn-primary">📞 +7 (951) 870-39-34</a>
-            <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-messenger">💬 Написать в мессенджер MAX</a>
-        </div>
-    </section>
+    <main>
+        <section class="hero">
+            <div class="hero-content reveal">
+                <h1>Оформление ДТП в Воронеже <span>без ГИБДД</span></h1>
+                <p>Приеду за 15 минут. Грамотно оформлю документы, защищу от мошенников и помогу получить максимальную выплату от страховой. Полное юридическое сопровождение под ключ.</p>
+                <div class="btn-group">
+                    <a href="tel:+79518703934" class="btn btn-red pulse-effect">Вызвать комиссара</a>
+                    <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-dark">Написать в MAX</a>
+                </div>
+            </div>
+        </section>
 
-    <!-- Услуги и О нас -->
-    <section class="section">
-        <h2 class="section-title hidden">Работаем на ваш результат</h2>
-        <p class="section-subtitle hidden">Мы не просто рисуем схему. Мы комплексно решаем вашу проблему, защищаем от ошибок и гарантируем правильность оформления документов для страховой компании.</p>
-        
-        <div class="cards">
-            <div class="card hidden">
-                <div class="card-icon">📝</div>
-                <h3>Европротокол до 400 000 ₽</h3>
-                <p>Оформляем ДТП по стандартному европротоколу с лимитом <span class="highlight">до 100 000 ₽</span>. Также проводим фотофиксацию и оформляем расширенный европротокол через Госуслуги с выплатой <span class="highlight">до 400 000 ₽</span>.</p>
+        <!-- Услуги и Описание -->
+        <section class="section">
+            <h2 class="section-title reveal">Мы работаем на ваш результат</h2>
+            <p class="section-subtitle reveal">Мы не просто рисуем схему. Мы комплексно решаем вашу проблему, защищаем от ошибок и гарантируем правильность оформления для страховой.</p>
+            
+            <div class="grid">
+                <!-- Карточка 1 -->
+                <article class="card reveal">
+                    <div class="card-icon">📄</div>
+                    <h3>Европротокол до 400 000 ₽</h3>
+                    <p>Оформляем ДТП по стандарту с лимитом <span class="highlight">до 100 000 ₽</span>. Также проводим обязательную фотофиксацию и оформляем расширенный протокол через Госуслуги с выплатой <span class="highlight">до 400 000 ₽</span>.</p>
+                </article>
+                
+                <!-- Карточка 2 -->
+                <article class="card reveal">
+                    <div class="card-icon">💸</div>
+                    <h3>Помощь с выплатами</h3>
+                    <p>Наша работа не заканчивается на месте аварии. Консультируем и помогаем подать документы в страховую, чтобы вы получили <span class="highlight">реальную сумму</span> за ущерб без занижений.</p>
+                </article>
+                
+                <!-- Карточка 3 -->
+                <article class="card reveal">
+                    <div class="card-icon">🤝</div>
+                    <h3>Полное сопровождение</h3>
+                    <p>Берем на себя всю бюрократию. Ведем ваше дело от звонка с дороги до момента, когда деньги поступят на счет. Никаких очередей в ГИБДД и потраченных нервов.</p>
+                </article>
+                
+                <!-- Карточка 4 -->
+                <article class="card reveal">
+                    <div class="card-icon">⚖️</div>
+                    <h3>Честно. Без цессий</h3>
+                    <p>Работаем исключительно в ваших интересах. Мы принципиально <span class="highlight">не занимаемся цессией</span> (не выкупаем долги за копейки). Наша цель — чтобы всю положенную сумму получили вы.</p>
+                </article>
             </div>
-            <div class="card hidden">
-                <div class="card-icon">💰</div>
-                <h3>Помощь с выплатами</h3>
-                <p>Сотрудничество не заканчивается на месте аварии. Мы консультируем и помогаем правильно подать документы в страховую компанию, чтобы вы получили <span class="highlight">максимальную компенсацию</span> за ущерб.</p>
-            </div>
-            <div class="card hidden">
-                <div class="card-icon">🤝</div>
-                <h3>Полное сопровождение</h3>
-                <p>Берем на себя всю бюрократию. Ведем ваше дело от момента звонка с дороги до этапа, когда деньги поступят на ваш счет. Вы экономите время, нервы и избегаете очередей в ГИБДД.</p>
-            </div>
-            <div class="card hidden">
-                <div class="card-icon">⚖️</div>
-                <h3>Честно. Без цессий</h3>
-                <p>Мы работаем исключительно в ваших интересах. Принципиально <span class="highlight">не занимаемся цессией</span> (выкупом страховых дел за копейки). Наша главная цель — чтобы всю положенную по закону сумму получили именно вы.</p>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Подвал / Контакты -->
+    <!-- Подвал -->
     <footer>
-        <div class="footer-content hidden">
-            <h2>Попали в ДТП? Звоните прямо сейчас!</h2>
-            <p style="color: var(--gray); margin-bottom: 20px; font-size: 1.1rem;">Приеду в любой район Воронежа за 15-30 минут. Круглосуточно, 24/7.</p>
+        <div class="reveal">
+            <h2 style="font-size: clamp(24px, 4vw, 36px); font-weight: 900;">Попали в ДТП? Звоните!</h2>
+            <p style="color: var(--text-muted); font-size: 18px; margin-top: 10px;">Работаем 24/7. Приедем в любой район Воронежа.</p>
             <a href="tel:+79518703934" class="footer-phone">+7 (951) 870-39-34</a>
-            <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-messenger">Связаться в мессенджере MAX</a>
-            <p style="margin-top: 50px; color: #444; font-size: 14px;">© 2026 вызовдтп.рф — Аварийный комиссар Воронеж</p>
+            <p style="color: #444; font-size: 14px; margin-top: 40px;">© 2026 вызовдтп.рф — Аварийный комиссар Воронеж</p>
         </div>
     </footer>
 
-    <!-- Скрипт для анимаций при прокрутке -->
+    <!-- Мобильная плавающая панель (Sticky Mobile Bar) -->
+    <div class="mobile-action-bar">
+        <a href="tel:+79518703934" class="btn btn-red pulse-effect">
+            <span class="btn-icon">📞</span> Вызвать
+        </a>
+        <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-dark">
+            <span class="btn-icon">💬</span> MAX
+        </a>
+    </div>
+
+    <!-- Скрипт для плавной анимации появления элементов (Scroll Reveal) -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('show');
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Анимируем только один раз
                     }
                 });
-            }, {
-                threshold: 0.1
-            });
+            }, observerOptions);
 
-            const hiddenElements = document.querySelectorAll('.hidden');
-            hiddenElements.forEach((el) => observer.observe(el));
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         });
     </script>
 </body>
