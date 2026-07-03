@@ -6,14 +6,14 @@
     <title>Аварийный комиссар Воронеж | вызовдтп.рф</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* Базовые настройки и переменные */
+        /* Базовые настройки и переменные (Черно-красный стиль) */
         :root {
-            --primary: #FF5722; /* Сигнальный оранжевый */
-            --primary-hover: #E64A19;
-            --dark: #121212;
-            --darker: #0a0a0a;
+            --primary: #E53935; /* Ярко-красный */
+            --primary-hover: #C62828; /* Темно-красный при наведении */
+            --dark: #0a0a0a; /* Очень темный фон */
+            --darker: #000000; /* Глубокий черный */
             --light: #F5F5F5;
-            --gray: #888888;
+            --gray: #9e9e9e;
         }
 
         * {
@@ -53,13 +53,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
-            background: rgba(18, 18, 18, 0.95);
+            background: rgba(0, 0, 0, 0.95);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(229, 57, 53, 0.2);
         }
 
         .logo {
@@ -93,14 +93,13 @@
 
         /* Главный экран (Hero) */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            padding: 0 5%;
-            background: linear-gradient(to right, rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.4)), url('https://images.unsplash.com/photo-1626620575390-0eb56f4d6d6e?q=80&w=2000&auto=format&fit=crop') center/cover;
-            margin-top: 60px;
+            padding: 100px 5% 40px;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1563223696-2917726de3e8?q=80&w=2000&auto=format&fit=crop') center/cover;
         }
 
         .hero h1 {
@@ -108,7 +107,7 @@
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 20px;
-            max-width: 800px;
+            max-width: 900px;
         }
 
         .hero h1 span {
@@ -119,7 +118,7 @@
             font-size: 1.2rem;
             color: #ddd;
             margin-bottom: 40px;
-            max-width: 600px;
+            max-width: 700px;
         }
 
         .btn-group {
@@ -145,27 +144,28 @@
             background-color: var(--primary);
             color: #fff;
             border: none;
-            box-shadow: 0 10px 20px rgba(255, 87, 34, 0.3);
+            box-shadow: 0 10px 20px rgba(229, 57, 53, 0.3);
         }
 
         .btn-primary:hover {
             background-color: var(--primary-hover);
             transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(255, 87, 34, 0.4);
+            box-shadow: 0 15px 25px rgba(229, 57, 53, 0.5);
         }
 
         .btn-messenger {
-            background-color: #2b2b2b;
+            background-color: #1a1a1a;
             color: #fff;
-            border: 1px solid #444;
+            border: 1px solid #333;
         }
 
         .btn-messenger:hover {
-            background-color: #3b3b3b;
+            background-color: #2a2a2a;
+            border-color: var(--primary);
             transform: translateY(-3px);
         }
 
-        /* Преимущества и услуги */
+        /* Услуги и О нас */
         .section {
             padding: 100px 5%;
             background-color: var(--darker);
@@ -174,60 +174,95 @@
         .section-title {
             text-align: center;
             font-size: 2.5rem;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
             font-weight: 800;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 60px auto;
         }
 
         .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
 
         .card {
-            background: #1e1e1e;
+            background: #111;
             padding: 40px 30px;
-            border-radius: 15px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #222;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-10px);
-            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(229, 57, 53, 0.1);
+            border-color: #333;
+        }
+        
+        .card:hover::before {
+            width: 100%;
+            opacity: 0.05;
         }
 
         .card-icon {
             font-size: 40px;
             margin-bottom: 20px;
+            color: var(--primary);
         }
 
         .card h3 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 15px;
+            color: #fff;
         }
 
         .card p {
             color: var(--gray);
             font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .highlight {
+            color: #fff;
+            font-weight: 600;
         }
 
         /* Подвал */
         footer {
-            background-color: #000;
-            padding: 50px 5%;
+            background-color: #050505;
+            padding: 60px 5%;
             text-align: center;
             border-top: 1px solid #222;
         }
 
         .footer-content h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 20px;
         }
 
         .footer-phone {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 800;
             color: var(--primary);
             display: block;
@@ -237,10 +272,10 @@
         /* Адаптив под мобильные телефоны */
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             .header-contacts {
-                display: none; /* Скрываем телефон в шапке на мобилках для экономии места */
+                display: none; 
             }
             .btn-group {
                 flex-direction: column;
@@ -250,10 +285,13 @@
                 width: 100%;
             }
             .section {
-                padding: 60px 5%;
+                padding: 70px 5%;
             }
             .footer-phone {
-                font-size: 1.8rem;
+                font-size: 2rem;
+            }
+            .card {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -265,38 +303,45 @@
         <div class="logo">Вызов<span>ДТП</span>.рф</div>
         <div class="header-contacts">
             <a href="tel:+79518703934" class="phone">+7 (951) 870-39-34</a>
-            <a href="tel:+79518703934" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Вызвать сейчас</a>
+            <a href="tel:+79518703934" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Вызвать комиссара</a>
         </div>
     </header>
 
     <!-- Главный экран -->
     <section class="hero hidden">
-        <h1>Аварийный комиссар в <span>Воронеже</span></h1>
-        <p>Быстрое и законное оформление ДТП без участия ГИБДД. Приеду на место от 15 минут. Круглосуточно. Сохраню ваши нервы и время.</p>
+        <h1>Профессиональное <span>оформление ДТП</span> в Воронеже</h1>
+        <p>Полное юридическое сопровождение от вызова на место аварии до получения страховой выплаты. Быстро, грамотно, без участия ГИБДД.</p>
         <div class="btn-group">
             <a href="tel:+79518703934" class="btn btn-primary">📞 +7 (951) 870-39-34</a>
-            <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-messenger">💬 Написать в MAX</a>
+            <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-messenger">💬 Написать в мессенджер MAX</a>
         </div>
     </section>
 
-    <!-- Услуги и преимущества -->
+    <!-- Услуги и О нас -->
     <section class="section">
-        <h2 class="section-title hidden">Почему выбирают меня?</h2>
+        <h2 class="section-title hidden">Работаем на ваш результат</h2>
+        <p class="section-subtitle hidden">Мы не просто рисуем схему. Мы комплексно решаем вашу проблему, защищаем от ошибок и гарантируем правильность оформления документов для страховой компании.</p>
+        
         <div class="cards">
             <div class="card hidden">
-                <div class="card-icon">⏱</div>
-                <h3>Быстрый приезд</h3>
-                <p>Прибытие на место ДТП в любой район Воронежа в течение 15-30 минут после звонка.</p>
-            </div>
-            <div class="card hidden">
                 <div class="card-icon">📝</div>
-                <h3>Оформление по закону</h3>
-                <p>Грамотное составление схемы ДТП, европротокола и фиксация повреждений для 100% выплаты по ОСАГО/КАСКО.</p>
+                <h3>Европротокол до 400 000 ₽</h3>
+                <p>Оформляем ДТП по стандартному европротоколу с лимитом <span class="highlight">до 100 000 ₽</span>. Также проводим фотофиксацию и оформляем расширенный европротокол через Госуслуги с выплатой <span class="highlight">до 400 000 ₽</span>.</p>
             </div>
             <div class="card hidden">
-                <div class="card-icon">🛡</div>
-                <h3>Защита от мошенников</h3>
-                <p>Предотвращение автоподстав и психологического давления со стороны других участников ДТП.</p>
+                <div class="card-icon">💰</div>
+                <h3>Помощь с выплатами</h3>
+                <p>Сотрудничество не заканчивается на месте аварии. Мы консультируем и помогаем правильно подать документы в страховую компанию, чтобы вы получили <span class="highlight">максимальную компенсацию</span> за ущерб.</p>
+            </div>
+            <div class="card hidden">
+                <div class="card-icon">🤝</div>
+                <h3>Полное сопровождение</h3>
+                <p>Берем на себя всю бюрократию. Ведем ваше дело от момента звонка с дороги до этапа, когда деньги поступят на ваш счет. Вы экономите время, нервы и избегаете очередей в ГИБДД.</p>
+            </div>
+            <div class="card hidden">
+                <div class="card-icon">⚖️</div>
+                <h3>Честно. Без цессий</h3>
+                <p>Мы работаем исключительно в ваших интересах. Принципиально <span class="highlight">не занимаемся цессией</span> (выкупом страховых дел за копейки). Наша главная цель — чтобы всю положенную по закону сумму получили именно вы.</p>
             </div>
         </div>
     </section>
@@ -305,10 +350,10 @@
     <footer>
         <div class="footer-content hidden">
             <h2>Попали в ДТП? Звоните прямо сейчас!</h2>
-            <p style="color: var(--gray); margin-bottom: 20px;">Работаю 24/7 без выходных и праздников по всему Воронежу.</p>
+            <p style="color: var(--gray); margin-bottom: 20px; font-size: 1.1rem;">Приеду в любой район Воронежа за 15-30 минут. Круглосуточно, 24/7.</p>
             <a href="tel:+79518703934" class="footer-phone">+7 (951) 870-39-34</a>
             <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-messenger">Связаться в мессенджере MAX</a>
-            <p style="margin-top: 40px; color: #555; font-size: 14px;">© 2026 вызовдтп.рф — Аварийный комиссар Воронеж</p>
+            <p style="margin-top: 50px; color: #444; font-size: 14px;">© 2026 вызовдтп.рф — Аварийный комиссар Воронеж</p>
         </div>
     </footer>
 
