@@ -3,28 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Оптимизация для Яндекса и Google -->
-    <title>Аварийный Комиссар Воронеж | Вызов при ДТП | вызовдтп.рф</title>
-    <meta name="description" content="Оперативный выезд аварийного комиссара в Воронеже. Оформление ДТП без ГИБДД за 30 минут. Помощь в получении выплат по ОСАГО и КАСКО. Звоните: +7 (951) 870-39-34">
-    <meta name="keywords" content="аварийный комиссар воронеж, вызов при дтп, оформление дтп, помощь при дтп, европротокол, выплаты осаго, каско воронеж, вызовдтп.рф">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://вызовдтп.рф" />
-
-    <!-- Шрифты и Иконки -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>Аварийный комиссар Воронеж | вызовдтп.рф</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
+        /* Базовые настройки и переменные */
         :root {
-            --primary: #0a192f; /* Темно-синий, доверие */
-            --accent: #ff4757; /* Красный, срочность/внимание */
-            --accent-hover: #ff6b81;
-            --text-light: #f1f2f6;
-            --text-dark: #2f3542;
-            --bg-light: #ffffff;
-            --bg-gray: #f4f6f8;
-            --transition: all 0.3s ease;
+            --primary: #FF5722; /* Сигнальный оранжевый */
+            --primary-hover: #E64A19;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #F5F5F5;
+            --gray: #888888;
         }
 
         * {
@@ -35,10 +24,10 @@
         }
 
         body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
+            background-color: var(--dark);
+            color: var(--light);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         a {
@@ -47,394 +36,297 @@
         }
 
         /* Анимации */
-        .reveal {
+        .hidden {
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(40px);
             transition: all 0.8s ease-out;
         }
-        .reveal.active {
+
+        .show {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Шапка */
+        /* Шапка сайта */
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 25, 47, 0.95);
-            backdrop-filter: blur(10px);
-            color: var(--text-light);
-            z-index: 1000;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 20px 5%;
+            background: rgba(18, 18, 18, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+
         .logo {
             font-size: 24px;
             font-weight: 800;
-            color: var(--text-light);
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
         .logo span {
-            color: var(--accent);
+            color: var(--primary);
         }
+
         .header-contacts {
             display: flex;
-            align-items: center;
             gap: 20px;
+            align-items: center;
         }
-        .phone-number {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .btn-call {
-            background: var(--accent);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+
+        .phone {
+            font-size: 18px;
             font-weight: 600;
-            transition: var(--transition);
+            color: #fff;
+            transition: color 0.3s;
         }
-        .btn-call:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
+
+        .phone:hover {
+            color: var(--primary);
         }
 
         /* Главный экран (Hero) */
         .hero {
-            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.85)), url('https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&q=80&w=1920') center/cover;
             height: 100vh;
             display: flex;
-            align-items: center;
-            color: var(--text-light);
-            padding-top: 80px;
-            text-align: center;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 5%;
+            background: linear-gradient(to right, rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.4)), url('https://images.unsplash.com/photo-1626620575390-0eb56f4d6d6e?q=80&w=2000&auto=format&fit=crop') center/cover;
+            margin-top: 60px;
         }
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+
         .hero h1 {
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: 800;
+            line-height: 1.1;
             margin-bottom: 20px;
-            line-height: 1.2;
+            max-width: 800px;
         }
+
         .hero h1 span {
-            color: var(--accent);
+            color: var(--primary);
         }
+
         .hero p {
             font-size: 1.2rem;
+            color: #ddd;
             margin-bottom: 40px;
-            opacity: 0.9;
+            max-width: 600px;
         }
-        .hero-buttons {
+
+        .btn-group {
             display: flex;
-            justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
         }
-        .btn-primary, .btn-secondary {
-            padding: 15px 30px;
-            font-size: 18px;
+
+        .btn {
+            padding: 18px 35px;
             border-radius: 8px;
-            font-weight: 700;
-            transition: var(--transition);
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
         }
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
-        }
-        .btn-secondary {
-            background: #2ea44f; /* Цвет Телеграм/Мессенджеров */
-            color: white;
-        }
-        .btn-secondary:hover {
-            background: #258a40;
-        }
-        .btn-tg {
-            background: #0088cc;
-        }
-        .btn-tg:hover { background: #0077b3; }
 
-        /* Преимущества / Почему мы */
-        .benefits {
-            padding: 80px 0;
-            background: var(--bg-gray);
+        .btn-primary {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            box-shadow: 0 10px 20px rgba(255, 87, 34, 0.3);
         }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(255, 87, 34, 0.4);
+        }
+
+        .btn-messenger {
+            background-color: #2b2b2b;
+            color: #fff;
+            border: 1px solid #444;
+        }
+
+        .btn-messenger:hover {
+            background-color: #3b3b3b;
+            transform: translateY(-3px);
+        }
+
+        /* Преимущества и услуги */
+        .section {
+            padding: 100px 5%;
+            background-color: var(--darker);
+        }
+
         .section-title {
             text-align: center;
             font-size: 2.5rem;
-            margin-bottom: 50px;
-            color: var(--primary);
+            margin-bottom: 60px;
             font-weight: 800;
         }
-        .benefits-grid {
+
+        .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
-        .benefit-card {
-            background: white;
+
+        .card {
+            background: #1e1e1e;
             padding: 40px 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
             text-align: center;
-            transition: var(--transition);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .benefit-card:hover {
+
+        .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: var(--primary);
         }
-        .benefit-card i {
-            font-size: 3rem;
-            color: var(--accent);
+
+        .card-icon {
+            font-size: 40px;
             margin-bottom: 20px;
         }
-        .benefit-card h3 {
+
+        .card h3 {
             font-size: 1.5rem;
             margin-bottom: 15px;
-            color: var(--primary);
         }
 
-        /* Выплаты ОСАГО / КАСКО */
-        .info-section {
-            padding: 80px 0;
-        }
-        .info-content {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-        }
-        .info-text {
-            flex: 1;
-        }
-        .info-text h2 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-        .info-text ul {
-            list-style: none;
-            margin-top: 20px;
-        }
-        .info-text ul li {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-        }
-        .info-text ul li i {
-            color: #2ea44f;
-            font-size: 1.2rem;
-            margin-top: 3px;
-        }
-        .info-image {
-            flex: 1;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .info-image img {
-            width: 100%;
-            height: auto;
-            display: block;
+        .card p {
+            color: var(--gray);
+            font-size: 1rem;
         }
 
-        /* Контакты */
-        .contacts {
-            padding: 80px 0;
-            background: var(--primary);
-            color: var(--text-light);
+        /* Подвал */
+        footer {
+            background-color: #000;
+            padding: 50px 5%;
             text-align: center;
-        }
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-        .contact-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2rem;
-        }
-        .contact-item i {
-            font-size: 2.5rem;
-            color: var(--accent);
-        }
-        .footer-socials {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .social-btn {
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.1);
-            transition: var(--transition);
-        }
-        .social-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
+            border-top: 1px solid #222;
         }
 
-        /* Адаптивность для телефонов */
+        .footer-content h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-phone {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        /* Адаптив под мобильные телефоны */
         @media (max-width: 768px) {
-            .header-contacts .phone-number { display: none; }
-            .hero h1 { font-size: 2rem; }
-            .hero p { font-size: 1rem; }
-            .info-content { flex-direction: column; }
-            .hero-buttons { flex-direction: column; width: 100%; padding: 0 20px; }
-            .btn-primary, .btn-secondary, .btn-tg { width: 100%; justify-content: center; }
-            .section-title { font-size: 2rem; }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .header-contacts {
+                display: none; /* Скрываем телефон в шапке на мобилках для экономии места */
+            }
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn {
+                width: 100%;
+            }
+            .section {
+                padding: 60px 5%;
+            }
+            .footer-phone {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Шапка сайта -->
+    <!-- Шапка -->
     <header>
-        <div class="container header-content">
-            <div class="logo">вызовдтп<span>.рф</span></div>
-            <div class="header-contacts">
-                <a href="tel:+79518703934" class="phone-number"><i class="fas fa-phone-alt"></i> +7 (951) 870-39-34</a>
-                <a href="tel:+79518703934" class="btn-call">Вызвать</a>
-            </div>
+        <div class="logo">Вызов<span>ДТП</span>.рф</div>
+        <div class="header-contacts">
+            <a href="tel:+79518703934" class="phone">+7 (951) 870-39-34</a>
+            <a href="tel:+79518703934" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Вызвать сейчас</a>
         </div>
     </header>
 
     <!-- Главный экран -->
-    <section class="hero">
-        <div class="container hero-content reveal">
-            <h1>Аварийный комиссар <span>в Воронеже</span></h1>
-            <p>Случилось ДТП? Не паникуйте! Приедем за 15-30 минут. Профессиональное оформление, защита от штрафов и гарантия полных выплат по ОСАГО и КАСКО.</p>
-            <div class="hero-buttons">
-                <a href="tel:+79518703934" class="btn-primary"><i class="fas fa-car-crash"></i> Срочный вызов</a>
-                <a href="https://t.me/blatsphera" target="_blank" class="btn-primary btn-tg"><i class="fab fa-telegram-plane"></i> Написать в Telegram</a>
+    <section class="hero hidden">
+        <h1>Аварийный комиссар в <span>Воронеже</span></h1>
+        <p>Быстрое и законное оформление ДТП без участия ГИБДД. Приеду на место от 15 минут. Круглосуточно. Сохраню ваши нервы и время.</p>
+        <div class="btn-group">
+            <a href="tel:+79518703934" class="btn btn-primary">📞 +7 (951) 870-39-34</a>
+            <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-messenger">💬 Написать в MAX</a>
+        </div>
+    </section>
+
+    <!-- Услуги и преимущества -->
+    <section class="section">
+        <h2 class="section-title hidden">Почему выбирают меня?</h2>
+        <div class="cards">
+            <div class="card hidden">
+                <div class="card-icon">⏱</div>
+                <h3>Быстрый приезд</h3>
+                <p>Прибытие на место ДТП в любой район Воронежа в течение 15-30 минут после звонка.</p>
+            </div>
+            <div class="card hidden">
+                <div class="card-icon">📝</div>
+                <h3>Оформление по закону</h3>
+                <p>Грамотное составление схемы ДТП, европротокола и фиксация повреждений для 100% выплаты по ОСАГО/КАСКО.</p>
+            </div>
+            <div class="card hidden">
+                <div class="card-icon">🛡</div>
+                <h3>Защита от мошенников</h3>
+                <p>Предотвращение автоподстав и психологического давления со стороны других участников ДТП.</p>
             </div>
         </div>
     </section>
 
-    <!-- Блок: Почему выбирают нас -->
-    <section class="benefits" id="about">
-        <div class="container">
-            <h2 class="section-title reveal">Почему оформлять ДТП лучше с нами?</h2>
-            <div class="benefits-grid">
-                <div class="benefit-card reveal">
-                    <i class="fas fa-stopwatch"></i>
-                    <h3>Экономия времени</h3>
-                    <p>Не нужно часами ждать ГИБДД. Мы прибываем на место быстрее и оформляем европротокол за 30-40 минут по всем правилам.</p>
-                </div>
-                <div class="benefit-card reveal">
-                    <i class="fas fa-file-signature"></i>
-                    <h3>Гарантия выплат</h3>
-                    <p>Правильно заполним все документы и схему ДТП. У страховой не будет повода отказать вам в выплате или занизить сумму.</p>
-                </div>
-                <div class="benefit-card reveal">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>Никакого стресса</h3>
-                    <p>Берем на себя общение со вторым участником. Поможем избежать конфликтов, давления и скрытых подвохов.</p>
-                </div>
-            </div>
+    <!-- Подвал / Контакты -->
+    <footer>
+        <div class="footer-content hidden">
+            <h2>Попали в ДТП? Звоните прямо сейчас!</h2>
+            <p style="color: var(--gray); margin-bottom: 20px;">Работаю 24/7 без выходных и праздников по всему Воронежу.</p>
+            <a href="tel:+79518703934" class="footer-phone">+7 (951) 870-39-34</a>
+            <a href="https://max.ru/u/f9LHodD0cOI2FnwqO5-1DgAW1HKEqMwxe-uqadKqMyDXOUGaLoBaJ-8eRJw" target="_blank" class="btn btn-messenger">Связаться в мессенджере MAX</a>
+            <p style="margin-top: 40px; color: #555; font-size: 14px;">© 2026 вызовдтп.рф — Аварийный комиссар Воронеж</p>
         </div>
-    </section>
+    </footer>
 
-    <!-- Блок: ОСАГО и КАСКО -->
-    <section class="info-section">
-        <div class="container info-content">
-            <div class="info-text reveal">
-                <h2>Помощь с <span>ОСАГО и КАСКО</span></h2>
-                <p>Страховые компании часто пользуются шоковым состоянием водителей после аварии и малейшими ошибками в документах, чтобы урезать выплату. С нами это исключено.</p>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> <strong>Независимая оценка:</strong> Зафиксируем скрытые повреждения, которые не видны на первый взгляд.</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>Полное сопровождение:</strong> Расскажем, как правильно подать документы в страховую.</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>Фото- и видеофиксация:</strong> Соберем железобетонную доказательную базу с места происшествия.</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>Консультация:</strong> Бесплатно проконсультируем по дальнейшим действиям после оформления.</li>
-                </ul>
-            </div>
-            <div class="info-image reveal">
-                <!-- Плейсхолдер картинки, можно заменить на реальное фото работы/документов -->
-                <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=800" alt="Оформление ДТП">
-            </div>
-        </div>
-    </section>
-
-    <!-- Контакты -->
-    <section class="contacts">
-        <div class="container reveal">
-            <h2 class="section-title" style="color: white;">Наши Контакты</h2>
-            <p style="font-size: 1.2rem;">Работаем оперативно. Выезжаем в любую точку Воронежа.</p>
-            
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-mobile-alt"></i>
-                    <strong>Телефон:</strong>
-                    <a href="tel:+79518703934">+7 (951) 870-39-34</a>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <strong>Адрес офиса:</strong>
-                    <span>г. Воронеж, ул. Карпинского, 39</span>
-                </div>
-            </div>
-
-            <div class="footer-socials">
-                <a href="https://t.me/blatsphera" target="_blank" class="social-btn" style="color: #00a8ff;">
-                    <i class="fab fa-telegram"></i> Telegram (@blatsphera)
-                </a>
-                <a href="https://max.ru/u/f9LHodD0cOKIaamMJAxuAhEaXfungcGvD5wDwjxEN-BFYhuEuoaKyYZ4pY8" target="_blank" class="social-btn" style="color: #44bd32;">
-                    <i class="fas fa-comment-dots"></i> Написать в MAX
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Скрипт для анимации появления при прокрутке -->
+    <!-- Скрипт для анимаций при прокрутке -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const reveals = document.querySelectorAll('.reveal');
-
-            const revealOnScroll = () => {
-                const windowHeight = window.innerHeight;
-                const elementVisible = 100;
-
-                reveals.forEach((reveal) => {
-                    const elementTop = reveal.getBoundingClientRect().top;
-                    if (elementTop < windowHeight - elementVisible) {
-                        reveal.classList.add('active');
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
                     }
                 });
-            };
+            }, {
+                threshold: 0.1
+            });
 
-            window.addEventListener('scroll', revealOnScroll);
-            // Запуск при загрузке для элементов первого экрана
-            revealOnScroll();
+            const hiddenElements = document.querySelectorAll('.hidden');
+            hiddenElements.forEach((el) => observer.observe(el));
         });
     </script>
 </body>
