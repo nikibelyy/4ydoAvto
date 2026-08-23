@@ -74,7 +74,7 @@
             position: fixed;
             inset: 0;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(244, 63, 94, 0.07) 0%, transparent 50%),
+                radial-gradient(circle at 50% 0%, rgba(244, 63, 94, 0.08) 0%, transparent 50%),
                 linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
             background-size: 100% 100%, 60px 60px, 60px 60px;
@@ -82,9 +82,9 @@
             pointer-events: none;
         }
 
-        /* Стильный хедер без лишних элементов */
+        /* Стильный хедер */
         .glass-header {
-            background: rgba(13, 15, 20, 0.8);
+            background: rgba(13, 15, 20, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -92,7 +92,7 @@
 
         /* Премиальная карточка */
         .card-pro {
-            background: linear-gradient(145deg, rgba(21, 24, 33, 0.7) 0%, rgba(13, 15, 20, 0.9) 100%);
+            background: linear-gradient(145deg, rgba(21, 24, 33, 0.75) 0%, rgba(13, 15, 20, 0.95) 100%);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
@@ -101,7 +101,7 @@
 
         .card-pro:hover {
             border-color: rgba(244, 63, 94, 0.3);
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             box-shadow: 0 30px 60px -20px rgba(244, 63, 94, 0.15);
         }
 
@@ -130,6 +130,19 @@
             border-color: rgba(244, 63, 94, 0.4);
         }
 
+        /* Мобильная фиксированная панель снизу */
+        .mobile-sticky-bar {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .mobile-sticky-bar {
+                display: flex;
+            }
+            body {
+                padding-bottom: 84px; /* Отступ под мобильную плашку */
+            }
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #060709; }
         ::-webkit-scrollbar-thumb { background: #272a37; border-radius: 4px; }
@@ -148,31 +161,71 @@
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/111500966" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 </head>
-<body class="selection:bg-accent-red selection:text-
+<body class="selection:bg-accent-red selection:text-white">
 
-    
+    <div class="premium-grid"></div>
+
+    <!-- Хедер -->
+    <header class="glass-header sticky top-0 z-50 w-full px-4 sm:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-rose-500 to-rose-800 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-rose-900/30">
+                    ⚡
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg sm:text-2xl font-black tracking-tight text-white group-hover:text-rose-500 transition-colors">
+                        вызовдтп<span class="text-accent-red">.рф</span>
+                    </span>
+                    <span class="text-[9px] sm:text-[10px] text-gray-400 font-semibold tracking-wider uppercase">
+                        Служба помощи • Воронеж
+                    </span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+                <a href="#services" class="hover:text-white transition-colors">Услуги</a>
+                <a href="#protection" class="hover:text-rose-400 transition-colors text-rose-500 font-bold">Защита от мошенников</a>
+                <a href="#steps" class="hover:text-white transition-colors">Как мы помогаем</a>
+                <a href="#contacts" class="hover:text-white transition-colors">Контакты</a>
+            </div>
+
+            <div class="flex items-center">
+                <a href="tel:+79518703934" 
+                   data-goal="header_call"
+                   class="btn-action px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wide whitespace-nowrap flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <span>Вызвать</span>
+                </a>
+            </div>
+        </div>
+    </header>
 
     <!-- Главный экран -->
-    <section class="relative pt-20 pb-20 sm:pt-32 sm:px-6 px-4 max-w-7xl mx-auto flex flex-col items-center text-
+    <section class="relative pt-12 pb-16 sm:pt-28 sm:pb-24 sm:px-6 px-4 max-w-7xl mx-auto flex flex-col items-center text-center">
+        
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-base-700/80 border border-rose-500/30 text-rose-400 text-xs font-bold mb-6 shadow-lg shadow-rose-950/20">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            Выезд 15 минут • Защита от черных автоюристов 24/7
+        </div>
 
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 text-white max-w-5xl">
+        <h1 class="text-3xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.12] mb-6 text-white max-w-5xl">
             Срочная помощь при ДТП <br>
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-300 to-rose-600">
-                и надежная защита от мошенников
+                и жесткая защита от мошенников
             </span>
         </h1>
 
-        <p class="max-w-2xl mx-auto text-gray-400 text-base sm:text-lg font-medium leading-relaxed mb-10">
-            Прибываем на место за 15 минут. Оформляем Европротокол под ключ, помогаем разобраться в стрессе и ограждаем вас от навязанных «бесплатных независимых экспертиз», которые отбирают ваши деньги.
+        <p class="max-w-2xl mx-auto text-gray-400 text-sm sm:text-lg font-medium leading-relaxed mb-8 sm:mb-10">
+            Попали в аварию? Не подписывайте сомнительные бумаги на месте. Оформляем Европротокол под ключ и ограждаем вас от навязанных «бесплатных экспертиз», забирающих ваши деньги.
         </p>
 
-        <!-- Идеально ровные кнопки в одну строку с защитой от переносов -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-lg sm:max-w-none">
+        <!-- Кнопки действия -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-lg sm:max-w-none">
             <a href="tel:+79518703934" 
                data-goal="hero_call"
                class="btn-action w-full sm:w-auto px-8 py-4 rounded-xl text-base font-extrabold whitespace-nowrap flex items-center justify-center gap-3">
                 <svg class="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                <span>Вызвать комиссара</span>
+                <span>Вызвать комиссара срочно</span>
             </a>
             
             <a href="https://max.ru/u/f9LHodD0cOKyRQFJ96isNe6zBFKbnG-XoBHQ39uZ4We_JVvAlDRb0AXwqWE" 
@@ -185,50 +238,50 @@
         </div>
 
         <!-- Преимущества в цифрах -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 w-full max-w-5xl">
-            <div class="card-pro p-6 rounded-2xl text-left">
-                <div class="text-3xl font-black text-rose-500 mb-1">15 мин</div>
-                <div class="text-xs text-gray-400 font-medium">Оперативный выезд по Воронежу</div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-14 sm:mt-20 w-full max-w-5xl">
+            <div class="card-pro p-5 sm:p-6 rounded-2xl text-left">
+                <div class="text-2xl sm:text-3xl font-black text-rose-500 mb-1">15 мин</div>
+                <div class="text-[11px] sm:text-xs text-gray-400 font-medium">Оперативный выезд по Воронежу</div>
             </div>
-            <div class="card-pro p-6 rounded-2xl text-left">
-                <div class="text-3xl font-black text-rose-500 mb-1">100%</div>
-                <div class="text-xs text-gray-400 font-medium">Защита от мошенников-посредников</div>
+            <div class="card-pro p-5 sm:p-6 rounded-2xl text-left">
+                <div class="text-2xl sm:text-3xl font-black text-rose-500 mb-1">100%</div>
+                <div class="text-[11px] sm:text-xs text-gray-400 font-medium">Защита от мошенников-посредников</div>
             </div>
-            <div class="card-pro p-6 rounded-2xl text-left">
-                <div class="text-3xl font-black text-rose-500 mb-1">24 / 7</div>
-                <div class="text-xs text-gray-400 font-medium">Круглосуточная поддержка водителей</div>
+            <div class="card-pro p-5 sm:p-6 rounded-2xl text-left">
+                <div class="text-2xl sm:text-3xl font-black text-rose-500 mb-1">24 / 7</div>
+                <div class="text-[11px] sm:text-xs text-gray-400 font-medium">Круглосуточная поддержка водителей</div>
             </div>
-            <div class="card-pro p-6 rounded-2xl text-left">
-                <div class="text-3xl font-black text-rose-500 mb-1">0 ₽</div>
-                <div class="text-xs text-gray-400 font-medium">Консультация и оценка ситуации</div>
+            <div class="card-pro p-5 sm:p-6 rounded-2xl text-left">
+                <div class="text-2xl sm:text-3xl font-black text-rose-500 mb-1">0 ₽</div>
+                <div class="text-[11px] sm:text-xs text-gray-400 font-medium">Консультация и оценка ситуации</div>
             </div>
         </div>
     </section>
 
-    <!-- АКЦЕНТНЫЙ БЛОК: Защита от независимых экспертов-мошенников -->
-    <section id="protection" class="py-20 px-4 max-w-7xl mx-auto">
-        <div class="card-pro rounded-3xl p-8 sm:p-14 border border-rose-500/20 relative overflow-hidden">
+    <!-- БЛОК: Защита от автоюристов-мошенников -->
+    <section id="protection" class="py-16 sm:py-20 px-4 max-w-7xl mx-auto">
+        <div class="card-pro rounded-3xl p-6 sm:p-14 border border-rose-500/20 relative overflow-hidden">
             <div class="absolute -right-20 -top-20 w-80 h-80 bg-rose-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center relative z-10">
                 <div>
                     <span class="text-xs uppercase font-extrabold tracking-widest text-rose-500 mb-3 block">Безопасность автовладельцев</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-6 leading-tight">Осторожно на дороге: лже-эксперты отнимают ваши деньги</h2>
-                    <p class="text-gray-300 text-base leading-relaxed mb-6">
-                        Сразу после ДТП активизируются «серые» автоюристы и независимые эксперты. Они навязывают подписание кабальных договоров цессии (переуступки прав) или «бесплатной» оценки, после чего забирают львиную долю ваших страховых выплат.
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-4 sm:mb-6 leading-tight">Осторожно: лже-эксперты отнимают ваши деньги</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6">
+                        Сразу после ДТП активизируются «серые» посредники. Они навязывают подписание кабальных договоров цессии (переуступки прав) или «бесплатной» оценки, после чего забирают львиную долю ваших страховых выплат.
                     </p>
-                    <p class="text-gray-400 text-base leading-relaxed mb-8">
-                        Служба <strong class="text-white">вызовдтп.рф</strong> создана для того, чтобы помогать людям честно. Мы защищаем ваши интересы по закону, не даем мошенникам обмануть вас в стрессовой ситуации и гарантируем чистоту всех документов.
+                    <p class="text-gray-400 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
+                        Служба <strong class="text-white">вызовдтп.рф</strong> защищает ваши интересы по закону, не давая мошенникам обмануть вас в стрессовой ситуации.
                     </p>
                     <a href="tel:+79518703934" 
                        data-goal="protection_call"
-                       class="btn-action px-8 py-3.5 rounded-xl text-sm font-extrabold whitespace-nowrap inline-flex items-center gap-3">
+                       class="btn-action w-full sm:w-auto px-8 py-3.5 rounded-xl text-sm font-extrabold whitespace-nowrap inline-flex items-center justify-center gap-3">
                         <span>Получить честную помощь</span>
                     </a>
                 </div>
 
-                <div class="space-y-4">
-                    <div class="bg-base-900/90 border border-rose-500/20 p-5 rounded-xl flex items-start gap-4">
+                <div class="space-y-3 sm:space-y-4">
+                    <div class="bg-base-900/90 border border-rose-500/20 p-4 sm:p-5 rounded-xl flex items-start gap-4">
                         <div class="w-8 h-8 rounded-lg bg-rose-950 text-rose-500 flex items-center justify-center font-bold shrink-0">✕</div>
                         <div>
                             <h4 class="text-white font-bold text-sm mb-1">Скрытая переуступка прав (цессия)</h4>
@@ -236,7 +289,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-base-900/90 border border-rose-500/20 p-5 rounded-xl flex items-start gap-4">
+                    <div class="bg-base-900/90 border border-rose-500/20 p-4 sm:p-5 rounded-xl flex items-start gap-4">
                         <div class="w-8 h-8 rounded-lg bg-rose-950 text-rose-500 flex items-center justify-center font-bold shrink-0">✕</div>
                         <div>
                             <h4 class="text-white font-bold text-sm mb-1">Навязанные «бесплатные» экспертизы</h4>
@@ -244,7 +297,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-base-900/90 border border-emerald-500/30 p-5 rounded-xl flex items-start gap-4 shadow-lg shadow-emerald-950/20">
+                    <div class="bg-base-900/90 border border-emerald-500/30 p-4 sm:p-5 rounded-xl flex items-start gap-4 shadow-lg shadow-emerald-950/20">
                         <div class="w-8 h-8 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold shrink-0">✓</div>
                         <div>
                             <h4 class="text-white font-bold text-sm mb-1">Наша честная позиция вызовдтп.рф</h4>
@@ -257,15 +310,15 @@
     </section>
 
     <!-- Услуги компании -->
-    <section id="services" class="py-20 px-4 max-w-7xl mx-auto">
-        <div class="text-center max-w-3xl mx-auto mb-16">
+    <section id="services" class="py-16 sm:py-20 px-4 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
             <span class="text-xs uppercase font-extrabold tracking-widest text-rose-500 mb-3 block">Наши возможности</span>
-            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-4">Помощь людям в любой ситуации</h2>
-            <p class="text-gray-400 text-base">Полный спектр услуг при дорожно-транспортных происшествиях в Воронеже.</p>
+            <h2 class="text-2xl sm:text-5xl font-extrabold text-white mb-4">Помощь людям в любой ситуации</h2>
+            <p class="text-gray-400 text-sm sm:text-base">Полный спектр услуг при дорожно-транспортных происшествиях в Воронеже.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="card-pro p-8 rounded-3xl flex flex-col justify-between">
+            <div class="card-pro p-6 sm:p-8 rounded-3xl flex flex-col justify-between">
                 <div>
                     <div class="w-12 h-12 rounded-2xl bg-base-900 border border-rose-500/20 flex items-center justify-center text-rose-500 mb-6 font-bold text-xl">📄</div>
                     <h3 class="text-xl font-bold text-white mb-3">Оформление Европротокола</h3>
@@ -274,7 +327,7 @@
                 <div class="text-xs font-bold text-rose-400 bg-rose-950/40 px-3 py-1.5 rounded-lg border border-rose-500/20 self-start">Выплаты до 400 000 ₽</div>
             </div>
 
-            <div class="card-pro p-8 rounded-3xl flex flex-col justify-between">
+            <div class="card-pro p-6 sm:p-8 rounded-3xl flex flex-col justify-between">
                 <div>
                     <div class="w-12 h-12 rounded-2xl bg-base-900 border border-rose-500/20 flex items-center justify-center text-rose-500 mb-6 font-bold text-xl">🛡️</div>
                     <h3 class="text-xl font-bold text-white mb-3">Защита от автомошенников</h3>
@@ -283,7 +336,7 @@
                 <div class="text-xs font-bold text-rose-400 bg-rose-950/40 px-3 py-1.5 rounded-lg border border-rose-500/20 self-start">100% Безопасно</div>
             </div>
 
-            <div class="card-pro p-8 rounded-3xl flex flex-col justify-between">
+            <div class="card-pro p-6 sm:p-8 rounded-3xl flex flex-col justify-between">
                 <div>
                     <div class="w-12 h-12 rounded-2xl bg-base-900 border border-rose-500/20 flex items-center justify-center text-rose-500 mb-6 font-bold text-xl">⚖️</div>
                     <h3 class="text-xl font-bold text-white mb-3">Юридическая поддержка</h3>
@@ -295,30 +348,30 @@
     </section>
 
     <!-- Алгоритм работы -->
-    <section id="steps" class="py-20 px-4 max-w-7xl mx-auto">
-        <div class="card-pro rounded-3xl p-8 sm:p-14 border border-white/5">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+    <section id="steps" class="py-16 sm:py-20 px-4 max-w-7xl mx-auto">
+        <div class="card-pro rounded-3xl p-6 sm:p-14 border border-white/5">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center">
                 <div>
                     <span class="text-xs uppercase font-extrabold tracking-widest text-rose-500 mb-3 block">Алгоритм действий</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-6">Что делать сразу после ДТП?</h2>
-                    <p class="text-gray-300 text-base leading-relaxed mb-4">
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-4 sm:mb-6">Что делать сразу после ДТП?</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
                         Главное — не поддаваться панике и не подписывать сомнительные бумаги от незнакомцев, первыми прибывших на место.
                     </p>
-                    <p class="text-gray-400 text-base leading-relaxed">
+                    <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
                         Позвоните в <strong class="text-white">вызовдтп.рф</strong>, и наш специалист возьмет всю бумажную работу и безопасность под свой контроль.
                     </p>
                 </div>
 
-                <div class="space-y-4">
-                    <div class="bg-base-900 p-5 rounded-2xl border border-white/5 flex items-center gap-4">
+                <div class="space-y-3 sm:space-y-4">
+                    <div class="bg-base-900 p-4 sm:p-5 rounded-2xl border border-white/5 flex items-center gap-4">
                         <div class="w-10 h-10 rounded-xl bg-rose-950 text-rose-500 flex items-center justify-center font-extrabold shrink-0">1</div>
                         <div>
                             <h4 class="text-white font-bold text-sm">Звонок диспетчеру</h4>
-                            <p class="text-gray-400 text-xs">Сообщите адрес и суть аварии по тел: <a href="tel:+79518703934" class="text-rose-500 font-bold">+7 (951) 870-39-34</a></p>
+                            <p class="text-gray-400 text-xs">Сообщите адрес по тел: <a href="tel:+79518703934" class="text-rose-500 font-bold">+7 (951) 870-39-34</a></p>
                         </div>
                     </div>
 
-                    <div class="bg-base-900 p-5 rounded-2xl border border-white/5 flex items-center gap-4">
+                    <div class="bg-base-900 p-4 sm:p-5 rounded-2xl border border-white/5 flex items-center gap-4">
                         <div class="w-10 h-10 rounded-xl bg-rose-950 text-rose-500 flex items-center justify-center font-extrabold shrink-0">2</div>
                         <div>
                             <h4 class="text-white font-bold text-sm">Прибытие комиссара</h4>
@@ -326,7 +379,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-base-900 p-5 rounded-2xl border border-white/5 flex items-center gap-4">
+                    <div class="bg-base-900 p-4 sm:p-5 rounded-2xl border border-white/5 flex items-center gap-4">
                         <div class="w-10 h-10 rounded-xl bg-rose-950 text-rose-500 flex items-center justify-center font-extrabold shrink-0">3</div>
                         <div>
                             <h4 class="text-white font-bold text-sm">Безопасное оформление</h4>
@@ -339,12 +392,12 @@
     </section>
 
     <!-- Финальный призыв к действию -->
-    <section id="contacts" class="py-20 px-4 max-w-7xl mx-auto">
-        <div class="card-pro rounded-3xl p-8 sm:p-16 border border-rose-500/30 text-center relative overflow-hidden">
+    <section id="contacts" class="py-16 sm:py-20 px-4 max-w-7xl mx-auto">
+        <div class="card-pro rounded-3xl p-6 sm:p-16 border border-rose-500/30 text-center relative overflow-hidden">
             <div class="max-w-2xl mx-auto relative z-10">
                 <span class="text-xs uppercase font-extrabold tracking-widest text-rose-500 mb-3 block">Мы на связи 24/7</span>
-                <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-6">Попали в ДТП? Нужна помощь?</h2>
-                <p class="text-gray-400 text-base mb-10">Звоните прямо сейчас. Бесплатная консультация и оперативный выезд комиссара в любой район Воронежа.</p>
+                <h2 class="text-2xl sm:text-5xl font-extrabold text-white mb-4 sm:mb-6">Попали в ДТП? Нужна помощь?</h2>
+                <p class="text-gray-400 text-sm sm:text-base mb-8 sm:mb-10">Звоните прямо сейчас. Бесплатная консультация и оперативный выезд комиссара в любой район Воронежа.</p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <a href="tel:+79518703934" 
@@ -367,7 +420,7 @@
     </section>
 
     <!-- Подвал -->
-    <footer class="py-10 border-t border-white/5 text-center px-4 bg-base-900">
+    <footer class="py-10 border-t border-white/5 text-center px-4 bg-base-900 mb-12 sm:mb-0">
         <div class="max-w-5xl mx-auto space-y-3">
             <div class="text-xl font-black text-white tracking-wider">
                 вызовдтп<span class="text-rose-500">.рф</span>
@@ -380,6 +433,22 @@
             </p>
         </div>
     </footer>
+
+    <!-- Мобильная фиксированная панель (активируется только на телефонах для мгновенного звонка) -->
+    <div class="mobile-sticky-bar fixed bottom-0 left-0 right-0 z-50 bg-base-900/95 backdrop-blur-lg border-t border-white/10 p-3 items-center justify-between gap-3 shadow-2xl">
+        <a href="tel:+79518703934" 
+           data-goal="sticky_mobile_call"
+           class="btn-action flex-1 py-3 px-4 rounded-xl text-sm font-extrabold flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 fill-current shrink-0 animate-bounce" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            <span>Позвонить</span>
+        </a>
+        <a href="https://max.ru/u/f9LHodD0cOKyRQFJ96isNe6zBFKbnG-XoBHQ39uZ4We_JVvAlDRb0AXwqWE" 
+           target="_blank" rel="noopener noreferrer"
+           data-goal="sticky_mobile_chat"
+           class="btn-secondary py-3 px-4 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-1.5 whitespace-nowrap">
+            <span>MAX</span>
+        </a>
+    </div>
 
     <!-- Скрипт метрики -->
     <script>
