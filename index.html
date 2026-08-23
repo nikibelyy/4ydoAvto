@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-    <!-- Schema.org Microdata (Без адреса) -->
+    <!-- Schema.org Microdata -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -42,18 +42,18 @@
                         sans: ['Outfit', 'sans-serif'],
                     },
                     colors: {
-                        dark: '#0A0514', /* Глубокий темный фон в стиле ЮMoney */
-                        card: '#140A26',
+                        dark: '#030303', /* Ультра-черный фон */
                         brand: {
-                            purple: '#8B5CF6',
-                            magenta: '#D946EF',
-                            red: '#F43F5E'
+                            purple: '#7C3AED', /* Строгий фиолетовый */
+                            red: '#DC2626',    /* Агрессивный красный */
+                            darkRed: '#991B1B'
                         }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'glow': 'glow 3s ease-in-out infinite alternate',
                         'gradient-x': 'gradient-x 3s ease infinite',
+                        'pulse-slow': 'pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         float: {
@@ -69,6 +69,10 @@
                                 'background-size': '200% 200%',
                                 'background-position': 'right center'
                             },
+                        },
+                        'pulse-slow': {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: .5 },
                         }
                     }
                 }
@@ -84,39 +88,43 @@
             max-width: 100vw;
             margin: 0;
             padding: 0;
-            background-color: #0A0514;
+            background-color: #030303;
             color: #F3F4F6;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Фоновая сетка для глубины (Фиолетовый оттенок) */
+        /* Технологичная фоновая сетка (Черно-красная) */
         .bg-grid {
             position: fixed;
             inset: 0;
-            background-size: 40px 40px;
+            background-size: 50px 50px;
             background-image: 
-                linear-gradient(to right, rgba(139, 92, 246, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+                linear-gradient(to right, rgba(220, 38, 38, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
             mask-image: radial-gradient(circle at top center, black 10%, transparent 80%);
             -webkit-mask-image: radial-gradient(circle at top center, black 10%, transparent 80%);
             z-index: -2;
             pointer-events: none;
         }
 
+        /* Навигация Glass */
         .glass-nav {
-            background: rgba(20, 10, 38, 0.6);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(217, 70, 239, 0.1);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.02);
         }
 
+        /* Премиальные карточки */
         .glass-card {
-            background: linear-gradient(145deg, rgba(30, 15, 55, 0.4) 0%, rgba(20, 10, 38, 0.2) 100%);
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.8) 0%, rgba(10, 10, 10, 0.9) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(139, 92, 246, 0.15);
-            border-top: 1px solid rgba(217, 70, 239, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(124, 58, 237, 0.3); /* Фиолетовый блик сверху */
+            border-bottom: 1px solid rgba(220, 38, 38, 0.1); /* Красный отсвет снизу */
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
@@ -127,7 +135,7 @@
             inset: 0;
             border-radius: inherit;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(217, 70, 239, 0.3), transparent, rgba(244, 63, 94, 0.2));
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), transparent, rgba(220, 38, 38, 0.2));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -135,55 +143,58 @@
         }
 
         .glass-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px -10px rgba(217, 70, 239, 0.25);
-            background: linear-gradient(145deg, rgba(40, 20, 70, 0.5) 0%, rgba(20, 10, 38, 0.3) 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(220, 38, 38, 0.15);
+            background: linear-gradient(145deg, rgba(25, 25, 25, 0.9) 0%, rgba(15, 15, 15, 0.95) 100%);
+            border-top: 1px solid rgba(220, 38, 38, 0.5); /* При наведении линия становится красной */
         }
 
-        /* Кнопка в стиле ЮMoney (Градиент Фиолетовый -> Малиновый -> Красный) */
+        /* Кнопка Градиент (Purple -> Red) */
         .btn-gradient {
-            background: linear-gradient(135deg, #7C3AED 0%, #D946EF 50%, #F43F5E 100%);
+            background: linear-gradient(135deg, #7C3AED 0%, #B91C1C 50%, #DC2626 100%);
             background-size: 200% auto;
             transition: 0.5s;
-            box-shadow: 0 10px 30px -5px rgba(217, 70, 239, 0.5);
+            box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.4);
             color: white;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .btn-gradient:hover {
             background-position: right center; 
-            box-shadow: 0 15px 40px -5px rgba(244, 63, 94, 0.6);
+            box-shadow: 0 15px 35px -5px rgba(220, 38, 38, 0.6);
             transform: translateY(-2px);
         }
 
+        /* Кнопка Outline (Темная с красным бордером) */
         .btn-outline {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(217, 70, 239, 0.3);
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid rgba(124, 58, 237, 0.3);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
         .btn-outline:hover {
-            background: rgba(217, 70, 239, 0.1);
-            border-color: rgba(244, 63, 94, 0.6);
-            box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
+            background: rgba(220, 38, 38, 0.05);
+            border-color: rgba(220, 38, 38, 0.6);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
         }
 
         /* Текстовые градиенты */
         .text-gradient {
-            background: linear-gradient(to right, #FFFFFF, #D946EF, #F43F5E);
+            background: linear-gradient(to right, #FFFFFF, #9CA3AF, #DC2626);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
-        .text-gradient-purple {
-            background: linear-gradient(to right, #A78BFA, #D946EF);
+        .text-gradient-accent {
+            background: linear-gradient(to right, #A78BFA, #DC2626);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        /* Абсолютный контейнер для свечений, чтобы избежать скролла */
+        /* Абсолютный контейнер для свечений (Строгие цвета) */
         .glow-container {
             position: fixed;
             inset: 0;
@@ -195,21 +206,21 @@
         .glow-circle {
             position: absolute;
             border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.5;
-            animation: pulse-glow 6s infinite alternate;
+            filter: blur(130px);
+            opacity: 0.4;
+            animation: pulse-glow 7s infinite alternate;
         }
 
         @keyframes pulse-glow {
-            0% { transform: scale(1); opacity: 0.4; }
-            100% { transform: scale(1.1); opacity: 0.6; }
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.1); opacity: 0.5; }
         }
 
-        /* Кастомный скроллбар */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0A0514; }
-        ::-webkit-scrollbar-thumb { background: #3B0764; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #D946EF; }
+        /* Кастомный скроллбар (Темно-красный) */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030303; }
+        ::-webkit-scrollbar-thumb { background: #450a0a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #DC2626; }
     </style>
 
     <!-- Yandex.Metrika counter -->
@@ -220,57 +231,55 @@
             for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
         })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111500966', 'ym');
-
         ym(111500966, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/111500966" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-
 </head>
-<body class="antialiased selection:bg-brand-magenta selection:text-white">
+<body class="antialiased selection:bg-brand-red selection:text-white">
 
     <div class="bg-grid"></div>
     
-    <!-- Безопасный контейнер для фоновых эффектов -->
+    <!-- Безопасный контейнер для фоновых эффектов (Черный, Красный, Фиолетовый) -->
     <div class="glow-container">
-        <div class="glow-circle w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-purple-600/30 top-[-10%] left-1/2 -translate-x-1/2"></div>
-        <div class="glow-circle w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-rose-600/20 top-[40%] right-[-10%]"></div>
-        <div class="glow-circle w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-fuchsia-600/20 bottom-[-10%] left-[-10%]"></div>
+        <div class="glow-circle w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-purple-900/30 top-[-10%] left-1/2 -translate-x-1/2"></div>
+        <div class="glow-circle w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-red-900/20 top-[40%] right-[-10%]"></div>
+        <div class="glow-circle w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-purple-900/20 bottom-[-10%] left-[-10%]"></div>
     </div>
 
     <!-- Шапка -->
     <header class="fixed top-2 sm:top-6 inset-x-0 z-50 px-3 sm:px-6 max-w-7xl mx-auto w-full transition-all duration-300">
         <nav class="glass-nav rounded-2xl sm:rounded-[2rem] px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
             <a href="#" class="flex flex-col group shrink-0">
-                <span class="font-black text-xl sm:text-2xl tracking-tight text-white group-hover:text-fuchsia-400 transition-colors">
-                    вызовдтп<span class="text-fuchsia-500">.рф</span>
+                <span class="font-black text-xl sm:text-2xl tracking-tight text-white group-hover:text-red-500 transition-colors">
+                    вызовдтп<span class="text-red-600">.рф</span>
                 </span>
-                <span class="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-0.5">
+                <span class="text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">
                     Воронеж • 24/7
                 </span>
             </a>
 
-            <div class="hidden lg:flex items-center gap-10 text-sm font-semibold text-gray-300">
-                <a href="#services" class="hover:text-fuchsia-400 transition-colors">Услуги</a>
-                <a href="#process" class="hover:text-fuchsia-400 transition-colors">Как мы работаем</a>
-                <a href="#contacts" class="hover:text-fuchsia-400 transition-colors">Контакты</a>
+            <div class="hidden lg:flex items-center gap-10 text-sm font-semibold text-gray-400">
+                <a href="#services" class="hover:text-red-500 transition-colors">Услуги</a>
+                <a href="#process" class="hover:text-red-500 transition-colors">Алгоритм</a>
+                <a href="#contacts" class="hover:text-red-500 transition-colors">Контакты</a>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 sm:gap-4">
                 <a href="tel:+79518703934" 
                    data-goal="call_header"
-                   class="hidden md:flex items-center gap-2 bg-white/5 hover:bg-white/10 px-5 py-2.5 rounded-full text-sm font-bold transition-all border border-white/10 text-white hover:border-fuchsia-500/50">
+                   class="hidden md:flex items-center gap-2 bg-black/40 hover:bg-black/60 px-5 py-2.5 rounded-full text-sm font-bold transition-all border border-white/5 text-white hover:border-red-500/50">
                     <span class="relative flex h-2.5 w-2.5">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
                     </span>
                     +7 (951) 870-39-34
                 </a>
                 <a href="https://max.ru/u/f9LHodD0cOIsoqlXfyn89fwevvHW2mxXkpsPgQiJnDmaDbBn0f5VelUVnTk" 
                    target="_blank" rel="noopener noreferrer" 
                    data-goal="chat_header"
-                   class="btn-gradient px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-black tracking-wider uppercase">
+                   class="btn-gradient px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm font-black tracking-widest uppercase flex items-center gap-2">
                     MAX
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </a>
             </div>
         </nav>
@@ -279,23 +288,23 @@
     <!-- Главный экран -->
     <section class="relative pt-32 pb-16 sm:pt-48 sm:pb-24 px-4 max-w-7xl mx-auto flex flex-col items-center justify-center min-h-[90vh]">
         
-        <div class="inline-flex items-center gap-3 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs sm:text-sm font-bold mb-8 backdrop-blur-md">
+        <div class="inline-flex items-center gap-3 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-black/50 border border-red-500/30 text-gray-300 text-xs sm:text-sm font-bold mb-8 backdrop-blur-md">
             <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
             </span>
             Срочный выезд по Воронежу • 15 минут
         </div>
 
-        <h1 class="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight leading-[1.1] mb-6 text-center">
+        <h1 class="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight leading-[1.1] mb-6 text-center text-white">
             Аварийный <br class="sm:hidden" />комиссар <br>
-            <span class="text-gradient drop-shadow-2xl">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-400 to-red-600 drop-shadow-2xl">
                 вызов на ДТП 24/7
             </span>
         </h1>
 
         <p class="max-w-3xl mx-auto text-gray-400 text-base sm:text-xl font-medium leading-relaxed mb-12 text-center">
-            Официальное оформление без ГИБДД. Быстро, законно и с гарантией выплаты 100% ущерба от страховой компании. Защитим ваши интересы прямо на месте.
+            Официальное оформление без ГИБДД. Быстро, законно и с гарантией выплаты 100% ущерба от страховой компании. Жестко защищаем ваши интересы на месте.
         </p>
 
         <!-- Кнопки CTA -->
@@ -303,7 +312,7 @@
             <a href="tel:+79518703934" 
                data-goal="call_hero"
                class="btn-gradient px-6 sm:px-10 py-5 rounded-2xl text-lg sm:text-xl font-black flex items-center justify-center gap-3 w-full sm:w-auto animate-gradient-x">
-                <svg class="w-6 h-6 fill-current animate-pulse" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <svg class="w-6 h-6 fill-current animate-pulse-slow" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                 Вызвать: +7 (951) 870-39-34
             </a>
             <a href="https://max.ru/u/f9LHodD0cOKyRQFJ96isNe6zBFKbnG-XoBHQ39uZ4We_JVvAlDRb0AXwqWE" 
@@ -311,27 +320,27 @@
                data-goal="chat_hero"
                class="btn-outline text-white font-bold px-6 sm:px-10 py-5 rounded-2xl text-lg flex items-center justify-center gap-3 w-full sm:w-auto">
                 <span>Написать в MAX</span>
-                <svg class="w-6 h-6 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             </a>
         </div>
 
         <!-- Преимущества (Статистика) -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mt-20 sm:mt-28 w-full max-w-5xl">
             <div class="glass-card p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] flex flex-col items-center sm:items-start text-center sm:text-left">
-                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-purple">15 мин</div>
-                <div class="text-xs sm:text-sm text-gray-400 font-medium">Подача авто в любой район</div>
+                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-accent">15 мин</div>
+                <div class="text-xs sm:text-sm text-gray-500 font-medium">Подача авто в любой район</div>
             </div>
             <div class="glass-card p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] flex flex-col items-center sm:items-start text-center sm:text-left">
-                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-purple">24/7</div>
-                <div class="text-xs sm:text-sm text-gray-400 font-medium">Работаем без выходных</div>
+                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-accent">24/7</div>
+                <div class="text-xs sm:text-sm text-gray-500 font-medium">Работаем без выходных</div>
             </div>
             <div class="glass-card p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] flex flex-col items-center sm:items-start text-center sm:text-left">
-                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-purple">100%</div>
-                <div class="text-xs sm:text-sm text-gray-400 font-medium">Гарантия законности</div>
+                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-accent">100%</div>
+                <div class="text-xs sm:text-sm text-gray-500 font-medium">Гарантия законности</div>
             </div>
             <div class="glass-card p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] flex flex-col items-center sm:items-start text-center sm:text-left">
-                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-purple">0 ₽</div>
-                <div class="text-xs sm:text-sm text-gray-400 font-medium">Бесплатная консультация</div>
+                <div class="text-3xl sm:text-4xl font-black mb-1 sm:mb-2 text-gradient-accent">0 ₽</div>
+                <div class="text-xs sm:text-sm text-gray-500 font-medium">Бесплатная консультация</div>
             </div>
         </div>
     </section>
@@ -340,12 +349,12 @@
     <section id="services" class="py-20 sm:py-28 px-4 max-w-7xl mx-auto relative">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-20">
             <div class="max-w-2xl">
-                <span class="text-sm uppercase tracking-widest text-fuchsia-400 font-black mb-3 block flex items-center gap-2">
-                    <div class="w-8 h-[2px] bg-fuchsia-400"></div> Наши услуги
+                <span class="text-sm uppercase tracking-widest text-red-500 font-black mb-3 block flex items-center gap-2">
+                    <div class="w-8 h-[2px] bg-red-600"></div> Наши услуги
                 </span>
                 <h2 class="text-4xl sm:text-5xl font-black text-white leading-tight">Профессиональная помощь на дороге</h2>
             </div>
-            <p class="text-gray-400 text-base sm:text-lg max-w-md mt-6 md:mt-0 font-medium border-l-2 border-fuchsia-500/20 pl-4">
+            <p class="text-gray-400 text-base sm:text-lg max-w-md mt-6 md:mt-0 font-medium border-l-2 border-red-600/30 pl-4">
                 Полный цикл сопровождения: от фотофиксации на месте до получения максимальной выплаты от страховой.
             </p>
         </div>
@@ -354,111 +363,111 @@
             <!-- Карточка 1 -->
             <div class="glass-card p-8 sm:p-10 rounded-[2rem] relative overflow-hidden group">
                 <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <svg class="w-32 h-32 text-purple-400" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    <svg class="w-32 h-32 text-purple-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                 </div>
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-8 shadow-[0_0_20px_rgba(139,92,246,0.2)]">
+                <div class="w-16 h-16 rounded-2xl bg-black border border-purple-500/30 flex items-center justify-center text-purple-500 mb-8 shadow-[0_0_20px_rgba(124,58,237,0.15)] group-hover:border-purple-500/60 transition-colors">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-4">Европротокол</h3>
                 <p class="text-gray-400 text-base leading-relaxed mb-8 relative z-10">Грамотное составление схемы и документов без ожидания экипажа ГИБДД. Полное соответствие требованиям страховых компаний.</p>
-                <div class="text-sm font-bold text-purple-400 bg-purple-400/10 inline-block px-4 py-2 rounded-full backdrop-blur-sm border border-purple-400/20">Ущерб до 400 000 ₽</div>
+                <div class="text-sm font-bold text-purple-400 bg-purple-900/20 inline-block px-4 py-2 rounded-full backdrop-blur-sm border border-purple-500/20">Ущерб до 400 000 ₽</div>
             </div>
 
             <!-- Карточка 2 -->
             <div class="glass-card p-8 sm:p-10 rounded-[2rem] relative overflow-hidden group">
                 <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <svg class="w-32 h-32 text-fuchsia-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <svg class="w-32 h-32 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                 </div>
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-fuchsia-500/20 to-pink-500/20 border border-fuchsia-500/30 flex items-center justify-center text-fuchsia-400 mb-8 shadow-[0_0_20px_rgba(217,70,239,0.2)]">
+                <div class="w-16 h-16 rounded-2xl bg-black border border-red-600/30 flex items-center justify-center text-red-500 mb-8 shadow-[0_0_20px_rgba(220,38,38,0.15)] group-hover:border-red-600/60 transition-colors">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-4">Автоэкспертиза</h3>
                 <p class="text-gray-400 text-base leading-relaxed mb-8 relative z-10">Точный расчет реальной стоимости ремонта, выявление скрытых дефектов и взыскание утраты товарной стоимости автомобиля.</p>
-                <div class="text-sm font-bold text-fuchsia-400 bg-fuchsia-400/10 inline-block px-4 py-2 rounded-full backdrop-blur-sm border border-fuchsia-400/20">Честная оценка</div>
+                <div class="text-sm font-bold text-red-400 bg-red-900/20 inline-block px-4 py-2 rounded-full backdrop-blur-sm border border-red-500/20">Честная оценка</div>
             </div>
 
             <!-- Карточка 3 -->
             <div class="glass-card p-8 sm:p-10 rounded-[2rem] relative overflow-hidden group">
                 <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <svg class="w-32 h-32 text-rose-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                    <svg class="w-32 h-32 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
                 </div>
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500/20 to-red-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 mb-8 shadow-[0_0_20px_rgba(244,63,94,0.2)]">
+                <div class="w-16 h-16 rounded-2xl bg-black border border-gray-600/30 flex items-center justify-center text-gray-400 mb-8 shadow-[0_0_20px_rgba(156,163,175,0.1)] group-hover:border-gray-500/60 transition-colors">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-4">Юридическая Защита</h3>
-                <p class="text-gray-400 text-base leading-relaxed mb-8 relative z-10">Взыскание выплат со страховой компании, споры при занижении суммы ущерба, полная защита виновника и потерпевшего.</p>
-                <div class="text-sm font-bold text-rose-400 bg-rose-400/10 inline-block px-4 py-2 rounded-full backdrop-blur-sm border border-rose-400/20">Сопровождение под ключ</div>
+                <p class="text-gray-400 text-base leading-relaxed mb-8 relative z-10">Взыскание выплат со страховой компании, споры при занижении суммы ущерба, жесткая защита виновника и потерпевшего.</p>
+                <div class="text-sm font-bold text-gray-300 bg-gray-800/50 inline-block px-4 py-2 rounded-full backdrop-blur-sm border border-gray-600/30">Сопровождение под ключ</div>
             </div>
         </div>
     </section>
 
     <!-- О нас / Алгоритм -->
     <section id="process" class="py-20 sm:py-28 px-4 max-w-7xl mx-auto">
-        <div class="glass-card rounded-[2.5rem] p-6 sm:p-16 border border-fuchsia-500/20 relative overflow-hidden">
+        <div class="glass-card rounded-[2.5rem] p-6 sm:p-16 border border-purple-500/20 relative overflow-hidden">
             <!-- Декор внутри блока -->
-            <div class="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+            <div class="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px] pointer-events-none"></div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 relative z-10">
                 <div class="flex flex-col justify-center">
-                    <span class="text-sm uppercase tracking-widest text-rose-400 font-black mb-3 flex items-center gap-2">
-                        <div class="w-8 h-[2px] bg-rose-400"></div> О службе
+                    <span class="text-sm uppercase tracking-widest text-purple-400 font-black mb-3 flex items-center gap-2">
+                        <div class="w-8 h-[2px] bg-purple-500"></div> О службе
                     </span>
                     <h2 class="text-3xl sm:text-5xl font-black text-white mb-8 leading-tight">Приедем туда, <br>где нужна помощь</h2>
-                    <div class="space-y-6 text-gray-300 text-base sm:text-lg leading-relaxed font-medium">
-                        <p>ДТП — это всегда стресс. Одна неверно поставленная галочка в документах может стать причиной отказа в выплате страховки. Наша задача — <strong class="text-white">взять на себя всю бюрократию</strong> и защитить ваши права.</p>
+                    <div class="space-y-6 text-gray-400 text-base sm:text-lg leading-relaxed font-medium">
+                        <p>ДТП — это всегда стресс и риск финансовых потерь. Одна неверно поставленная галочка в документах может стать причиной отказа в выплате. Наша задача — <strong class="text-white">взять на себя всю бюрократию</strong> и жестко защитить ваши права.</p>
                         <p>Мы дежурим по всем районам Воронежа. Не нужно никуда ехать — мы сами приедем к вам на место столкновения, проведем оценку и оформим всё по закону.</p>
                     </div>
                     <div class="mt-10 flex flex-wrap gap-4">
-                        <div class="flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-2xl">
-                            <svg class="w-6 h-6 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="flex items-center gap-3 bg-black/40 border border-white/5 px-5 py-3 rounded-2xl">
+                            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <span class="text-white font-bold text-sm sm:text-base">Работаем 24/7</span>
                         </div>
-                        <div class="flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-2xl">
-                            <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="flex items-center gap-3 bg-black/40 border border-white/5 px-5 py-3 rounded-2xl">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <span class="text-white font-bold text-sm sm:text-base">Опыт 10+ лет</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-black/40 backdrop-blur-xl p-6 sm:p-10 rounded-[2rem] border border-white/5 shadow-2xl">
+                <div class="bg-black/60 backdrop-blur-xl p-6 sm:p-10 rounded-[2rem] border border-white/5 shadow-2xl">
                     <div class="text-2xl font-black text-white mb-8 flex items-center justify-between">
                         <span>План действий</span>
-                        <div class="w-3 h-3 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.8)]"></div>
+                        <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]"></div>
                     </div>
                     
-                    <!-- Линия таймлайна с градиентом -->
-                    <div class="space-y-8 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-purple-500 before:via-fuchsia-500 before:to-transparent">
+                    <!-- Линия таймлайна с градиентом (Фиолетовый -> Красный) -->
+                    <div class="space-y-8 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-purple-600 before:via-red-600 before:to-transparent">
                         
                         <!-- Шаг 1 -->
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#140A26] bg-purple-500/20 text-purple-400 font-black shadow-[0_0_15px_rgba(139,92,246,0.5)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 backdrop-blur-md">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#030303] bg-purple-900/50 text-purple-400 font-black shadow-[0_0_15px_rgba(124,58,237,0.3)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 backdrop-blur-md">
                                 1
                             </div>
-                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-5 rounded-2xl group-hover:border-purple-500/40 transition-colors">
+                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-[#0A0A0A] border border-white/5 p-5 rounded-2xl group-hover:border-purple-500/40 transition-colors">
                                 <h4 class="text-white font-bold text-lg mb-2">Включите аварийку</h4>
-                                <p class="text-gray-400 text-sm">Выставите знак (15м) и убедитесь, что нет пострадавших.</p>
+                                <p class="text-gray-500 text-sm">Выставите знак (15м) и убедитесь, что нет пострадавших.</p>
                             </div>
                         </div>
                         
                         <!-- Шаг 2 -->
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#140A26] bg-fuchsia-500/20 text-fuchsia-400 font-black shadow-[0_0_15px_rgba(217,70,239,0.5)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 backdrop-blur-md">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#030303] bg-red-900/50 text-red-500 font-black shadow-[0_0_15px_rgba(220,38,38,0.3)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 backdrop-blur-md">
                                 2
                             </div>
-                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-5 rounded-2xl group-hover:border-fuchsia-500/40 transition-colors">
+                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-[#0A0A0A] border border-white/5 p-5 rounded-2xl group-hover:border-red-600/40 transition-colors">
                                 <h4 class="text-white font-bold text-lg mb-2">Вызовите нас</h4>
-                                <p class="text-gray-400 text-sm">Позвоните <a href="tel:+79518703934" class="text-fuchsia-400 font-bold hover:underline">+7 (951) 870-39-34</a>. Назовите адрес ДТП.</p>
+                                <p class="text-gray-500 text-sm">Позвоните <a href="tel:+79518703934" class="text-red-500 font-bold hover:underline">+7 (951) 870-39-34</a>. Назовите адрес ДТП.</p>
                             </div>
                         </div>
 
                         <!-- Шаг 3 -->
                         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#140A26] bg-rose-500/20 text-rose-400 font-black shadow-[0_0_15px_rgba(244,63,94,0.5)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 backdrop-blur-md">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#030303] bg-gray-800 text-gray-300 font-black shadow-[0_0_15px_rgba(255,255,255,0.05)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 backdrop-blur-md">
                                 3
                             </div>
-                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-5 rounded-2xl group-hover:border-rose-500/40 transition-colors">
+                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-[#0A0A0A] border border-white/5 p-5 rounded-2xl group-hover:border-gray-500/40 transition-colors">
                                 <h4 class="text-white font-bold text-lg mb-2">Ожидайте 15 минут</h4>
-                                <p class="text-gray-400 text-sm">Специалист прибудет на место и оформит всё по закону.</p>
+                                <p class="text-gray-500 text-sm">Специалист прибудет на место и оформит всё по закону.</p>
                             </div>
                         </div>
 
@@ -468,25 +477,25 @@
         </div>
     </section>
 
-    <!-- Контакты (WOW CTA Блок) -->
+    <!-- Контакты (Строгий CTA Блок) -->
     <section id="contacts" class="py-20 sm:py-32 px-4 max-w-7xl mx-auto relative">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-red-900/5 to-transparent pointer-events-none"></div>
         
-        <div class="glass-card p-8 sm:p-20 rounded-[3rem] border border-fuchsia-500/30 relative overflow-hidden text-center shadow-[0_0_60px_rgba(217,70,239,0.1)]">
-            <div class="absolute top-[-50%] left-[-10%] w-[150%] h-[150%] bg-gradient-to-br from-purple-500/10 via-fuchsia-500/10 to-rose-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="glass-card p-8 sm:p-20 rounded-[3rem] border border-red-600/20 relative overflow-hidden text-center shadow-[0_0_50px_rgba(220,38,38,0.05)]">
+            <div class="absolute top-[-50%] left-[-10%] w-[150%] h-[150%] bg-gradient-to-br from-purple-900/10 via-red-900/10 to-black blur-[100px] rounded-full pointer-events-none"></div>
             
             <div class="relative z-10 max-w-3xl mx-auto">
-                <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-white text-sm font-bold mb-10 backdrop-blur-md">
-                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-black/50 border border-white/10 text-white text-sm font-bold mb-10 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
                     Комиссары на линии
                 </div>
                 
                 <h2 class="text-5xl sm:text-7xl font-black text-white mb-8 leading-tight">
                     Случилось ДТП? <br>
-                    <span class="text-gradient">Не теряйте время.</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-red-600">Не теряйте время.</span>
                 </h2>
                 
-                <p class="text-xl text-gray-300 font-medium mb-16">
+                <p class="text-xl text-gray-400 font-medium mb-16">
                     Свяжитесь с нами прямо сейчас. Бесплатная консультация по телефону. Выезд немедленно.
                 </p>
 
@@ -503,23 +512,23 @@
                        data-goal="chat_contacts" 
                        class="btn-outline w-full sm:w-auto text-center py-6 px-12 rounded-3xl font-bold text-white text-xl shadow-xl flex items-center justify-center gap-3 transition-all hover:scale-105">
                         Написать в MAX
-                        <svg class="w-6 h-6 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Подвал (без адреса) -->
-    <footer class="py-12 border-t border-white/5 text-center px-4 relative z-10 bg-[#0A0514]">
+    <!-- Подвал -->
+    <footer class="py-12 border-t border-white/5 text-center px-4 relative z-10 bg-[#030303]">
         <div class="max-w-6xl mx-auto space-y-6">
-            <div class="text-2xl font-black text-white opacity-40">
-                вызовдтп<span class="text-fuchsia-500">.рф</span>
+            <div class="text-2xl font-black text-white opacity-20">
+                вызовдтп<span class="text-red-600">.рф</span>
             </div>
-            <p class="font-bold text-gray-500 text-sm">
+            <p class="font-bold text-gray-600 text-sm">
                 © 2026 Служба аварийных комиссаров • Воронеж • Тел: +7 (951) 870-39-34
             </p>
-            <p class="max-w-4xl mx-auto text-[11px] sm:text-xs leading-relaxed text-gray-700">
+            <p class="max-w-4xl mx-auto text-[11px] sm:text-xs leading-relaxed text-gray-800">
                 Круглосуточный вызов аварийного комиссара при ДТП в Воронеже. Быстрое оформление Европротокола без участия полиции, независимая автоэкспертиза, оценка ущерба автомобиля после аварии, юридическая помощь автолюбителям. Работаем 24/7 во всех районах Воронежа напрямую с автовладельцами.
             </p>
         </div>
