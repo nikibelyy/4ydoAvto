@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     
     <!-- SEO Meta Tags -->
-    <title>Аварийный Комиссар Воронеж — Вызов ДТП за 15 минут | вызовдтп.рф</title>
+    <title>Аварийный Комиссар Воронеж — Вызов ДТП за 15 минут</title>
     <meta name="description" content="Срочный вызов аварийного комиссара в Воронеже 24/7. Оформление ДТП без ГИБДД, Европротокол, экспертиза. Прибытие от 15 минут. Звоните: +7 (951) 870-39-34">
-    <meta name="keywords" content="аварийный комиссар воронеж, вызов дтп воронеж, вызовдтп рф, оформить дтп воронеж, европротокол воронеж, комиссар дтп карпинского 39">
+    <meta name="keywords" content="аварийный комиссар воронеж, вызов дтп воронеж, оформить дтп воронеж, европротокол воронеж, комиссар дтп карпинского 39">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://вызовдтп.рф/">
 
     <!-- Schema.org Microdata -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "EmergencyService",
-      "name": "Служба Аварийных Комиссаров вызовдтп.рф",
-      "url": "https://вызовдтп.рф",
+      "name": "Служба Аварийных Комиссаров",
       "telephone": "+79518703934",
       "priceRange": "₽₽",
       "address": {
@@ -37,10 +35,10 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: '#07090E',
-                        card: '#11141D',
-                        accent: '#8B5CF6',
-                        cyan: '#06B6D4'
+                        dark: '#050505',
+                        card: '#0A0A0A',
+                        accent: '#DC2626', // Red-600
+                        primary: '#991B1B' // Red-800
                     }
                 }
             }
@@ -53,41 +51,41 @@
             width: 100%;
             margin: 0;
             padding: 0;
-            background-color: #07090E;
+            background-color: #050505; /* Глубокий черный */
             color: #F3F4F6;
         }
 
         .glass-nav {
-            background: rgba(17, 20, 29, 0.85);
+            background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .glass-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+            background: linear-gradient(145deg, rgba(25, 25, 25, 0.6) 0%, rgba(10, 10, 10, 0.9) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.03);
             transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .glass-card:hover {
-            border-color: rgba(139, 92, 246, 0.5);
+            border-color: rgba(220, 38, 38, 0.5);
             transform: translateY(-3px);
-            box-shadow: 0 16px 36px -12px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 16px 36px -12px rgba(220, 38, 38, 0.25);
         }
 
         .btn-gradient {
-            background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 50%, #06B6D4 100%);
+            background: linear-gradient(135deg, #EF4444 0%, #B91C1C 50%, #7F1D1D 100%);
             background-size: 200% 200%;
             animation: gradient-shift 6s ease infinite;
-            box-shadow: 0 8px 25px -4px rgba(139, 92, 246, 0.5);
+            box-shadow: 0 8px 25px -4px rgba(220, 38, 38, 0.4);
             transition: all 0.3s ease;
         }
 
         .btn-gradient:hover {
-            box-shadow: 0 12px 30px -4px rgba(6, 182, 212, 0.6);
+            box-shadow: 0 12px 30px -4px rgba(239, 68, 68, 0.6);
             transform: scale(1.02);
         }
 
@@ -98,20 +96,20 @@
         }
 
         .pulse-red {
-            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+            box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6);
             animation: pulse-red-anim 2s infinite;
         }
 
         @keyframes pulse-red-anim {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
-            70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+            70% { box-shadow: 0 0 0 14px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
         }
 
         .glow-circle {
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
+            filter: blur(120px);
             z-index: -1;
             pointer-events: none;
         }
@@ -132,42 +130,34 @@
     <!-- /Yandex.Metrika counter -->
 
 </head>
-<body class="antialiased selection:bg-purple-500 selection:text-white">
+<body class="antialiased selection:bg-red-600 selection:text-white">
 
-    <div class="glow-circle w-[280px] h-[280px] sm:w-[450px] sm:h-[450px] bg-purple-600/15 top-[-50px] left-1/2 -translate-x-1/2"></div>
-    <div class="glow-circle w-[300px] h-[300px] bg-cyan-600/10 top-[600px] right-[-100px]"></div>
+    <!-- Красные фоновые свечения -->
+    <div class="glow-circle w-[280px] h-[280px] sm:w-[450px] sm:h-[450px] bg-red-600/15 top-[-50px] left-1/2 -translate-x-1/2"></div>
+    <div class="glow-circle w-[300px] h-[300px] bg-red-800/15 top-[600px] right-[-100px]"></div>
 
-    <!-- Шапка без логотипа -->
+    <!-- Обновленная шапка -->
     <header class="fixed top-4 inset-x-0 z-50 px-4 max-w-6xl mx-auto">
         <nav class="glass-nav rounded-2xl sm:rounded-full px-5 sm:px-8 py-3.5 flex items-center justify-between shadow-2xl">
             <a href="#" class="flex flex-col group shrink-0">
-                <span class="font-black text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-gray-200 to-cyan-400 bg-clip-text text-transparent">
-                    вызовдтп.рф
-                </span>
-                <span class="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-extrabold -mt-1">
-                    Воронеж • 24/7
+                <span class="font-black text-lg sm:text-xl tracking-widest uppercase bg-gradient-to-r from-white to-red-500 bg-clip-text text-transparent">
+                    ВЫЗОВДТП.РФ
                 </span>
             </a>
 
             <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-                <a href="#about" class="hover:text-cyan-400 transition-colors">О нас</a>
-                <a href="#services" class="hover:text-cyan-400 transition-colors">Услуги</a>
-                <a href="#process" class="hover:text-cyan-400 transition-colors">Порядок действий</a>
-                <a href="#contacts" class="hover:text-cyan-400 transition-colors">Контакты</a>
+                <a href="#about" class="hover:text-red-500 transition-colors">О нас</a>
+                <a href="#services" class="hover:text-red-500 transition-colors">Услуги</a>
+                <a href="#process" class="hover:text-red-500 transition-colors">Порядок действий</a>
+                <a href="#contacts" class="hover:text-red-500 transition-colors">Контакты</a>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3">
                 <a href="tel:+79518703934" 
                    data-goal="call_header"
-                   class="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full text-xs font-bold transition-all border border-white/10 text-gray-200">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                   class="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-5 py-2 rounded-full text-sm font-bold transition-all border border-white/10 text-gray-200">
+                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
                     +7 (951) 870-39-34
-                </a>
-                <a href="https://max.ru/u/f9LHodD0cOIsoqlXfyn89fwevvHW2mxXkpsPgQiJnDmaDbBn0f5VelUVnTk" 
-                   target="_blank" rel="noopener noreferrer" 
-                   data-goal="chat_header"
-                   class="btn-gradient px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-black text-white tracking-wider uppercase">
-                    MAX Чат
                 </a>
             </div>
         </nav>
@@ -176,13 +166,13 @@
     <!-- Главный экран -->
     <section class="relative pt-36 pb-16 md:pt-48 md:pb-28 px-4 max-w-6xl mx-auto text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold mb-8 animate-pulse">
-            <span class="w-2 h-2 rounded-full bg-red-500"></span>
-            Срочный выезд по Воронежу • Среднее время подачи 15 минут
+            <span class="w-2 h-2 rounded-full bg-red-600"></span>
+            Срочный выезд по Воронежу • Подача от 15 минут
         </div>
 
         <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none mb-6">
             Аварийный комиссар <br>
-            <span class="bg-gradient-to-r from-purple-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">
+            <span class="bg-gradient-to-r from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent">
                 вызов на ДТП 24/7
             </span>
         </h1>
@@ -203,7 +193,7 @@
                data-goal="chat_hero"
                class="w-full sm:w-auto glass-card hover:bg-white/10 text-white font-bold px-8 py-4 rounded-2xl text-base flex items-center justify-center gap-3 transition-all">
                 <span>Написать в MAX</span>
-                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
         </div>
 
@@ -213,15 +203,15 @@
                 <div class="text-xs text-gray-400 font-medium">Прибытие в любой район Воронежа</div>
             </div>
             <div class="glass-card p-5 rounded-2xl">
-                <div class="text-2xl sm:text-3xl font-black text-purple-400 mb-1">24/7</div>
+                <div class="text-2xl sm:text-3xl font-black text-red-600 mb-1">24/7</div>
                 <div class="text-xs text-gray-400 font-medium">Круглосуточно, без выходных</div>
             </div>
             <div class="glass-card p-5 rounded-2xl">
-                <div class="text-2xl sm:text-3xl font-black text-cyan-400 mb-1">100%</div>
+                <div class="text-2xl sm:text-3xl font-black text-white mb-1">100%</div>
                 <div class="text-xs text-gray-400 font-medium">Юридическая законность ОСАГО/КАСКО</div>
             </div>
             <div class="glass-card p-5 rounded-2xl">
-                <div class="text-2xl sm:text-3xl font-black text-emerald-400 mb-1">0 ₽</div>
+                <div class="text-2xl sm:text-3xl font-black text-red-600 mb-1">0 ₽</div>
                 <div class="text-xs text-gray-400 font-medium">Консультация по телефону</div>
             </div>
         </div>
@@ -231,7 +221,7 @@
     <section id="services" class="py-16 px-4 max-w-6xl mx-auto">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
-                <span class="text-xs uppercase tracking-widest text-cyan-400 font-extrabold mb-2 block">Что мы делаем</span>
+                <span class="text-xs uppercase tracking-widest text-red-500 font-extrabold mb-2 block">Что мы делаем</span>
                 <h2 class="text-3xl sm:text-4xl font-black text-white">Профессиональная помощь при ДТП</h2>
             </div>
             <p class="text-gray-400 text-sm max-w-md mt-3 md:mt-0">
@@ -241,24 +231,24 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
-                <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-6 font-black text-lg">01</div>
+                <div class="w-12 h-12 rounded-2xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 mb-6 font-black text-lg">01</div>
                 <h3 class="text-xl font-bold text-white mb-3">Оформление Европротокола</h3>
                 <p class="text-gray-400 text-sm leading-relaxed mb-6">Грамотное составление схемы и документов без ожидания экипажа ГИБДД. Соответствует всем требованиям страховых компаний.</p>
-                <div class="text-xs font-bold text-purple-400 flex items-center gap-1">Ущерб до 400 000 ₽</div>
+                <div class="text-xs font-bold text-red-500 flex items-center gap-1">Ущерб до 400 000 ₽</div>
             </div>
 
             <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
-                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6 font-black text-lg">02</div>
+                <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-6 font-black text-lg">02</div>
                 <h3 class="text-xl font-bold text-white mb-3">Независимая Экспертиза</h3>
                 <p class="text-gray-400 text-sm leading-relaxed mb-6">Точный расчет реальной стоимости ремонта, выявление скрытых дефектов и утраты товарной стоимости (УТС) автомобиля.</p>
-                <div class="text-xs font-bold text-cyan-400 flex items-center gap-1">Честная оценка</div>
+                <div class="text-xs font-bold text-gray-300 flex items-center gap-1">Честная оценка</div>
             </div>
 
             <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6 font-black text-lg">03</div>
+                <div class="w-12 h-12 rounded-2xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 mb-6 font-black text-lg">03</div>
                 <h3 class="text-xl font-bold text-white mb-3">Юридическая Защита</h3>
                 <p class="text-gray-400 text-sm leading-relaxed mb-6">Взыскание выплат со страховой компании, споры при занижении суммы ущерба, защита виновника и потерпевшего.</p>
-                <div class="text-xs font-bold text-emerald-400 flex items-center gap-1">Под ключ</div>
+                <div class="text-xs font-bold text-red-500 flex items-center gap-1">Под ключ</div>
             </div>
         </div>
     </section>
@@ -267,12 +257,12 @@
     <section id="about" class="py-16 px-4 max-w-6xl mx-auto border-t border-white/5">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-                <span class="text-xs uppercase tracking-widest text-purple-400 font-extrabold">О службе вызовдтп.рф</span>
+                <span class="text-xs uppercase tracking-widest text-red-500 font-extrabold">О службе аваркомов</span>
                 <h2 class="text-3xl sm:text-4xl font-black text-white mt-2 mb-6">Надежный аварийный комиссар в Воронеже</h2>
                 <div class="space-y-4 text-gray-300 text-sm leading-relaxed">
                     <p>Дорожно-транспортное происшествие — это стресс, в котором легко ошибиться при заполнении документов и лишиться страховых выплат. Наша задача — <strong class="text-white font-semibold">полностью взять на себя оформление аварии</strong> и защитить ваши права.</p>
                     <p>Мы дежурим по всем районам города: Коминтерновский, Ленинский, Советский, Центральный, Левобережный и Железнодорожный. Среднее время прибытия экипажа составляет всего 15 минут.</p>
-                    <p>Наш офис расположен по адресу: <strong class="text-cyan-300 font-semibold">г. Воронеж, ул. Карпинского, д. 39</strong>. Вы можете обратиться к нам как на месте столкновения, так и приехать для бесплатной юридической консультации и оценки повреждений.</p>
+                    <p>Наш офис расположен по адресу: <strong class="text-red-400 font-semibold">г. Воронеж, ул. Карпинского, д. 39</strong>. Вы можете обратиться к нам как на месте столкновения, так и приехать для бесплатной юридической консультации и оценки повреждений.</p>
                 </div>
                 <div class="mt-8 flex flex-wrap gap-2 sm:gap-3">
                     <span class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-gray-300 font-medium">Опыт более 10 лет</span>
@@ -283,25 +273,25 @@
             <div id="process" class="glass-card p-6 sm:p-8 rounded-3xl relative">
                 <div class="text-xl font-bold text-white mb-6 flex items-center justify-between">
                     <span>Порядок действий при ДТП</span>
-                    <span class="text-xs font-normal text-cyan-400 bg-cyan-400/10 px-3 py-1 rounded-full">Инструкция</span>
+                    <span class="text-xs font-normal text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-full">Инструкция</span>
                 </div>
                 <div class="space-y-6">
                     <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center shrink-0 text-sm">1</div>
+                        <div class="w-8 h-8 rounded-full bg-red-600/20 text-red-500 font-bold flex items-center justify-center shrink-0 text-sm">1</div>
                         <div>
                             <h4 class="text-white font-semibold text-sm">Включите аварийную сигнализацию</h4>
                             <p class="text-gray-400 text-xs mt-1">Выставите знак аварийной остановки (15 м в городе) и убедитесь, что нет пострадавших.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center shrink-0 text-sm">2</div>
+                        <div class="w-8 h-8 rounded-full bg-red-600/20 text-red-500 font-bold flex items-center justify-center shrink-0 text-sm">2</div>
                         <div>
                             <h4 class="text-white font-semibold text-sm">Вызовите аварийного комиссара</h4>
-                            <p class="text-gray-400 text-xs mt-1">Позвоните по телефону <a href="tel:+79518703934" class="text-cyan-400 font-bold underline">+7 (951) 870-39-34</a> или напишите в чат MAX. Назовите адрес ДТП.</p>
+                            <p class="text-gray-400 text-xs mt-1">Позвоните по телефону <a href="tel:+79518703934" class="text-red-500 font-bold underline hover:text-red-400">+7 (951) 870-39-34</a> или напишите в чат MAX. Назовите адрес ДТП.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center shrink-0 text-sm">3</div>
+                        <div class="w-8 h-8 rounded-full bg-red-600/20 text-red-500 font-bold flex items-center justify-center shrink-0 text-sm">3</div>
                         <div>
                             <h4 class="text-white font-semibold text-sm">Дождитесь оформления</h4>
                             <p class="text-gray-400 text-xs mt-1">Специалист прибудет за 15 минут, проведет фотофиксацию и составит Европротокол по закону.</p>
@@ -317,12 +307,12 @@
         <div class="glass-card p-6 sm:p-12 rounded-3xl border border-white/10 relative overflow-hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
-                    <span class="text-xs uppercase tracking-widest text-cyan-400 font-extrabold">Контакты</span>
+                    <span class="text-xs uppercase tracking-widest text-red-500 font-extrabold">Контакты</span>
                     <h2 class="text-3xl font-black text-white mt-2 mb-6">Всегда на связи с вами</h2>
                     <div class="space-y-6 mb-8">
                         <div>
                             <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Телефон круглосуточно:</div>
-                            <a href="tel:+79518703934" data-goal="call_contacts" class="text-2xl sm:text-3xl font-black text-white hover:text-cyan-400 transition-colors">+7 (951) 870-39-34</a>
+                            <a href="tel:+79518703934" data-goal="call_contacts" class="text-2xl sm:text-3xl font-black text-white hover:text-red-500 transition-colors">+7 (951) 870-39-34</a>
                         </div>
                         <div>
                             <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Адрес офиса:</div>
@@ -330,28 +320,28 @@
                         </div>
                         <div>
                             <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Мессенджер:</div>
-                            <a href="https://max.ru/u/f9LHodD0cOKyRQFJ96isNe6zBFKbnG-XoBHQ39uZ4We_JVvAlDRb0AXwqWE" target="_blank" rel="noopener noreferrer" data-goal="chat_contacts" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-bold">
+                            <a href="https://max.ru/u/f9LHodD0cOKyRQFJ96isNe6zBFKbnG-XoBHQ39uZ4We_JVvAlDRb0AXwqWE" target="_blank" rel="noopener noreferrer" data-goal="chat_contacts" class="inline-flex items-center gap-2 text-red-500 hover:text-red-400 font-bold transition-colors">
                                 Связаться в MAX Messenger
                             </a>
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3">
                         <a href="tel:+79518703934" data-goal="call_contacts" class="btn-gradient text-center py-4 px-6 rounded-2xl font-black text-white text-sm uppercase tracking-wider">Позвонить сейчас</a>
-                        <a href="https://max.ru/u/f9LHodD0cOKyRQFJ96isNe6zBFKbnG-XoBHQ39uZ4We_JVvAlDRb0AXwqWE" target="_blank" rel="noopener noreferrer" data-goal="chat_contacts" class="bg-white/10 hover:bg-white/15 border border-white/10 text-center py-4 px-6 rounded-2xl font-bold text-white text-sm transition-colors">Написать в MAX</a>
+                        <a href="https://max.ru/u/f9LHodD0cOKyRQFJ96isNe6zBFKbnG-XoBHQ39uZ4We_JVvAlDRb0AXwqWE" target="_blank" rel="noopener noreferrer" data-goal="chat_contacts" class="bg-white/5 hover:bg-white/10 border border-white/10 text-center py-4 px-6 rounded-2xl font-bold text-white text-sm transition-colors">Написать в MAX</a>
                     </div>
                 </div>
 
                 <div class="rounded-2xl overflow-hidden border border-white/10 h-[300px] sm:h-[360px] relative bg-neutral-900 w-full">
-                    <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%92%D0%BE%D1%80%D0%BE%D0%BD%D0%B5%D0%B6%20%D0%9A%D0%B0%D1%80%D0%BF%D0%B8%D0%BD%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%2039&z=16" width="100%" height="100%" frameborder="0" allowfullscreen="true" class="absolute inset-0 w-full h-full grayscale contrast-125 opacity-80 hover:opacity-100 transition-opacity"></iframe>
+                    <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%92%D0%BE%D1%80%D0%BE%D0%BD%D0%B5%D0%B6%20%D0%9A%D0%B0%D1%80%D0%BF%D0%B8%D0%BD%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%2039&z=16" width="100%" height="100%" frameborder="0" allowfullscreen="true" class="absolute inset-0 w-full h-full grayscale contrast-125 opacity-70 hover:opacity-100 transition-opacity"></iframe>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Подвал -->
-    <footer class="py-12 border-t border-white/5 text-center text-xs text-gray-500 px-4">
+    <footer class="py-12 border-t border-white/5 text-center text-xs text-gray-500 px-4 bg-[#030303]">
         <div class="max-w-6xl mx-auto space-y-4">
-            <p class="font-medium text-gray-400">© 2026 Служба аварийных комиссаров «вызовдтп.рф» • Воронеж, ул. Карпинского, д. 39 • Тел: +7 (951) 870-39-34</p>
+            <p class="font-medium text-gray-400">© 2026 Служба аварийных комиссаров • Воронеж, ул. Карпинского, д. 39 • Тел: +7 (951) 870-39-34</p>
             <p class="max-w-3xl mx-auto text-[11px] leading-relaxed text-gray-600">Круглосуточный вызов аварийного комиссара при ДТП в Воронеже. Быстрое оформление Европротокола без участия полиции, независимая автоэкспертиза, оценка ущерба автомобиля после аварии, юридическая помощь автолюбителям. Работаем 24/7 во всех районах Воронежа и области.</p>
         </div>
     </footer>
@@ -366,7 +356,6 @@
                     if (typeof ym === 'function') {
                         ym(111500966, 'reachGoal', goalName);
                     }
-                    console.log('Отправлена цель в Метрику 111500966:', goalName);
                 });
             });
         });
