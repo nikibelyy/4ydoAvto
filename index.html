@@ -1,340 +1,905 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    
-    <!-- SEO Meta Tags -->
-    <title>Аварийный Комиссар Воронеж — Вызов ДТП за 15 минут</title>
-    <meta name="description" content="Срочный вызов аварийного комиссара в Воронеже 24/7. Оформление ДТП без ГИБДД. Прибытие от 15 минут. Звоните: +7 (951) 870-39-34">
-    <meta name="robots" content="index, follow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS Roulette — Demo</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: '#050505',
-                        card: '#0A0A0A',
-                    }
-                }
-            }
-        }
-    </script>
+<style>
+* {
+    box-sizing: border-box;
+}
 
-    <style>
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #050505;
-            color: #F3F4F6;
-        }
+:root {
+    --bg: #07090e;
+    --panel: #10141d;
+    --panel2: #151b26;
+    --text: #f4f7fb;
+    --muted: #7f8a9d;
+    --accent: #ff9f1c;
+    --blue: #4da6ff;
+    --purple: #a855f7;
+    --pink: #ec4899;
+    --red: #ef4444;
+    --gold: #fbbf24;
+}
 
-        .glass-nav {
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 50% -20%, rgba(255,159,28,.12), transparent 40%),
+        radial-gradient(circle at 10% 50%, rgba(77,166,255,.08), transparent 35%),
+        var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
 
-        .glass-card {
-            background: linear-gradient(145deg, rgba(25, 25, 25, 0.6) 0%, rgba(10, 10, 10, 0.9) 100%);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.35s ease;
-        }
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
 
-        .glass-card:hover {
-            border-color: rgba(220, 38, 38, 0.5);
-            transform: translateY(-3px);
-            box-shadow: 0 16px 36px -12px rgba(220, 38, 38, 0.25);
-        }
+header {
+    height: 72px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    background: rgba(8,10,15,.82);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
 
-        .btn-gradient {
-            background: linear-gradient(135deg, #EF4444 0%, #B91C1C 50%, #7F1D1D 100%);
-            background-size: 200% 200%;
-            animation: gradient-shift 6s ease infinite;
-            box-shadow: 0 8px 25px -4px rgba(220, 38, 38, 0.4);
-            transition: all 0.3s ease;
-        }
+.logo {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
 
-        .btn-gradient:hover {
-            box-shadow: 0 12px 30px -4px rgba(239, 68, 68, 0.6);
-            transform: scale(1.02);
-        }
+.logo span {
+    color: var(--accent);
+}
 
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+.nav {
+    display: flex;
+    gap: 25px;
+    color: var(--muted);
+    font-size: 14px;
+}
 
-        .pulse-red {
-            box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6);
-            animation: pulse-red-anim 2s infinite;
-        }
+.nav a {
+    color: inherit;
+    text-decoration: none;
+    transition: .2s;
+}
 
-        @keyframes pulse-red-anim {
-            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
-            70% { box-shadow: 0 0 0 14px rgba(220, 38, 38, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-        }
+.nav a:hover {
+    color: white;
+}
 
-        /* Эффекты свечения на фоне */
-        .glow-circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            z-index: -1;
-            pointer-events: none;
-        }
-    </style>
+.balance {
+    background: #151a23;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-weight: 800;
+}
+
+.balance span {
+    color: var(--gold);
+}
+
+main {
+    width: min(1250px, 94%);
+    margin: 35px auto 70px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: clamp(32px, 5vw, 62px);
+    text-transform: uppercase;
+    letter-spacing: -2px;
+}
+
+.hero h1 span {
+    color: var(--accent);
+}
+
+.hero p {
+    color: var(--muted);
+    margin-top: 10px;
+}
+
+.game {
+    background: rgba(16,20,29,.9);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 25px 80px rgba(0,0,0,.35);
+}
+
+.roulette {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    border-radius: 14px;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,.9), transparent 12%, transparent 88%, rgba(0,0,0,.9)),
+        #0b0f16;
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.roulette::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    transform: translateX(-50%);
+    background: var(--accent);
+    box-shadow: 0 0 25px var(--accent);
+    z-index: 20;
+}
+
+.roulette::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 15px solid var(--accent);
+    z-index: 25;
+}
+
+.track {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform;
+}
+
+.item {
+    width: 175px;
+    height: 190px;
+    flex: 0 0 175px;
+    border-radius: 12px;
+    background: linear-gradient(145deg,#171d29,#0e131c);
+    border: 1px solid rgba(255,255,255,.07);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--rarity), transparent 55%);
+    opacity: .12;
+}
+
+.item img {
+    width: 100%;
+    height: 125px;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 12px 12px rgba(0,0,0,.6));
+}
+
+.item-name {
+    position: relative;
+    z-index: 2;
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.item-rarity {
+    position: relative;
+    z-index: 2;
+    font-size: 10px;
+    color: var(--rarity);
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.rarity-blue { --rarity: #4da6ff; }
+.rarity-purple { --rarity: #a855f7; }
+.rarity-pink { --rarity: #ec4899; }
+.rarity-red { --rarity: #ef4444; }
+.rarity-gold { --rarity: #fbbf24; }
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.control {
+    background: var(--panel2);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.control label {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    background: #0b0f16;
+    border: 1px solid rgba(255,255,255,.08);
+    color: white;
+    border-radius: 8px;
+    padding: 12px;
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--accent);
+}
+
+.bet-buttons {
+    display: flex;
+    gap: 7px;
+}
+
+.bet-buttons button {
+    flex: 1;
+    border: 0;
+    background: #202735;
+    color: white;
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.bet-buttons button:hover {
+    background: #2c3547;
+}
+
+.spin {
+    width: 100%;
+    border: 0;
+    border-radius: 11px;
+    padding: 15px;
+    margin-top: 18px;
+    color: #111;
+    font-weight: 900;
+    font-size: 16px;
+    background: linear-gradient(135deg,#ffb52e,#ff7a00);
+    cursor: pointer;
+    transition: .2s;
+    box-shadow: 0 8px 30px rgba(255,145,0,.2);
+}
+
+.spin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255,145,0,.35);
+}
+
+.spin:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.result {
+    text-align: center;
+    min-height: 55px;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result strong {
+    font-size: 22px;
+}
+
+.win {
+    animation: win .7s ease infinite alternate;
+}
+
+@keyframes win {
+    from { transform: scale(1); text-shadow: 0 0 5px var(--gold); }
+    to { transform: scale(1.08); text-shadow: 0 0 25px var(--gold); }
+}
+
+.section-title {
+    margin: 45px 0 15px;
+    font-size: 20px;
+}
+
+.history {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+
+.history-card {
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.history-card img {
+    width: 100%;
+    height: 75px;
+    object-fit: contain;
+}
+
+.history-card small {
+    color: var(--muted);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.stat {
+    padding: 18px;
+    background: var(--panel);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.stat small {
+    color: var(--muted);
+}
+
+.stat b {
+    display: block;
+    margin-top: 7px;
+    font-size: 23px;
+}
+
+.toast {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    background: #161d29;
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 16px 20px;
+    border-radius: 12px;
+    transform: translateY(120px);
+    opacity: 0;
+    transition: .35s;
+    z-index: 100;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 14px;
+    top: -20px;
+    z-index: 90;
+    animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@media(max-width: 800px) {
+    .nav {
+        display: none;
+    }
+
+    .controls,
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .history {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .roulette {
+        height: 210px;
+    }
+
+    .item {
+        width: 150px;
+        flex-basis: 150px;
+        height: 170px;
+    }
+
+    .item img {
+        height: 105px;
+    }
+}
+</style>
 </head>
-<body class="antialiased selection:bg-red-600 selection:text-white">
 
-    <!-- Фоновые свечения -->
-    <div class="glow-circle w-[250px] h-[250px] sm:w-[450px] sm:h-[450px] bg-red-700/20 top-[-50px] left-1/2 -translate-x-1/2"></div>
-    <div class="glow-circle w-[300px] h-[300px] bg-red-900/20 top-[600px] right-[-100px] hidden md:block"></div>
+<body>
 
-    <!-- Адаптивная шапка -->
-    <header class="fixed top-2 sm:top-4 inset-x-0 z-50 px-2 sm:px-4 max-w-6xl mx-auto">
-        <nav class="glass-nav rounded-2xl px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-2xl relative">
-            
-            <!-- Нормальный классический логотип -->
-            <a href="#" class="flex items-center gap-2 group shrink-0">
-                <svg class="w-7 h-7 sm:w-8 sm:h-8 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.67-3.13 8.9-7 10.02-3.87-1.12-7-5.35-7-10.02V6.3l7-3.12zM11 7h2v6h-2V7zm0 8h2v2h-2v-2z"/>
-                </svg>
-                <span class="font-black text-lg sm:text-xl tracking-wide text-white">
-                    АВАРКОМ<span class="text-red-600">36</span>
-                </span>
-            </a>
+<header>
+    <div class="logo">CS<span>ROULETTE</span></div>
 
-            <!-- Десктопное меню -->
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-                <a href="#about" class="hover:text-red-500 transition-colors">О нас</a>
-                <a href="#services" class="hover:text-red-500 transition-colors">Услуги</a>
-                <a href="#process" class="hover:text-red-500 transition-colors">Порядок действий</a>
-                <a href="#contacts" class="hover:text-red-500 transition-colors">Контакты</a>
-            </div>
+    <nav class="nav">
+        <a href="#roulette">Рулетка</a>
+        <a href="#history">История</a>
+        <a href="#stats">Статистика</a>
+    </nav>
 
-            <!-- Десктопный телефон и бургер меню -->
-            <div class="flex items-center gap-3">
-                <a href="tel:+79518703934" data-goal="call_header" class="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full text-sm font-bold transition-all border border-white/10 text-gray-200">
-                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                    +7 (951) 870-39-34
-                </a>
-                
-                <!-- Кнопка мобильного меню -->
-                <button id="mobileMenuBtn" class="md:hidden p-2 text-gray-300 hover:text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- Выпадающее мобильное меню -->
-            <div id="mobileMenu" class="absolute top-full left-0 right-0 mt-2 glass-nav rounded-2xl flex-col hidden overflow-hidden md:hidden border border-white/10">
-                <a href="#about" class="px-6 py-4 text-sm font-medium text-gray-200 border-b border-white/5">О нас</a>
-                <a href="#services" class="px-6 py-4 text-sm font-medium text-gray-200 border-b border-white/5">Услуги</a>
-                <a href="#process" class="px-6 py-4 text-sm font-medium text-gray-200 border-b border-white/5">Порядок действий</a>
-                <a href="#contacts" class="px-6 py-4 text-sm font-medium text-gray-200 border-b border-white/5">Контакты</a>
-                <a href="tel:+79518703934" class="px-6 py-4 text-sm font-bold text-red-500 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                    Позвонить: +7 (951) 870-39-34
-                </a>
-            </div>
-        </nav>
-    </header>
+    <div class="balance">
+        Баланс: <span id="balance">1000</span> ₽
+    </div>
+</header>
 
-    <!-- Главный экран -->
-    <section class="relative pt-28 pb-12 sm:pt-40 sm:pb-20 md:pt-48 md:pb-28 px-4 max-w-6xl mx-auto text-center">
-        <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] sm:text-xs font-bold mb-6 sm:mb-8">
-            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-            Срочный выезд по Воронежу • Подача от 15 минут
+<main>
+
+<section class="hero">
+    <h1>CS <span>Roulette</span></h1>
+    <p>Демо-рулетка со скинами • Только виртуальная валюта</p>
+</section>
+
+<section class="game" id="roulette">
+
+    <div class="roulette">
+        <div class="track" id="track"></div>
+    </div>
+
+    <div class="controls">
+
+        <div class="control">
+            <label>Сумма ставки</label>
+            <input id="bet" type="number" min="1" value="50">
         </div>
 
-        <h1 class="text-3xl sm:text-5xl md:text-7xl font-black tracking-tight leading-tight sm:leading-none mb-4 sm:mb-6">
-            Аварийный комиссар <br class="hidden sm:block">
-            <span class="bg-gradient-to-r from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent">
-                вызов на ДТП 24/7
-            </span>
-        </h1>
-
-        <p class="max-w-2xl mx-auto text-gray-400 text-sm sm:text-lg font-normal leading-relaxed mb-8 sm:mb-10 px-2">
-            Официальное оформление без участия ГИБДД. Быстро, законно и с гарантией выплаты 100% ущерба от страховой компании.
-        </p>
-
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto px-4 sm:px-0">
-            <a href="tel:+79518703934" data-goal="call_hero" class="w-full sm:w-auto pulse-red bg-red-600 hover:bg-red-500 text-white font-extrabold px-6 sm:px-8 py-4 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 transition-all shadow-lg">
-                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                +7 (951) 870-39-34
-            </a>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-12 sm:mt-16 text-left">
-            <div class="glass-card p-4 sm:p-5 rounded-2xl">
-                <div class="text-xl sm:text-3xl font-black text-white mb-1">15 мин</div>
-                <div class="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight">Прибытие в любой район Воронежа</div>
-            </div>
-            <div class="glass-card p-4 sm:p-5 rounded-2xl">
-                <div class="text-xl sm:text-3xl font-black text-red-600 mb-1">24/7</div>
-                <div class="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight">Круглосуточно, без выходных</div>
-            </div>
-            <div class="glass-card p-4 sm:p-5 rounded-2xl">
-                <div class="text-xl sm:text-3xl font-black text-white mb-1">100%</div>
-                <div class="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight">Юридическая законность по ОСАГО</div>
-            </div>
-            <div class="glass-card p-4 sm:p-5 rounded-2xl">
-                <div class="text-xl sm:text-3xl font-black text-red-600 mb-1">0 ₽</div>
-                <div class="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight">Консультация по телефону</div>
+        <div class="control">
+            <label>Быстрая ставка</label>
+            <div class="bet-buttons">
+                <button onclick="setBet(25)">25</button>
+                <button onclick="setBet(50)">50</button>
+                <button onclick="setBet(100)">100</button>
+                <button onclick="setBet(250)">250</button>
             </div>
         </div>
-    </section>
 
-    <!-- Услуги -->
-    <section id="services" class="py-12 sm:py-16 px-4 max-w-6xl mx-auto">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12">
-            <div>
-                <span class="text-[10px] sm:text-xs uppercase tracking-widest text-red-500 font-extrabold mb-2 block">Что мы делаем</span>
-                <h2 class="text-2xl sm:text-4xl font-black text-white">Помощь при ДТП</h2>
-            </div>
-            <p class="text-gray-400 text-xs sm:text-sm max-w-md mt-3 md:mt-0 leading-relaxed">
-                Полный цикл сопровождения: от фотофиксации на дороге до получения максимальной выплаты.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            <div class="glass-card p-6 sm:p-8 rounded-3xl">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 mb-4 sm:mb-6 font-black text-base sm:text-lg">01</div>
-                <h3 class="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Европротокол</h3>
-                <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">Грамотное составление схемы и документов без ожидания экипажа ГИБДД.</p>
-                <div class="text-[10px] sm:text-xs font-bold text-red-500">Ущерб до 400 000 ₽</div>
-            </div>
-
-            <div class="glass-card p-6 sm:p-8 rounded-3xl">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-4 sm:mb-6 font-black text-base sm:text-lg">02</div>
-                <h3 class="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Автоэкспертиза</h3>
-                <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">Точный расчет реальной стоимости ремонта, выявление скрытых дефектов.</p>
-                <div class="text-[10px] sm:text-xs font-bold text-gray-300">Честная оценка</div>
-            </div>
-
-            <div class="glass-card p-6 sm:p-8 rounded-3xl sm:col-span-2 md:col-span-1">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 mb-4 sm:mb-6 font-black text-base sm:text-lg">03</div>
-                <h3 class="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Юридическая Защита</h3>
-                <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">Взыскание выплат со страховой компании, споры при занижении суммы ущерба.</p>
-                <div class="text-[10px] sm:text-xs font-bold text-red-500">Под ключ</div>
+        <div class="control">
+            <label>Множитель</label>
+            <div style="font-size:25px;font-weight:900;color:#ffb52e">
+                x2.0
             </div>
         </div>
-    </section>
 
-    <!-- О нас + Алгоритм -->
-    <section id="about" class="py-12 sm:py-16 px-4 max-w-6xl mx-auto border-t border-white/5">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-            <div class="order-2 lg:order-1">
-                <span class="text-[10px] sm:text-xs uppercase tracking-widest text-red-500 font-extrabold">О службе аваркомов</span>
-                <h2 class="text-2xl sm:text-4xl font-black text-white mt-2 mb-4 sm:mb-6">Надежный аварийный комиссар в Воронеже</h2>
-                <div class="space-y-3 sm:space-y-4 text-gray-300 text-xs sm:text-sm leading-relaxed">
-                    <p>ДТП — это стресс, в котором легко ошибиться при заполнении документов. Наша задача — <strong class="text-white font-semibold">полностью взять на себя оформление аварии</strong> и защитить ваши права.</p>
-                    <p>Мы дежурим по всем районам города. Среднее время прибытия экипажа составляет всего 15 минут.</p>
-                    <p>Наш офис расположен по адресу: <strong class="text-red-400 font-semibold">г. Воронеж, ул. Карпинского, д. 39</strong>. Вы можете обратиться к нам как на месте столкновения, так и приехать для бесплатной консультации.</p>
-                </div>
-            </div>
+    </div>
 
-            <div id="process" class="glass-card p-5 sm:p-8 rounded-3xl relative order-1 lg:order-2">
-                <div class="text-lg sm:text-xl font-bold text-white mb-5 sm:mb-6 flex items-center justify-between">
-                    <span>Порядок действий</span>
-                    <span class="text-[10px] sm:text-xs font-normal text-red-400 bg-red-500/10 border border-red-500/20 px-2 sm:px-3 py-1 rounded-full">Инструкция</span>
-                </div>
-                <div class="space-y-5 sm:space-y-6">
-                    <div class="flex items-start gap-3 sm:gap-4">
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-600/20 text-red-500 font-bold flex items-center justify-center shrink-0 text-xs sm:text-sm">1</div>
-                        <div>
-                            <h4 class="text-white font-semibold text-sm">Включите аварийку</h4>
-                            <p class="text-gray-400 text-[11px] sm:text-xs mt-1">Выставите знак аварийной остановки (15 м) и убедитесь, что нет пострадавших.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 sm:gap-4">
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-600/20 text-red-500 font-bold flex items-center justify-center shrink-0 text-xs sm:text-sm">2</div>
-                        <div>
-                            <h4 class="text-white font-semibold text-sm">Вызовите комиссара</h4>
-                            <p class="text-gray-400 text-[11px] sm:text-xs mt-1">Позвоните по телефону <a href="tel:+79518703934" class="text-red-500 font-bold underline">+7 (951) 870-39-34</a> и назовите адрес.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 sm:gap-4">
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-600/20 text-red-500 font-bold flex items-center justify-center shrink-0 text-xs sm:text-sm">3</div>
-                        <div>
-                            <h4 class="text-white font-semibold text-sm">Дождитесь оформления</h4>
-                            <p class="text-gray-400 text-[11px] sm:text-xs mt-1">Специалист прибудет за 15 минут, проведет фотофиксацию и составит документы.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <button class="spin" id="spinBtn" onclick="spin()">
+        КРУТИТЬ РУЛЕТКУ
+    </button>
+
+    <div class="result" id="result">
+        Сделай ставку и запускай рулетку
+    </div>
+
+</section>
+
+<h2 class="section-title">Статистика</h2>
+
+<section class="stats" id="stats">
+    <div class="stat">
+        <small>Всего спинов</small>
+        <b id="spins">0</b>
+    </div>
+
+    <div class="stat">
+        <small>Побед</small>
+        <b id="wins">0</b>
+    </div>
+
+    <div class="stat">
+        <small>Потрачено</small>
+        <b id="spent">0 ₽</b>
+    </div>
+
+    <div class="stat">
+        <small>Выиграно</small>
+        <b id="won">0 ₽</b>
+    </div>
+</section>
+
+<h2 class="section-title" id="history">Последние выпадения</h2>
+
+<section class="history" id="historyList"></section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const skins = [
+    {
+        name: "Glock-18 | Candy",
+        rarity: "blue",
+        multiplier: 1.1,
+        img: "https://steamcommunity-a.akamaihd.net/economy/image/class/730/730-9CP6G6M1D1"
+    },
+    {
+        name: "AK-47 | Elite",
+        rarity: "blue",
+        multiplier: 1.2,
+        img: "https://steamcommunity-a.akamaihd.net/economy/image/class/730/730-9CP6G6M1D1"
+    },
+    {
+        name: "AWP | Neon",
+        rarity: "purple",
+        multiplier: 1.6,
+        img: "https://steamcommunity-a.akamaihd.net/economy/image/class/730/730-9CP6G6M1D1"
+    },
+    {
+        name: "M4A1-S | Hyper",
+        rarity: "purple",
+        multiplier: 1.8,
+        img: "https://steamcommunity-a.akamaihd.net/economy/image/class/730/730-9CP6G6M1D1"
+    },
+    {
+        name: "AK-47 | Fire",
+        rarity: "pink",
+        multiplier: 2.3,
+        img: "https://steamcommunity-a.akamaihd.net/economy/image/class/730/730-9CP6G6M1D1"
+    },
+    {
+        name: "AWP | Dragon",
+        rarity: "red",
+        multiplier: 3.5,
+        img: "https://steamcommunity-a.akamaihd.net/economy/image/class/730/730-9CP6G6M1D1"
+    },
+    {
+        name: "Karambit | Fade",
+        rarity: "gold",
+        multiplier: 8,
+        img: "https://steamcommunity-a.akamaihd.net/economy/image/class/730/730-9CP6G6M1D1"
+    }
+];
+
+let balance = 1000;
+let spins = 0;
+let wins = 0;
+let spent = 0;
+let won = 0;
+let history = [];
+
+const track = document.getElementById("track");
+const result = document.getElementById("result");
+const spinBtn = document.getElementById("spinBtn");
+
+function randomSkin() {
+    const r = Math.random();
+
+    if (r < .42) return skins[0];
+    if (r < .65) return skins[1];
+    if (r < .82) return skins[2];
+    if (r < .91) return skins[3];
+    if (r < .97) return skins[4];
+    if (r < .995) return skins[5];
+
+    return skins[6];
+}
+
+function createItem(skin) {
+    const div = document.createElement("div");
+
+    div.className = `item rarity-${skin.rarity}`;
+
+    div.innerHTML = `
+        <img src="${skin.img}" alt="">
+        <div>
+            <div class="item-name">${skin.name}</div>
+            <div class="item-rarity">${skin.rarity}</div>
         </div>
-    </section>
+    `;
 
-    <!-- Контакты -->
-    <section id="contacts" class="py-12 sm:py-16 px-4 max-w-6xl mx-auto">
-        <div class="glass-card p-5 sm:p-12 rounded-3xl border border-white/10 relative overflow-hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div class="order-2 lg:order-1">
-                    <span class="text-[10px] sm:text-xs uppercase tracking-widest text-red-500 font-extrabold">Контакты</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white mt-2 mb-6">Всегда на связи с вами</h2>
-                    <div class="space-y-4 sm:space-y-6 mb-8">
-                        <div>
-                            <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Телефон круглосуточно:</div>
-                            <a href="tel:+79518703934" data-goal="call_contacts" class="text-xl sm:text-3xl font-black text-white hover:text-red-500 transition-colors">+7 (951) 870-39-34</a>
-                        </div>
-                        <div>
-                            <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Адрес офиса:</div>
-                            <div class="text-base sm:text-lg font-bold text-gray-200">г. Воронеж, ул. Карпинского, дом 39</div>
-                        </div>
-                    </div>
-                    <div class="flex w-full">
-                        <a href="tel:+79518703934" data-goal="call_contacts" class="w-full btn-gradient text-center py-4 px-6 rounded-2xl font-black text-white text-xs sm:text-sm uppercase tracking-wider">Позвонить сейчас</a>
-                    </div>
-                </div>
+    return div;
+}
 
-                <div class="order-1 lg:order-2 rounded-2xl overflow-hidden border border-white/10 h-[250px] sm:h-[360px] relative bg-neutral-900 w-full">
-                    <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%92%D0%BE%D1%80%D0%BE%D0%BD%D0%B5%D0%B6%20%D0%9A%D0%B0%D1%80%D0%BF%D0%B8%D0%BD%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%2039&z=16" width="100%" height="100%" frameborder="0" allowfullscreen="true" class="absolute inset-0 w-full h-full grayscale contrast-125 opacity-70 hover:opacity-100 transition-opacity"></iframe>
-                </div>
-            </div>
-        </div>
-    </section>
+function fillTrack() {
+    track.innerHTML = "";
 
-    <!-- Подвал -->
-    <footer class="py-8 sm:py-12 border-t border-white/5 text-center text-xs text-gray-500 px-4 bg-[#030303]">
-        <div class="max-w-6xl mx-auto space-y-3 sm:space-y-4">
-            <p class="font-medium text-gray-400">© 2026 Служба аварийных комиссаров • Воронеж, ул. Карпинского, д. 39</p>
-            <p class="max-w-3xl mx-auto text-[10px] sm:text-[11px] leading-relaxed text-gray-600">Круглосуточный вызов аварийного комиссара при ДТП в Воронеже. Быстрое оформление Европротокола без участия полиции. Работаем 24/7 во всех районах.</p>
-        </div>
-    </footer>
+    for(let i = 0; i < 45; i++) {
+        track.appendChild(createItem(randomSkin()));
+    }
+}
 
-    <!-- JS для мобильного меню -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.getElementById('mobileMenuBtn');
-            const menu = document.getElementById('mobileMenu');
-            
-            // Открытие/закрытие меню по бургеру
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-                menu.classList.toggle('flex');
-            });
+fillTrack();
 
-            // Закрытие меню при клике на любую ссылку в нем
-            const links = menu.querySelectorAll('a');
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.add('hidden');
-                    menu.classList.remove('flex');
-                });
-            });
+function setBet(value) {
+    document.getElementById("bet").value = value;
+}
+
+function sound(type) {
+    try {
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.frequency.value = type === "win" ? 700 : 150;
+        gain.gain.value = .06;
+
+        osc.start();
+
+        setTimeout(() => {
+            osc.stop();
+            ctx.close();
+        }, 130);
+    } catch(e) {}
+}
+
+function spin() {
+
+    const bet = Number(document.getElementById("bet").value);
+
+    if (!bet || bet <= 0) {
+        showToast("Введите корректную ставку");
+        return;
+    }
+
+    if (bet > balance) {
+        showToast("Недостаточно виртуального баланса");
+        return;
+    }
+
+    spinBtn.disabled = true;
+
+    balance -= bet;
+    spent += bet;
+    spins++;
+
+    updateStats();
+
+    const winningSkin = randomSkin();
+
+    fillTrack();
+
+    /*
+       Центральная позиция.
+       Последний элемент будет выбранным.
+    */
+
+    const items = [...track.children];
+
+    const targetIndex = 35;
+
+    items[targetIndex].replaceWith(createItem(winningSkin));
+
+    const itemWidth = 175;
+    const gap = 8;
+    const center = document.querySelector(".roulette").clientWidth / 2;
+
+    const targetPosition =
+        -(targetIndex * (itemWidth + gap))
+        + center
+        - itemWidth / 2;
+
+    track.style.transition = "none";
+    track.style.transform = "translateX(0)";
+
+    requestAnimationFrame(() => {
+
+        requestAnimationFrame(() => {
+
+            track.style.transition =
+                "transform 5.2s cubic-bezier(.08,.7,.05,1)";
+
+            track.style.transform =
+                `translateX(${targetPosition}px)`;
+
         });
-    </script>
+
+    });
+
+    setTimeout(() => {
+
+        const payout = Math.floor(bet * winningSkin.multiplier);
+
+        balance += payout;
+        won += payout;
+
+        if (payout >= bet) {
+            wins++;
+        }
+
+        history.unshift({
+            ...winningSkin,
+            payout
+        });
+
+        history = history.slice(0, 6);
+
+        result.innerHTML = `
+            <strong class="win">
+                ${winningSkin.name}
+                — +${payout} ₽
+            </strong>
+        `;
+
+        result.style.color =
+            getRarityColor(winningSkin.rarity);
+
+        addConfetti(winningSkin.rarity === "gold");
+
+        sound(
+            winningSkin.rarity === "gold"
+            ? "win"
+            : "normal"
+        );
+
+        renderHistory();
+        updateStats();
+
+        spinBtn.disabled = false;
+
+    }, 5400);
+}
+
+function getRarityColor(rarity) {
+
+    return {
+        blue: "#4da6ff",
+        purple: "#a855f7",
+        pink: "#ec4899",
+        red: "#ef4444",
+        gold: "#fbbf24"
+    }[rarity];
+
+}
+
+function renderHistory() {
+
+    const container =
+        document.getElementById("historyList");
+
+    container.innerHTML = "";
+
+    history.forEach(item => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "history-card";
+
+        card.style.borderColor =
+            getRarityColor(item.rarity);
+
+        card.innerHTML = `
+            <img src="${item.img}">
+            <strong>${item.name}</strong>
+            <small>${item.rarity}</small>
+            <small>+${item.payout} ₽</small>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+function updateStats() {
+
+    document.getElementById("balance")
+        .textContent = balance.toLocaleString("ru-RU");
+
+    document.getElementById("spins")
+        .textContent = spins;
+
+    document.getElementById("wins")
+        .textContent = wins;
+
+    document.getElementById("spent")
+        .textContent = spent.toLocaleString("ru-RU") + " ₽";
+
+    document.getElementById("won")
+        .textContent = won.toLocaleString("ru-RU") + " ₽";
+
+}
+
+function showToast(text) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = text;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2200);
+
+}
+
+function addConfetti(big) {
+
+    const amount = big ? 100 : 35;
+
+    for(let i = 0; i < amount; i++) {
+
+        const el =
+            document.createElement("div");
+
+        el.className = "confetti";
+
+        el.style.left =
+            Math.random() * 100 + "vw";
+
+        el.style.animationDelay =
+            Math.random() * .7 + "s";
+
+        el.style.background =
+            [
+                "#ffb52e",
+                "#ff4d6d",
+                "#4da6ff",
+                "#a855f7",
+                "#ffffff"
+            ][Math.floor(Math.random() * 5)];
+
+        document.body.appendChild(el);
+
+        setTimeout(() => el.remove(), 3000);
+
+    }
+
+}
+
+updateStats();
+
+</script>
+
 </body>
 </html>
