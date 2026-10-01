@@ -1,1 +1,0 @@
-const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>o.observe(e));document.querySelectorAll('[data-affiliate]').forEach(e=>e.addEventListener('click',()=>{try{gtag('event','affiliate_click',{event_category:'affiliate'})}catch(_){} }));
