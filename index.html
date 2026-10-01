@@ -1,168 +1,150 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07090f">
-  <meta name="description" content="AtlantaVPN — быстрый старт с защищённым подключением. Получите доступ через Telegram и настройте клиент за несколько минут.">
-  <title>AtlantaVPN — подключись заранее</title>
-  <style>
-    :root{
-      --bg:#07090f; --panel:#0d111b; --panel2:#111827; --text:#f7f8fb;
-      --muted:#9ba5b7; --line:rgba(255,255,255,.09); --accent:#7c5cff;
-      --accent2:#19e6a0; --danger:#ff4d67; --shadow:0 24px 80px rgba(0,0,0,.42);
-      --radius:24px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;background:
-      radial-gradient(circle at 20% 0%,rgba(124,92,255,.18),transparent 32rem),
-      radial-gradient(circle at 90% 15%,rgba(25,230,160,.10),transparent 28rem),
-      var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
-    a{text-decoration:none;color:inherit}
-    .wrap{width:min(1120px,calc(100% - 32px));margin:auto}
-    .nav{height:76px;display:flex;align-items:center;justify-content:space-between}
-    .brand{font-weight:900;letter-spacing:-.04em;font-size:22px}
-    .brand span{color:var(--accent2)}
-    .nav-cta{padding:11px 17px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);font-weight:750}
-    .hero{padding:74px 0 48px;position:relative;overflow:hidden}
-    .eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(25,230,160,.2);background:rgba(25,230,160,.07);color:#79f4c7;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:800}
-    .dot{width:7px;height:7px;background:var(--accent2);border-radius:50%;box-shadow:0 0 18px var(--accent2);animation:pulse 1.5s infinite}
-    @keyframes pulse{50%{transform:scale(1.5);opacity:.55}}
-    h1{font-size:clamp(48px,8vw,92px);line-height:.93;letter-spacing:-.065em;max-width:900px;margin:22px 0}
-    .gradient{background:linear-gradient(100deg,#fff 0%,#cfc8ff 42%,#77f0c3 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .lead{font-size:clamp(18px,2.5vw,23px);color:#c1c8d5;max-width:720px;margin:0 0 28px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:16px 22px;border-radius:15px;font-weight:900;transition:.2s transform,.2s box-shadow,.2s background}
-    .btn:hover{transform:translateY(-2px)}
-    .primary{background:linear-gradient(135deg,#8a6bff,#6040ed);box-shadow:0 12px 35px rgba(111,76,255,.3)}
-    .secondary{border:1px solid var(--line);background:rgba(255,255,255,.04)}
-    .notice{margin-top:22px;color:#7f8a9c;font-size:13px;max-width:720px}
-    .notice b{color:#cfd5df}
-    .ticker{margin:20px 0 0;padding:12px 15px;border:1px solid rgba(255,77,103,.18);background:rgba(255,77,103,.06);border-radius:14px;color:#ffb1bd;font-size:14px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:var(--radius);padding:25px;box-shadow:var(--shadow)}
-    .icon{font-size:27px;margin-bottom:20px}.card h3{margin:0 0 7px;font-size:19px}.card p{margin:0;color:var(--muted)}
-    section{padding:65px 0}
-    .section-head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:26px}
-    .kicker{color:#8874ff;text-transform:uppercase;font-size:12px;font-weight:900;letter-spacing:.13em}
-    h2{font-size:clamp(32px,5vw,55px);line-height:1;letter-spacing:-.05em;margin:8px 0 0}
-    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-    .step{position:relative;min-height:205px}.num{font-size:12px;color:#9c8cff;font-weight:900;letter-spacing:.12em}.step h3{font-size:20px;margin:24px 0 8px}.step p{color:var(--muted);margin:0}
-    .step:after{content:"";position:absolute;right:-7px;top:42px;width:14px;height:1px;background:rgba(255,255,255,.15)}
-    .step:last-child:after{display:none}
-    .device{display:grid;grid-template-columns:1.1fr .9fr;gap:15px;align-items:stretch}
-    .mock{min-height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-    .phone{width:220px;height:390px;border:7px solid #171c27;border-radius:34px;background:#080b12;box-shadow:0 35px 70px rgba(0,0,0,.5);padding:17px}
-    .screen{height:100%;border-radius:23px;background:linear-gradient(160deg,#111827,#080b12);padding:15px}
-    .screen .mini{font-size:11px;color:#788396}.status{margin-top:35px;font-size:30px;font-weight:900}.switch{margin-top:28px;height:65px;border-radius:18px;background:rgba(25,230,160,.12);border:1px solid rgba(25,230,160,.2);display:flex;align-items:center;justify-content:space-between;padding:0 14px}.switch i{width:38px;height:38px;border-radius:50%;background:var(--accent2);box-shadow:0 0 24px rgba(25,230,160,.35)}
-    .faq{display:grid;gap:10px}.faq details{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:16px;padding:18px 20px}.faq summary{cursor:pointer;font-weight:800}.faq p{color:var(--muted);margin:13px 0 0}
-    .final{padding:30px}.final h2{max-width:700px}.final .actions{margin-top:20px}
-    footer{padding:25px 0 45px;color:#687386;font-size:12px;border-top:1px solid var(--line)}
-    .reveal{opacity:0;transform:translateY(18px);transition:.7s ease}.reveal.show{opacity:1;transform:none}
-    @media(max-width:800px){.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.device{grid-template-columns:1fr}.nav-cta{display:none}}
-    @media(max-width:560px){.wrap{width:min(100% - 22px,1120px)}.hero{padding-top:48px}h1{font-size:48px}.actions .btn{width:100%}.steps{grid-template-columns:1fr}.step{min-height:auto}.step:after{display:none}.card{padding:21px}.phone{transform:scale(.88)}section{padding:48px 0}.section-head{display:block}.nav{height:65px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="AtlantaVPN — подготовь резервный способ доступа заранее.">
+<title>ATLANTAVPN // ACCESS WARNING</title>
+<style>
+:root{--bg:#050505;--red:#ff1738;--red2:#ff3d57;--white:#f4f4f0;--muted:#8e8e8e;--green:#8cff00;--line:#252525}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 4px);mix-blend-mode:screen;opacity:.45}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:49;background:radial-gradient(circle at center,transparent 35%,rgba(0,0,0,.62) 100%)}
+a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 30px));margin:auto}
+.top{border-bottom:1px solid #222;background:#080808;position:relative;z-index:2}.nav{height:70px;display:flex;align-items:center;justify-content:space-between}.logo{font-size:20px;font-weight:1000;letter-spacing:-.05em}.logo b{color:var(--red)}.live{font-size:11px;color:var(--red);display:flex;gap:8px;align-items:center}.live i{width:7px;height:7px;background:var(--red);border-radius:50%;box-shadow:0 0 12px var(--red);animation:blink .7s infinite}
+@keyframes blink{50%{opacity:.2}}
+.hero{min-height:calc(100vh - 70px);display:flex;align-items:center;position:relative;padding:70px 0}.hero:before{content:"";position:absolute;width:70vw;height:70vw;max-width:850px;max-height:850px;right:-30%;top:-20%;background:radial-gradient(circle,rgba(255,23,56,.14),transparent 65%);filter:blur(25px)}
+.alert{border:1px solid rgba(255,23,56,.45);background:rgba(255,23,56,.055);padding:10px 13px;display:inline-flex;gap:9px;font-size:12px;color:#ff7d8d;letter-spacing:.04em;box-shadow:0 0 35px rgba(255,23,56,.07)}
+.alert:before{content:"⚠";color:var(--red)}
+h1{font-family:Impact,"Arial Narrow",sans-serif;font-size:clamp(62px,12vw,145px);line-height:.82;letter-spacing:-.045em;text-transform:uppercase;max-width:1000px;margin:25px 0 20px}
+.glitch{position:relative;display:inline-block;color:#fff;text-shadow:3px 0 var(--red),-3px 0 #00e5ff;animation:shake 4s infinite}.glitch:before,.glitch:after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;overflow:hidden}.glitch:before{color:var(--red);transform:translate(3px,0);clip-path:inset(20% 0 55% 0);animation:gl1 2.8s infinite}.glitch:after{color:#00e5ff;transform:translate(-3px,0);clip-path:inset(65% 0 12% 0);animation:gl2 1.9s infinite}
+@keyframes gl1{0%,90%{clip-path:inset(20% 0 55% 0)}92%{clip-path:inset(5% 0 75% 0)}95%{clip-path:inset(55% 0 20% 0)}100%{clip-path:inset(20% 0 55% 0)}}@keyframes gl2{0%,86%{clip-path:inset(65% 0 12% 0)}89%{clip-path:inset(35% 0 35% 0)}93%{clip-path:inset(75% 0 5% 0)}100%{clip-path:inset(65% 0 12% 0)}}@keyframes shake{0%,94%,100%{transform:translate(0)}95%{transform:translate(-2px,1px)}96%{transform:translate(2px,-1px)}}
+.sub{font-family:inherit;color:#b8b8b8;font-size:clamp(15px,2vw,20px);max-width:720px;line-height:1.6}.sub strong{color:#fff}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{padding:17px 20px;border:1px solid #444;font-weight:900;letter-spacing:.01em;display:inline-flex;align-items:center;justify-content:center;transition:.18s;min-height:54px}.btn:hover{transform:translateY(-2px)}.red{background:var(--red);border-color:var(--red);color:#050505;box-shadow:0 0 35px rgba(255,23,56,.25)}.dark{background:#0c0c0c}
+.micro{font-size:11px;color:#666;margin-top:16px;line-height:1.6}
+.timer{margin-top:35px;border-top:1px solid #242424;border-bottom:1px solid #242424;padding:20px 0;display:flex;align-items:end;gap:22px;flex-wrap:wrap}.timer-label{font-size:10px;color:#777;text-transform:uppercase}.time{font-size:clamp(38px,7vw,70px);font-weight:1000;letter-spacing:-.06em;color:var(--red);text-shadow:0 0 25px rgba(255,23,56,.2)}
+.terminal{background:#080808;border:1px solid #262626;box-shadow:0 25px 80px rgba(0,0,0,.5);margin-top:35px}.termbar{height:38px;border-bottom:1px solid #252525;display:flex;align-items:center;padding:0 13px;gap:6px;color:#666;font-size:11px}.termbar i{width:8px;height:8px;border-radius:50%;background:#333}.termbar i:nth-child(2){background:#555}.termbar i:nth-child(3){background:var(--red)}.termcode{padding:18px;font-size:12px;line-height:1.8;color:#818181;min-height:165px}.termcode .r{color:var(--red)}.termcode .g{color:var(--green)}.cursor{display:inline-block;width:8px;height:14px;background:#aaa;vertical-align:-2px;animation:blink .8s infinite}
+section{padding:80px 0}.head{margin-bottom:30px}.k{font-size:10px;color:var(--red);letter-spacing:.16em}.head h2{font-family:Impact,"Arial Narrow",sans-serif;font-size:clamp(42px,7vw,78px);line-height:.9;margin:10px 0;text-transform:uppercase;letter-spacing:-.03em}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{border:1px solid #242424;background:#090909;padding:25px;position:relative;overflow:hidden}.card:before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--red);transform:scaleY(0);transform-origin:top;transition:.4s}.card:hover:before{transform:scaleY(1)}.num{font-size:10px;color:#555}.card h3{font-size:20px;margin:35px 0 10px}.card p{font-size:13px;line-height:1.7;color:#777;margin:0}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.step strong{display:block;font-size:12px;color:var(--red);margin-bottom:25px}.step h3{font-size:18px;margin:0 0 10px}.step p{color:#777;font-size:12px;line-height:1.7;margin:0}
+.warn{border:1px solid rgba(255,23,56,.35);background:linear-gradient(90deg,rgba(255,23,56,.08),transparent);padding:24px;margin-top:15px;color:#999;font-size:12px;line-height:1.7}.warn b{color:#fff}
+.faq{display:grid;gap:8px}.faq details{border:1px solid #242424;background:#090909;padding:18px}.faq summary{cursor:pointer;font-weight:900;font-size:13px}.faq p{color:#777;font-size:12px;line-height:1.7;margin:14px 0 0}
+.final{border:1px solid var(--red);padding:40px;background:radial-gradient(circle at 50% 0,rgba(255,23,56,.13),transparent 60%);text-align:center}.final h2{font-family:Impact,"Arial Narrow",sans-serif;font-size:clamp(45px,8vw,90px);line-height:.85;text-transform:uppercase;margin:0}.final p{color:#777;font-size:12px}.final .actions{justify-content:center}
+footer{border-top:1px solid #222;padding:28px 0 45px;color:#555;font-size:10px;line-height:1.7}
+.reveal{opacity:0;transform:translateY(18px);transition:.65s}.show{opacity:1;transform:none}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.hero{padding:50px 0}.nav{height:62px}}
+@media(max-width:540px){.wrap{width:calc(100% - 22px)}.actions .btn{width:100%}.steps{grid-template-columns:1fr}.timer{gap:8px}.time{width:100%}h1{font-size:59px}.hero{min-height:auto;padding:55px 0 45px}section{padding:55px 0}.terminal{margin-top:25px}.termcode{font-size:10px}.final{padding:28px 18px}}
+</style>
 </head>
 <body>
-<header class="wrap nav">
-  <a class="brand" href="#">Atlanta<span>VPN</span></a>
-  <a class="nav-cta" href="https://t.me/AtlantaVPN_bot?start=partner_6Lpp0Y">Получить доступ →</a>
-</header>
+<header class="top"><div class="wrap nav"><a class="logo" href="#">ATLANTA<b>VPN</b></a><div class="live"><i></i>SYSTEM STATUS: READY</div></div></header>
 
 <main>
 <section class="hero">
-  <div class="wrap">
-    <div class="eyebrow"><span class="dot"></span> ГОТОВЬ ПОДКЛЮЧЕНИЕ ЗАРАНЕЕ</div>
-    <h1>А если <span class="gradient">завтра</span> привычный интернет станет недоступен?</h1>
-    <p class="lead">Не жди момента, когда нужный сайт перестанет открываться. Получи доступ через Telegram и подготовь защищённое подключение за несколько минут.</p>
-    <div class="actions">
-      <a class="btn primary" href="https://t.me/AtlantaVPN_bot?start=partner_6Lpp0Y">⚡ Получить доступ в Telegram</a>
-      <a class="btn secondary" href="#setup">Как подключиться</a>
-    </div>
-    <div class="ticker">⚠️ Это не прогноз отключения интернета. Это простой принцип: <b>лучше настроить резервный способ доступа заранее</b>, чем искать решение в последний момент.</div>
-    <p class="notice">AtlantaVPN направляет вас в Telegram-бот. Условия доступа, стоимость и доступность подключения отображаются там.</p>
-  </div>
+<div class="wrap">
+<div class="alert">ACCESS PREPARATION // DO NOT WAIT FOR THE LAST MINUTE</div>
+<h1><span class="glitch" data-text="ИНТЕРНЕТ">ИНТЕРНЕТ</span><br>МОЖЕТ ИСЧЕЗНУТЬ<br><span style="color:var(--red)">ДЛЯ ТЕБЯ.</span></h1>
+<p class="sub">Когда нужный сайт перестаёт открываться, искать решение уже поздно. <strong>Подготовь резервный способ доступа заранее.</strong></p>
+
+<div class="timer">
+<div><div class="timer-label">VISUAL COUNTDOWN // DEMO</div><div class="time" id="timer">09:59:59</div></div>
+<div class="micro">Это визуальный таймер лендинга, а не прогноз отключения интернета.<br>Не жди последней минуты.</div>
+</div>
+
+<div class="actions">
+<a class="btn red" href="https://t.me/AtlantaVPN_bot?start=partner_6Lpp0Y">[ ПОЛУЧИТЬ ДОСТУП ]</a>
+<a class="btn dark" href="#how">[ ИНСТРУКЦИЯ ]</a>
+</div>
+<p class="micro">Нажимая кнопку, вы переходите в Telegram-бот AtlantaVPN. Условия и доступность сервиса указаны в боте.</p>
+
+<div class="terminal">
+<div class="termbar"><i></i><i></i><i></i><span style="margin-left:7px">atlanta@access:~</span></div>
+<div class="termcode">
+<span class="g">root@atlanta</span>:~$ check_connection<br>
+&gt; scanning access routes... <span class="g">OK</span><br>
+&gt; backup channel... <span class="g">READY</span><br>
+&gt; subscription... <span class="g">AVAILABLE</span><br>
+&gt; recommendation: <span class="r">CONNECT BEFORE YOU NEED IT</span><br>
+<span class="g">root@atlanta</span>:~$ <span class="cursor"></span>
+</div></div>
+</div>
 </section>
 
 <section>
-  <div class="wrap grid">
-    <article class="card reveal"><div class="icon">⚡</div><h3>Быстрый старт</h3><p>Получите ссылку подписки в Telegram и импортируйте её в клиент.</p></article>
-    <article class="card reveal"><div class="icon">🛡️</div><h3>Защищённое соединение</h3><p>Используйте VPN/прокси-подключение для доступа к нужным ресурсам.</p></article>
-    <article class="card reveal"><div class="icon">📱</div><h3>Телефон + ПК</h3><p>Настройка подходит для смартфона и других поддерживаемых устройств.</p></article>
-  </div>
+<div class="wrap">
+<div class="head"><div class="k">/// SIGNAL</div><h2>Почему заранее?</h2></div>
+<div class="grid">
+<div class="card reveal"><div class="num">01 // SPEED</div><h3>Не ищи в последний момент</h3><p>Получить ссылку и настроить клиент проще тогда, когда у тебя ещё есть нормальный доступ к Telegram и нужным ресурсам.</p></div>
+<div class="card reveal"><div class="num">02 // CONTROL</div><h3>Один готовый профиль</h3><p>Сохрани полученную подписку в клиенте и держи резервный способ подключения под рукой.</p></div>
+<div class="card reveal"><div class="num">03 // MOBILE</div><h3>С телефона</h3><p>Основной сценарий рассчитан на мобильное устройство: установка клиента, импорт ссылки и подключение.</p></div>
+</div>
+</div>
 </section>
 
-<section id="setup">
-  <div class="wrap">
-    <div class="section-head">
-      <div><div class="kicker">Старт за несколько минут</div><h2>Как подключиться</h2></div>
-      <a class="btn secondary" href="https://t.me/AtlantaVPN_bot?start=partner_6Lpp0Y">Открыть Telegram →</a>
-    </div>
-    <div class="steps">
-      <article class="card step reveal"><div class="num">01 / УСТАНОВКА</div><h3>Установи клиент</h3><p>Скачай Happ из официального источника для своего устройства.</p></article>
-      <article class="card step reveal"><div class="num">02 / ДОСТУП</div><h3>Получи ключ</h3><p>Открой Telegram-бот AtlantaVPN и получи персональную ссылку подписки.</p></article>
-      <article class="card step reveal"><div class="num">03 / ИМПОРТ</div><h3>Добавь ссылку</h3><p>В Happ нажми Add / Import / «+» и вставь полученную ссылку.</p></article>
-      <article class="card step reveal"><div class="num">04 / ГОТОВО</div><h3>Выбери сервер</h3><p>Выбери доступный сервер и включи соединение одной кнопкой.</p></article>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap device">
-    <div class="card mock reveal">
-      <div class="phone">
-        <div class="screen">
-          <div class="mini">AtlantaVPN • CONNECT</div>
-          <div class="status">Готово.</div>
-          <div style="color:#8f99a9;font-size:13px;margin-top:6px">Защищённое подключение</div>
-          <div class="switch"><span>Подключено</span><i></i></div>
-          <div style="margin-top:25px;height:8px;border-radius:99px;background:#1a2230"></div>
-          <div style="margin-top:10px;width:65%;height:8px;border-radius:99px;background:#1a2230"></div>
-        </div>
-      </div>
-    </div>
-    <div class="card reveal">
-      <div class="kicker">Без лишней возни</div>
-      <h2>Скопировал. Добавил. Подключил.</h2>
-      <p style="color:var(--muted);font-size:18px">Happ используется как клиент: после установки добавьте полученную от сервиса ссылку подписки и включите соединение.</p>
-      <div class="actions" style="margin-top:25px"><a class="btn primary" href="https://t.me/AtlantaVPN_bot?start=partner_6Lpp0Y">Получить ссылку →</a></div>
-    </div>
-  </div>
+<section id="how">
+<div class="wrap">
+<div class="head"><div class="k">/// PROCEDURE</div><h2>4 шага до доступа</h2></div>
+<div class="steps">
+<div class="card step reveal"><strong>01 / INSTALL</strong><h3>Установи Happ</h3><p>Скачай клиент Happ из официального источника для своей платформы.</p></div>
+<div class="card step reveal"><strong>02 / TELEGRAM</strong><h3>Открой AtlantaVPN</h3><p>Перейди в Telegram-бот и получи доступ/ссылку подписки по условиям сервиса.</p></div>
+<div class="card step reveal"><strong>03 / IMPORT</strong><h3>Импортируй ссылку</h3><p>В Happ нажми Add / Import / «+» и вставь скопированную ссылку.</p></div>
+<div class="card step reveal"><strong>04 / CONNECT</strong><h3>Включи соединение</h3><p>Выбери доступный сервер и активируй подключение.</p></div>
+</div>
+<div class="warn"><b>ВАЖНО:</b> Happ — клиент для подключения, а не сам сервис AtlantaVPN. Ссылка подписки предоставляется AtlantaVPN через Telegram-бот. Используй сервис в соответствии с законами своей страны.</div>
+</div>
 </section>
 
 <section>
-  <div class="wrap">
-    <div class="section-head"><div><div class="kicker">FAQ</div><h2>Частые вопросы</h2></div></div>
-    <div class="faq">
-      <details class="reveal"><summary>Это точно значит, что завтра отключат интернет?</summary><p>Нет. AtlantaVPN не заявляет о будущем отключении интернета. Заголовок — сценарий, который подчёркивает идею заранее подготовить резервный способ доступа.</p></details>
-      <details class="reveal"><summary>Где взять ключ для подключения?</summary><p>Нажмите любую кнопку «Получить доступ» — она ведёт в Telegram-бот AtlantaVPN, где выдаётся ссылка/доступ по условиям сервиса.</p></details>
-      <details class="reveal"><summary>Как добавить ключ в Happ?</summary><p>Установите клиент, скопируйте ссылку подписки из Telegram, затем используйте Add / Import / «+» внутри приложения и вставьте ссылку.</p></details>
-      <details class="reveal"><summary>Что делать, если не подключается?</summary><p>Проверьте срок действия ключа, интернет-соединение и попробуйте другой доступный сервер. Если проблема остаётся, обратитесь в Telegram-бот сервиса.</p></details>
-    </div>
-  </div>
+<div class="wrap">
+<div class="head"><div class="k">/// TERMINAL</div><h2>Подключение без квеста</h2></div>
+<div class="terminal reveal">
+<div class="termbar"><i></i><i></i><i></i><span style="margin-left:7px">setup.log</span></div>
+<div class="termcode">
+<span class="r">[WARNING]</span> access route may become unavailable at any time.<br>
+[01] Install client........................ <span class="g">DONE</span><br>
+[02] Open AtlantaVPN bot................... <span class="g">DONE</span><br>
+[03] Copy subscription URL................. <span class="g">DONE</span><br>
+[04] Add URL to Happ....................... <span class="g">DONE</span><br>
+[05] Activate connection................... <span class="g">READY</span><br><br>
+<span class="r">STATUS:</span> <span class="g">STANDBY FOR CONNECTION</span>
+</div>
+</div>
+</div>
 </section>
 
 <section>
-  <div class="wrap">
-    <div class="card final reveal">
-      <div class="kicker">НЕ ЖДИ ПОСЛЕДНЕЙ МИНУТЫ</div>
-      <h2>Подготовь доступ сейчас — потом просто включи.</h2>
-      <div class="actions"><a class="btn primary" href="https://t.me/AtlantaVPN_bot?start=partner_6Lpp0Y">🚀 Получить AtlantaVPN</a></div>
-    </div>
-  </div>
+<div class="wrap">
+<div class="head"><div class="k">/// FAQ</div><h2>Вопросы</h2></div>
+<div class="faq">
+<details class="reveal"><summary>Вы реально знаете, что завтра отключат интернет?</summary><p>Нет. Сайт не делает такого прогноза. Агрессивная подача и countdown — визуальная концепция, чтобы подчеркнуть идею заранее подготовить резервный доступ.</p></details>
+<details class="reveal"><summary>Куда ведёт кнопка подключения?</summary><p>В Telegram-бот AtlantaVPN с реферальным параметром: partner_6Lpp0Y.</p></details>
+<details class="reveal"><summary>Что делать после получения ссылки?</summary><p>Установить Happ, открыть импорт/добавление подключения, вставить ссылку подписки, сохранить профиль и включить соединение.</p></details>
+<details class="reveal"><summary>Если не работает?</summary><p>Проверь интернет, срок действия подписки и доступные серверы. Затем обратись в Telegram-бот сервиса.</p></details>
+</div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="final reveal">
+<div class="k">/// LAST CALL</div>
+<h2>Подготовься<br><span style="color:var(--red)">сейчас.</span></h2>
+<p>Не потому что мы знаем будущее. А потому что резервный способ доступа лучше иметь заранее.</p>
+<div class="actions"><a class="btn red" href="https://t.me/AtlantaVPN_bot?start=partner_6Lpp0Y">[ ЗАПУСТИТЬ ATLANTAVPN ]</a></div>
+</div>
+</div>
 </section>
 </main>
 
-<footer>
-  <div class="wrap">© AtlantaVPN • Информация на сайте не является прогнозом отключения интернета. Используйте сервис в соответствии с законами вашей страны и условиями провайдера.</div>
-</footer>
+<footer><div class="wrap">ATLANTAVPN // Landing page • Визуальные предупреждения и countdown являются элементами дизайна и не являются прогнозом отключения интернета. Информация о доступности и условиях сервиса предоставляется в Telegram-боте.</div></footer>
 
 <script>
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show'); });
-  },{threshold:.12});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+let seconds=9*60*60+59*60+59;
+const timer=document.getElementById('timer');
+setInterval(()=>{seconds=Math.max(0,seconds-1);let h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;timer.textContent=[h,m,s].map(x=>String(x).padStart(2,'0')).join(':')},1000);
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
 </script>
 </body>
 </html>
