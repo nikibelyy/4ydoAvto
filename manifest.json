@@ -1,12 +1,13 @@
 {
- "name":"Календарь",
- "short_name":"Календарь",
- "description":"Мобильный календарь рабочих смен.",
- "lang":"ru","dir":"ltr","start_url":"./","scope":"./",
- "display":"standalone","orientation":"portrait",
- "background_color":"#F7EBEB","theme_color":"#F7EBEB",
- "icons":[
-  {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-  {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
- ]
+  "name":"Календарь смен",
+  "short_name":"Календарь",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#f7eaea",
+  "theme_color":"#f7eaea",
+  "lang":"ru",
+  "icons":[
+    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png"}
+  ]
 }

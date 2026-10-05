@@ -1,243 +1,397 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F7EBEB">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Календарь</title>
-<style>
-:root{
- --bg:#F7EBEB;--surface:#FFF8F5;--pill:#EAE0E2;--work:#55A968;--work2:#438D56;--off:#D2CDCF;--offText:#6F696C;
- --special:#D33F31;--text:#292B2D;--muted:#918A8D;--line:rgba(66,45,50,.08);
- --shadow:0 16px 45px rgba(70,45,50,.10);--ease:cubic-bezier(.2,.8,.2,1)
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth;background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
-button,input{font:inherit}button{border:0;cursor:pointer}
-button:focus-visible,input:focus-visible{outline:3px solid rgba(85,169,104,.24);outline-offset:2px}
-.app{min-height:100vh;padding-bottom:190px}
-.header{
- position:sticky;top:0;z-index:50;background:rgba(247,235,235,.88);backdrop-filter:blur(20px);
- -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)
-}
-.header-top{width:min(100%,760px);margin:auto;padding:7px 14px 4px;display:flex;align-items:center;justify-content:flex-end}.minimal-top{min-height:43px}.today-spacer{flex:1}
-.today-chip{background:var(--pill);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800;color:var(--text);transition:.2s}
-.today-chip:active{transform:scale(.94)}
-.weekbar{width:min(100%,760px);margin:auto;padding:3px 10px 9px;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.weekbar span{text-align:center;color:var(--muted);font-size:10px;font-weight:850;letter-spacing:.3px}
-.main{width:min(100%,760px);margin:auto;padding:0 10px}
-.month{padding:17px 0 27px;scroll-margin-top:125px}
-.month-head{display:flex;align-items:center;justify-content:center;position:relative;margin:2px 0 14px}
-.month-title{font-size:25px;letter-spacing:-.9px;margin:0;font-weight:900;text-transform:none}
-.month-badge{position:absolute;right:3px;background:rgba(85,169,104,.11);color:var(--work2);font-size:9px;font-weight:850;border-radius:999px;padding:5px 8px}
-.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px 3px}
-.day{height:50px;display:grid;place-items:center;position:relative;background:transparent;padding:0}
-.day.empty{pointer-events:none}
-.num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:700;transition:transform .2s var(--ease),background .2s,color .2s,box-shadow .2s}
-.day:active .num{transform:scale(.82)}
-.day.work .num{background:var(--work);color:#fff;box-shadow:0 5px 13px rgba(85,169,104,.20)}
-.day.off .num{background:var(--off);color:var(--offText)}
-.day.special .num{background:var(--special);color:#fff;box-shadow:0 5px 13px rgba(211,63,49,.16)}
-.day.today .num{box-shadow:0 0 0 3px rgba(85,169,104,.28),0 6px 15px rgba(85,169,104,.16)}
-.day.today:not(.work):not(.special) .num{background:var(--off);color:var(--offText)}
-.day.weekend:not(.work):not(.special) .num{color:#777174}
-.day-note{position:absolute;bottom:0;font-size:7px;color:var(--muted);font-weight:750}
-.scroll-top{position:fixed;right:14px;bottom:183px;z-index:38;width:42px;height:42px;border-radius:50%;background:rgba(255,248,245,.94);box-shadow:var(--shadow);color:var(--work2);font-size:18px;font-weight:900;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s}
-.scroll-top.visible{opacity:1;pointer-events:auto;transform:none}
-.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(255,248,245,.91);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid var(--line);box-shadow:0 -14px 45px rgba(70,45,50,.10);padding:9px 12px calc(10px + env(safe-area-inset-bottom))}
-.bottom-inner{width:min(100%,760px);margin:auto}
-.patterns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.pill{background:var(--pill);color:var(--text);border-radius:999px;padding:10px 5px;font-size:11px;font-weight:800;transition:transform .16s var(--ease),background .2s}
-.pill:active{transform:scale(.95)}
-.pill.add{background:var(--work);color:#fff}
-.toggle-wrap{display:flex;justify-content:center;margin:8px 0 7px}
-.toggle{display:flex;background:var(--pill);padding:3px;border-radius:999px}
-.toggle button{background:transparent;color:var(--muted);padding:7px 18px;border-radius:999px;font-size:11px;font-weight:850;transition:.2s}
-.toggle button.active{background:var(--work);color:#fff;box-shadow:0 4px 10px rgba(85,169,104,.16)}
-.stats{display:flex;justify-content:space-between;font-size:11px;font-weight:850;padding:0 3px}.stats span:last-child{text-align:right}
-.legend{text-align:center;color:var(--muted);font-size:9px;margin-top:4px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;vertical-align:0;margin:0 3px 0 8px}.dot:first-child{margin-left:0}.doff{background:var(--off)}.dw{background:var(--work)}.ds{background:var(--special)}
-.modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(37,26,29,.28);opacity:0;pointer-events:none;transition:opacity .25s}
-.modal-backdrop.open{opacity:1;pointer-events:auto}
-.modal{position:absolute;left:0;right:0;bottom:0;background:#FFF8F5;border-radius:28px 28px 0 0;padding:11px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s var(--ease);box-shadow:0 -18px 60px rgba(45,30,35,.18)}
-.modal-backdrop.open .modal{transform:none}
-.handle{width:43px;height:4px;border-radius:5px;background:#D6C8CA;margin:0 auto 14px}.modal h2{margin:0;font-size:22px;letter-spacing:-.5px}.modal p{margin:4px 0 15px;color:var(--muted);font-size:12px;line-height:1.45}
-.form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field{font-size:11px;color:#726A6D;font-weight:800}.field.full{grid-column:1/-1}
-input{width:100%;margin-top:5px;border:1px solid #DED1D3;background:#fff;border-radius:14px;padding:11px 12px;color:var(--text)}
-.actions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}.actions button{padding:12px;border-radius:999px;font-weight:850}.cancel{background:var(--pill)}.save{background:var(--work);color:#fff}
-.toast{position:fixed;z-index:120;left:50%;bottom:205px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#303234;color:#fff;border-radius:999px;padding:10px 15px;font-size:11px;font-weight:800;transition:.22s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
-.pulse{animation:pulse .45s var(--ease)}@keyframes pulse{0%{transform:scale(.92);opacity:.5}100%{transform:none;opacity:1}}
-@media(min-width:600px){.app{padding-bottom:170px}.grid{gap:8px 6px}.day{height:55px}.num{width:45px;height:45px}.scroll-top{bottom:163px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7eaea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.json">
+  <title>Календарь</title>
+  <style>
+    :root{
+      --bg:#f7eaea;
+      --bg2:#f3e2e3;
+      --ink:#252225;
+      --muted:#777276;
+      --green:#17685f;
+      --green-dark:#12574f;
+      --gray:#c7c3c5;
+      --gray-text:#666164;
+      --red:#e5221f;
+      --line:rgba(90,75,80,.10);
+      --sheet:rgba(255,244,245,.92);
+      --shadow:0 8px 28px rgba(77,52,58,.12);
+      --radius:22px;
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;background:var(--bg);color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+      font-weight:400;overflow-x:hidden;
+    }
+    button{font:inherit;color:inherit;border:0;background:none}
+    .app{min-height:100vh}
+    .top{
+      position:sticky;top:0;z-index:20;
+      padding:10px 14px 7px;
+      background:linear-gradient(to bottom,rgba(247,234,234,.98),rgba(247,234,234,.90));
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    }
+    .weekdays{
+      display:grid;grid-template-columns:repeat(7,1fr);
+      max-width:760px;margin:auto;
+      text-align:center;font-size:14px;line-height:28px;
+      color:#272327;font-weight:500;
+    }
+    .calendar{max-width:760px;margin:0 auto;padding:0 10px 190px}
+    .month{margin:0 0 22px}
+    .month-title{
+      text-align:center;font-size:34px;font-weight:600;
+      letter-spacing:-1.2px;margin:25px 0 16px;
+    }
+    .month-title.current:after{
+      content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
+      margin:0 0 5px 8px;background:var(--green);
+    }
+    .grid{
+      display:grid;grid-template-columns:repeat(7,1fr);
+      row-gap:7px;
+    }
+    .day{
+      min-width:0;height:88px;display:flex;align-items:center;justify-content:center;
+      position:relative;
+    }
+    .day.empty{pointer-events:none}
+    .day button{
+      width:70px;height:70px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:23px;line-height:1;cursor:pointer;
+      transition:transform .16s ease,box-shadow .18s ease,background .18s ease;
+      position:relative;
+    }
+    .day button:active{transform:scale(.93)}
+    .day.off button{
+      background:var(--gray);
+      color:var(--gray-text);
+    }
+    .day.work button{
+      background:var(--green);
+      color:#fff;
+      box-shadow:0 3px 0 rgba(0,0,0,.05);
+    }
+    .day.special button{
+      background:var(--red);
+      color:#fff;
+      box-shadow:0 3px 0 rgba(0,0,0,.06);
+    }
+    .day.today button{
+      outline:3px solid rgba(23,104,95,.34);
+      outline-offset:4px;
+    }
+    .day.today button:after{
+      content:"";position:absolute;inset:-7px;border-radius:50%;
+      border:1px solid rgba(23,104,95,.15);
+      pointer-events:none;
+    }
+    .day.today .today-dot{
+      position:absolute;width:6px;height:6px;border-radius:50%;
+      background:var(--green);bottom:7px;z-index:2;
+    }
+    .badge{
+      position:absolute;right:4px;top:1px;
+      font-size:8px;font-weight:700;letter-spacing:.5px;
+      color:rgba(255,255,255,.92);background:rgba(0,0,0,.14);
+      border-radius:8px;padding:3px 5px;
+    }
+    .empty-month{height:8px}
+    .sheet{
+      position:fixed;z-index:30;left:0;right:0;bottom:0;
+      padding:10px 12px calc(10px + var(--safe-bottom));
+      background:linear-gradient(to top,rgba(247,234,234,.99),rgba(247,234,234,.90));
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      border-top:1px solid rgba(100,75,80,.08);
+      box-shadow:0 -8px 28px rgba(70,45,50,.08);
+    }
+    .sheet-inner{max-width:760px;margin:auto}
+    .patterns{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:7px;
+      margin-bottom:8px;
+    }
+    .pattern{
+      padding:13px 5px;border-radius:22px;
+      font-size:15px;white-space:nowrap;
+      color:#403a3d;background:rgba(255,247,248,.55);
+    }
+    .pattern.active{
+      background:#fff0f2;box-shadow:inset 0 0 0 1px rgba(130,95,105,.06);
+    }
+    .pattern:active{transform:scale(.98)}
+    .stats{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:5px 4px 0;color:#343033;font-size:14px;
+    }
+    .stats strong{font-size:19px;font-weight:600}
+    .stats-left,.stats-right{display:flex;align-items:center;gap:8px}
+    .stat-pill{
+      width:50px;height:22px;border-radius:13px;background:#bcb8bb;
+      position:relative;overflow:hidden;
+    }
+    .stat-pill i{display:block;height:100%;background:var(--green);border-radius:13px}
+    .fab{
+      position:fixed;z-index:25;right:16px;bottom:132px;
+      width:46px;height:46px;border-radius:50%;
+      background:rgba(255,245,246,.94);box-shadow:var(--shadow);
+      font-size:22px;opacity:0;pointer-events:none;
+      transform:translateY(8px);transition:.2s;
+    }
+    .fab.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+    .modal-back{
+      position:fixed;inset:0;z-index:50;background:rgba(45,33,38,.25);
+      display:none;align-items:flex-end;
+    }
+    .modal-back.open{display:flex}
+    .modal{
+      width:100%;max-width:760px;margin:auto auto 0;
+      background:#fff5f6;border-radius:28px 28px 0 0;
+      padding:18px 18px calc(22px + var(--safe-bottom));
+      box-shadow:0 -15px 50px rgba(55,35,40,.20);
+    }
+    .grab{width:42px;height:4px;border-radius:4px;background:#c6bfc2;margin:0 auto 18px}
+    .modal h2{margin:0 0 12px;font-size:23px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    label{display:block;font-size:13px;color:var(--muted);margin:9px 0 5px}
+    input{
+      width:100%;padding:13px;border-radius:14px;border:1px solid #ded4d6;
+      background:#fff;font-size:16px;outline:none;
+    }
+    .modal-actions{display:flex;gap:10px;margin-top:15px}
+    .modal-actions button{flex:1;padding:14px;border-radius:16px;background:#eadfe1}
+    .modal-actions .save{background:var(--green);color:#fff}
+    @media(max-width:520px){
+      .day{height:82px}.day button{width:64px;height:64px;font-size:21px}
+      .month-title{font-size:31px;margin-top:23px}
+      .calendar{padding-left:6px;padding-right:6px}
+      .pattern{font-size:14px;padding:12px 3px}
+    }
+    @media(min-width:700px){
+      .day{height:96px}.day button{width:76px;height:76px}
+    }
+  </style>
 </head>
 <body>
 <div class="app">
-<header class="header">
- <div class="header-top minimal-top">
-  <span class="today-spacer" aria-hidden="true"></span>
-  <button class="today-chip" id="todayBtn">Сегодня</button>
- </div>
- <div class="weekbar"><span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span></div>
-</header>
-<main class="main" id="calendar"></main>
+  <header class="top"><div class="weekdays">
+    <div>ПН</div><div>ВТ</div><div>СР</div><div>ЧТ</div><div>ПТ</div><div>СБ</div><div>ВС</div>
+  </div></header>
+  <main id="calendar" class="calendar"></main>
+
+  <button id="todayFab" class="fab" aria-label="Сегодня">↑</button>
+
+  <section class="sheet">
+    <div class="sheet-inner">
+      <div class="patterns">
+        <button class="pattern" data-pattern="1/3">Один/три</button>
+        <button class="pattern active" data-pattern="2/2">Два/два</button>
+        <button class="pattern" data-pattern="3/3">Три/три</button>
+        <button class="pattern" data-pattern="custom">Добавить</button>
+      </div>
+      <div class="stats">
+        <div class="stats-left"><span>В месяце</span><strong id="monthCount">0</strong><span>раб.</span></div>
+        <div class="stats-right"><span>Год</span><strong id="yearCount">0</strong><span>раб.</span></div>
+      </div>
+    </div>
+  </section>
 </div>
 
-<button class="scroll-top" id="scrollTop" aria-label="Вернуться к сегодня">↑</button>
-
-<section class="bottom">
- <div class="bottom-inner">
-  <div class="patterns">
-   <button class="pill" data-pattern="1/3">Один/три</button>
-   <button class="pill" data-pattern="2/2">Два/два</button>
-   <button class="pill" data-pattern="3/3">Три/три</button>
-   <button class="pill add" id="customBtn">＋ Добавить</button>
+<div id="modalBack" class="modal-back">
+  <div class="modal">
+    <div class="grab"></div>
+    <h2>Своя смена</h2>
+    <div class="form-row">
+      <div><label>Рабочих дней</label><input id="workDays" type="number" min="1" max="31" value="2"></div>
+      <div><label>Выходных дней</label><input id="offDays" type="number" min="1" max="31" value="2"></div>
+    </div>
+    <label>Первый рабочий день</label>
+    <input id="firstWork" type="date">
+    <div class="modal-actions">
+      <button id="cancel">Отмена</button>
+      <button id="save" class="save">Сохранить</button>
+    </div>
   </div>
-  <div class="toggle-wrap"><div class="toggle"><button id="monthMode">В месяце</button><button id="yearMode">В году</button></div></div>
-  <div class="stats"><span id="workStat">Рабочих дней: 0</span><span id="offStat">Выходных дней: 0</span></div>
-  <div class="legend"><span><i class="dot doff"></i>выходной</span><span><i class="dot dw"></i>рабочий</span><span><i class="dot ds"></i>особый / смена</span></div>
- </div>
-</section>
-
-<div class="modal-backdrop" id="modal">
- <div class="modal" role="dialog" aria-modal="true">
-  <div class="handle"></div><h2>Настроить график</h2>
-  <p>Задайте цикл и дату, с которой начинается первый рабочий день. Календарь пересчитает дни вперёд и назад.</p>
-  <div class="form">
-   <label class="field">Рабочих дней<input id="workDays" type="number" min="1" max="31" inputmode="numeric"></label>
-   <label class="field">Выходных дней<input id="offDays" type="number" min="1" max="31" inputmode="numeric"></label>
-   <label class="field full">Первый рабочий день<input id="startDate" type="date"></label>
-  </div>
-  <div class="actions"><button class="cancel" id="cancelBtn">Отмена</button><button class="save" id="saveBtn">Применить график</button></div>
- </div>
 </div>
-<div class="toast" id="toast"></div>
 
 <script>
 (() => {
- const KEY="rabochiy-kalendar-v3";
- const today=new Date(); today.setHours(0,0,0,0);
- const months=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
- const pad=n=>String(n).padStart(2,"0");
- const key=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
- const parse=s=>{let [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
- const diff=(a,b)=>Math.round((b-a)/86400000);
- const add=(d,n)=>{let x=new Date(d);x.setDate(x.getDate()+n);return x};
+  const KEY='rk-v4-settings';
+  const today = new Date();
+  const iso = d => {
+    const x=new Date(d); x.setHours(12,0,0,0);
+    return x.toISOString().slice(0,10);
+  };
+  const todayISO=iso(today);
 
- let state;
- try{state=JSON.parse(localStorage.getItem(KEY))}catch{}
- state ||= {};
- state.pattern ||= {work:2,off:2,start:key(today)};
- state.overrides ||= {};
- state.mode ||= "month";
- // The anchor is always normalized to the real current date when the app opens.
- state.anchor={year:today.getFullYear(),month:today.getMonth()};
- function save(){localStorage.setItem(KEY,JSON.stringify({...state,anchor:undefined}))}
+  let settings=JSON.parse(localStorage.getItem(KEY)||'null') || {
+    type:'2/2', work:2, off:2, firstWork:todayISO, manual:{}
+  };
+  settings.manual=settings.manual||{};
 
- function status(d){
-   const k=key(d);
-   if(state.overrides[k]) return state.overrides[k];
-   const start=parse(state.pattern.start), n=diff(start,d), cycle=state.pattern.work+state.pattern.off;
-   const pos=((n%cycle)+cycle)%cycle;
-   return pos<state.pattern.work?"work":"off";
- }
- function makeMonth(first){
-   const section=document.createElement("section");section.className="month";section.dataset.month=`${first.getFullYear()}-${first.getMonth()}`;
-   const head=document.createElement("div");head.className="month-head";
-   const title=document.createElement("h2");title.className="month-title";title.textContent=`${months[first.getMonth()]} ${first.getFullYear()}`;
-   head.append(title);
-   if(first.getFullYear()===today.getFullYear()&&first.getMonth()===today.getMonth()){const b=document.createElement("span");b.className="month-badge";b.textContent="ТЕКУЩИЙ";head.append(b)}
-   section.append(head);
-   const grid=document.createElement("div");grid.className="grid";
-   const offset=(first.getDay()+6)%7;
-   for(let i=0;i<offset;i++){let e=document.createElement("div");e.className="day empty";grid.append(e)}
-   const count=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
-   for(let n=1;n<=count;n++){
-     const d=new Date(first.getFullYear(),first.getMonth(),n), s=status(d), cell=document.createElement("button");
-     cell.className=`day ${s}`;cell.dataset.date=key(d);
-     if(d.getDay()===0||d.getDay()===6)cell.classList.add("weekend");
-     if(key(d)===key(today))cell.classList.add("today");
-     cell.innerHTML=`<span class="num">${n}</span>${state.overrides[key(d)]==="special"?'<span class="day-note">особый</span>':''}`;
-     cell.addEventListener("click",()=>cycle(cell.dataset.date));
-     grid.append(cell);
-   }
-   section.append(grid);return section;
- }
- function render(){
-   const root=document.getElementById("calendar");root.innerHTML="";
-   // Keep a useful browsing window, but always center it around the real current month.
-   for(let off=-2;off<=12;off++)root.append(makeMonth(new Date(today.getFullYear(),today.getMonth()+off,1)));
-   updateStats();
-   requestAnimationFrame(()=>focusToday(false));
- }
- function cycle(k){
-   const d=parse(k), current=state.overrides[k]||status(d);
-   state.overrides[k]=current==="off"?"work":current==="work"?"special":"off";
-   save();render();
-   const el=document.querySelector(`[data-date="${k}"]`);if(el){el.classList.add("pulse");setTimeout(()=>el.classList.remove("pulse"),500)}
-   toast(state.overrides[k]==="work"?"Рабочий день":state.overrides[k]==="special"?"Особый день / смена":"Выходной");
- }
- function updateStats(){
-   let w=0,o=0;
-   if(state.mode==="month"){
-     const days=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
-     for(let i=1;i<=days;i++){let s=status(new Date(today.getFullYear(),today.getMonth(),i));s==="work"||s==="special"?w++:o++}
-   }else{
-     for(let m=0;m<12;m++){let days=new Date(today.getFullYear(),m+1,0).getDate();for(let i=1;i<=days;i++){let s=status(new Date(today.getFullYear(),m,i));s==="work"||s==="special"?w++:o++}}
-   }
-   document.getElementById("workStat").textContent=`Рабочих дней: ${w}`;
-   document.getElementById("offStat").textContent=`Выходных дней: ${o}`;
-   document.getElementById("monthMode").classList.toggle("active",state.mode==="month");
-   document.getElementById("yearMode").classList.toggle("active",state.mode==="year");
- }
- function focusToday(smooth=true){
-   const el=document.querySelector(`[data-date="${key(today)}"]`);
-   if(el)el.scrollIntoView({behavior:smooth?"smooth":"auto",block:"center"});
- }
- function openModal(w=state.pattern.work,o=state.pattern.off){
-   document.getElementById("workDays").value=w;document.getElementById("offDays").value=o;
-   document.getElementById("startDate").value=state.pattern.start;
-   document.getElementById("modal").classList.add("open");
- }
- function closeModal(){document.getElementById("modal").classList.remove("open")}
- function toast(t){let e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.remove("show"),1500)}
- document.getElementById("todayBtn").onclick=()=>{render();setTimeout(()=>focusToday(true),30)};
- document.getElementById("scrollTop").onclick=()=>focusToday(true);
- document.querySelectorAll("[data-pattern]").forEach(b=>b.onclick=()=>{let [w,o]=b.dataset.pattern.split("/").map(Number);openModal(w,o)});
- document.getElementById("customBtn").onclick=()=>openModal();
- document.getElementById("cancelBtn").onclick=closeModal;
- document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")closeModal()};
- document.getElementById("saveBtn").onclick=()=>{
-   let w=Math.max(1,Math.min(31,Number(document.getElementById("workDays").value)||1));
-   let o=Math.max(1,Math.min(31,Number(document.getElementById("offDays").value)||1));
-   let start=document.getElementById("startDate").value||key(today);
-   state.pattern={work:w,off:o,start};save();closeModal();render();toast(`График ${w}/${o} применён`);
- };
- document.getElementById("monthMode").onclick=()=>{state.mode="month";save();updateStats()};
- document.getElementById("yearMode").onclick=()=>{state.mode="year";save();updateStats()};
+  const monthNames=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const calendar=document.getElementById('calendar');
+  const monthCount=document.getElementById('monthCount');
+  const yearCount=document.getElementById('yearCount');
+  const fab=document.getElementById('todayFab');
 
- let sx=0,sy=0;
- document.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
- document.addEventListener("touchend",e=>{
-   let dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
-   if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy))toast(dx<0?"Листайте вниз по календарю":"Вернитесь к текущей дате");
- },{passive:true});
- window.addEventListener("scroll",()=>document.getElementById("scrollTop").classList.toggle("visible",scrollY>500),{passive:true});
+  function save(){ localStorage.setItem(KEY,JSON.stringify(settings)); }
 
- // Automatic date rollover: if the page stays open through midnight, update without a reload.
- let lastDay=key(today);
- setInterval(()=>{
-   const d=new Date();d.setHours(0,0,0,0);
-   if(key(d)!==lastDay){location.reload()}
- },30000);
+  function startOfDay(d){const x=new Date(d);x.setHours(12,0,0,0);return x}
+  function daysDiff(a,b){return Math.round((startOfDay(a)-startOfDay(b))/86400000)}
 
- render();
- if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+  function baseStatus(date){
+    const key=iso(date);
+    if(settings.manual[key]) return settings.manual[key];
+    const first=new Date(settings.firstWork+'T12:00:00');
+    const diff=daysDiff(date,first);
+    const cycle=Math.max(1,Number(settings.work))+Math.max(1,Number(settings.off));
+    const pos=((diff%cycle)+cycle)%cycle;
+    return pos<Number(settings.work)?'work':'off';
+  }
+
+  function status(date){
+    return baseStatus(date);
+  }
+
+  function monthData(year,month){
+    const first=new Date(year,month,1,12);
+    const last=new Date(year,month+1,0,12);
+    let start=(first.getDay()+6)%7;
+    const arr=[];
+    for(let i=0;i<start;i++) arr.push(null);
+    for(let d=1;d<=last.getDate();d++) arr.push(new Date(year,month,d,12));
+    while(arr.length%7) arr.push(null);
+    return arr;
+  }
+
+  function makeMonth(year,month){
+    const wrap=document.createElement('section');
+    wrap.className='month';
+    const title=document.createElement('h2');
+    title.className='month-title';
+    title.textContent=monthNames[month];
+    if(year===today.getFullYear() && month===today.getMonth()) title.classList.add('current');
+    wrap.appendChild(title);
+
+    const grid=document.createElement('div'); grid.className='grid';
+    monthData(year,month).forEach((date,idx)=>{
+      const cell=document.createElement('div'); cell.className='day';
+      if(!date){cell.classList.add('empty');grid.appendChild(cell);return;}
+      const key=iso(date);
+      const s=status(date);
+      cell.classList.add(s);
+      if(key===todayISO) cell.classList.add('today');
+
+      const b=document.createElement('button');
+      b.type='button'; b.textContent=date.getDate();
+      b.setAttribute('aria-label', `${date.getDate()} ${monthNames[month]}: ${s==='work'?'рабочий':s==='special'?'особый':'выходной'}`);
+
+      if(s==='special'){
+        const badge=document.createElement('span'); badge.className='badge'; badge.textContent='СМЕНА'; b.appendChild(badge);
+      }
+      if(key===todayISO){
+        const dot=document.createElement('span'); dot.className='today-dot'; b.appendChild(dot);
+      }
+
+      b.addEventListener('click',()=>{
+        const next={off:'work',work:'special',special:'off'}[status(date)];
+        settings.manual[key]=next;
+        save(); render(); updateStats();
+        setTimeout(()=>document.getElementById('d-'+key)?.scrollIntoView({behavior:'smooth',block:'center'}),30);
+      });
+      cell.id='d-'+key;
+      cell.appendChild(b); grid.appendChild(cell);
+    });
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  function render(){
+    calendar.innerHTML='';
+    const start=new Date(today.getFullYear(),today.getMonth()-2,1,12);
+    for(let i=0;i<15;i++){
+      const d=new Date(start.getFullYear(),start.getMonth()+i,1,12);
+      calendar.appendChild(makeMonth(d.getFullYear(),d.getMonth()));
+    }
+  }
+
+  function countRange(from,to){
+    let n=0;
+    const d=new Date(from); d.setHours(12,0,0,0);
+    const end=new Date(to); end.setHours(12,0,0,0);
+    while(d<=end){
+      if(status(d)==='work') n++;
+      d.setDate(d.getDate()+1);
+    }
+    return n;
+  }
+  function updateStats(){
+    const y=today.getFullYear(),m=today.getMonth();
+    monthCount.textContent=countRange(new Date(y,m,1,12),new Date(y,m+1,0,12));
+    yearCount.textContent=countRange(new Date(y,0,1,12),new Date(y,11,31,12));
+  }
+  function scrollToday(smooth=true){
+    const el=document.getElementById('d-'+todayISO);
+    if(el) el.scrollIntoView({behavior:smooth?'smooth':'auto',block:'center'});
+  }
+
+  document.querySelectorAll('.pattern').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const p=btn.dataset.pattern;
+      if(p==='custom'){
+        document.getElementById('workDays').value=settings.work;
+        document.getElementById('offDays').value=settings.off;
+        document.getElementById('firstWork').value=settings.firstWork;
+        document.getElementById('modalBack').classList.add('open');
+        return;
+      }
+      const map={'1/3':[1,3],'2/2':[2,2],'3/3':[3,3]};
+      [settings.work,settings.off]=map[p]; settings.type=p;
+      settings.firstWork=todayISO; settings.manual={}; save();
+      document.querySelectorAll('.pattern').forEach(x=>x.classList.toggle('active',x===btn));
+      render(); updateStats(); setTimeout(()=>scrollToday(false),40);
+    });
+  });
+
+  document.getElementById('cancel').onclick=()=>document.getElementById('modalBack').classList.remove('open');
+  document.getElementById('modalBack').addEventListener('click',e=>{
+    if(e.target.id==='modalBack') e.currentTarget.classList.remove('open');
+  });
+  document.getElementById('save').onclick=()=>{
+    settings.work=Math.max(1,Number(document.getElementById('workDays').value)||1);
+    settings.off=Math.max(1,Number(document.getElementById('offDays').value)||1);
+    settings.firstWork=document.getElementById('firstWork').value||todayISO;
+    settings.type='custom'; settings.manual={}; save();
+    document.querySelectorAll('.pattern').forEach(x=>x.classList.toggle('active',x.dataset.pattern==='custom'));
+    document.getElementById('modalBack').classList.remove('open');
+    render(); updateStats(); setTimeout(()=>scrollToday(false),40);
+  };
+
+  window.addEventListener('scroll',()=>fab.classList.toggle('show',window.scrollY>500),{passive:true});
+  fab.addEventListener('click',()=>scrollToday(true));
+
+  render(); updateStats();
+  setTimeout(()=>scrollToday(false),80);
+
+  let lastDate=todayISO;
+  setInterval(()=>{
+    const nowISO=iso(new Date());
+    if(nowISO!==lastDate) location.reload();
+  },30000);
 })();
+</script>
+<script>
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
 </script>
 </body>
 </html>
