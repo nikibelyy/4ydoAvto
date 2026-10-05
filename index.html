@@ -8,10 +8,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Рабочий Календарь</title>
+<title>Календарь</title>
 <style>
 :root{
- --bg:#F7EBEB;--surface:#FFF8F5;--pill:#EAE0E2;--work:#3A8E9A;--work2:#2F7F90;
+ --bg:#F7EBEB;--surface:#FFF8F5;--pill:#EAE0E2;--work:#55A968;--work2:#438D56;--off:#D2CDCF;--offText:#6F696C;
  --special:#D33F31;--text:#292B2D;--muted:#918A8D;--line:rgba(66,45,50,.08);
  --shadow:0 16px 45px rgba(70,45,50,.10);--ease:cubic-bezier(.2,.8,.2,1)
 }
@@ -19,15 +19,13 @@
 html{scroll-behavior:smooth;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
 button,input{font:inherit}button{border:0;cursor:pointer}
-button:focus-visible,input:focus-visible{outline:3px solid rgba(58,142,154,.24);outline-offset:2px}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(85,169,104,.24);outline-offset:2px}
 .app{min-height:100vh;padding-bottom:190px}
 .header{
  position:sticky;top:0;z-index:50;background:rgba(247,235,235,.88);backdrop-filter:blur(20px);
  -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)
 }
-.header-top{width:min(100%,760px);margin:auto;padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:9px}.logo{width:34px;height:34px;border-radius:11px;background:var(--work);display:grid;place-items:center;color:#fff;box-shadow:0 5px 15px rgba(58,142,154,.22)}
-.brand-text{font-weight:850;letter-spacing:-.4px;font-size:17px}.brand-sub{font-size:10px;color:var(--muted);font-weight:650}
+.header-top{width:min(100%,760px);margin:auto;padding:7px 14px 4px;display:flex;align-items:center;justify-content:flex-end}.minimal-top{min-height:43px}.today-spacer{flex:1}
 .today-chip{background:var(--pill);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800;color:var(--text);transition:.2s}
 .today-chip:active{transform:scale(.94)}
 .weekbar{width:min(100%,760px);margin:auto;padding:3px 10px 9px;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
@@ -36,16 +34,17 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(58,142,154,.24);
 .month{padding:17px 0 27px;scroll-margin-top:125px}
 .month-head{display:flex;align-items:center;justify-content:center;position:relative;margin:2px 0 14px}
 .month-title{font-size:25px;letter-spacing:-.9px;margin:0;font-weight:900;text-transform:none}
-.month-badge{position:absolute;right:3px;background:rgba(58,142,154,.11);color:var(--work2);font-size:9px;font-weight:850;border-radius:999px;padding:5px 8px}
+.month-badge{position:absolute;right:3px;background:rgba(85,169,104,.11);color:var(--work2);font-size:9px;font-weight:850;border-radius:999px;padding:5px 8px}
 .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px 3px}
 .day{height:50px;display:grid;place-items:center;position:relative;background:transparent;padding:0}
 .day.empty{pointer-events:none}
 .num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:700;transition:transform .2s var(--ease),background .2s,color .2s,box-shadow .2s}
 .day:active .num{transform:scale(.82)}
-.day.work .num{background:var(--work);color:#fff;box-shadow:0 5px 13px rgba(58,142,154,.18)}
+.day.work .num{background:var(--work);color:#fff;box-shadow:0 5px 13px rgba(85,169,104,.20)}
+.day.off .num{background:var(--off);color:var(--offText)}
 .day.special .num{background:var(--special);color:#fff;box-shadow:0 5px 13px rgba(211,63,49,.16)}
-.day.today .num{box-shadow:0 0 0 3px rgba(58,142,154,.22),0 6px 15px rgba(58,142,154,.2)}
-.day.today:not(.work):not(.special) .num{background:rgba(58,142,154,.12);color:var(--work2)}
+.day.today .num{box-shadow:0 0 0 3px rgba(85,169,104,.28),0 6px 15px rgba(85,169,104,.16)}
+.day.today:not(.work):not(.special) .num{background:var(--off);color:var(--offText)}
 .day.weekend:not(.work):not(.special) .num{color:#777174}
 .day-note{position:absolute;bottom:0;font-size:7px;color:var(--muted);font-weight:750}
 .scroll-top{position:fixed;right:14px;bottom:183px;z-index:38;width:42px;height:42px;border-radius:50%;background:rgba(255,248,245,.94);box-shadow:var(--shadow);color:var(--work2);font-size:18px;font-weight:900;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s}
@@ -59,9 +58,9 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(58,142,154,.24);
 .toggle-wrap{display:flex;justify-content:center;margin:8px 0 7px}
 .toggle{display:flex;background:var(--pill);padding:3px;border-radius:999px}
 .toggle button{background:transparent;color:var(--muted);padding:7px 18px;border-radius:999px;font-size:11px;font-weight:850;transition:.2s}
-.toggle button.active{background:var(--work);color:#fff;box-shadow:0 4px 10px rgba(58,142,154,.16)}
+.toggle button.active{background:var(--work);color:#fff;box-shadow:0 4px 10px rgba(85,169,104,.16)}
 .stats{display:flex;justify-content:space-between;font-size:11px;font-weight:850;padding:0 3px}.stats span:last-child{text-align:right}
-.legend{text-align:center;color:var(--muted);font-size:9px;margin-top:4px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;vertical-align:0;margin:0 3px 0 8px}.dot:first-child{margin-left:0}.dw{background:var(--work)}.ds{background:var(--special)}
+.legend{text-align:center;color:var(--muted);font-size:9px;margin-top:4px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;vertical-align:0;margin:0 3px 0 8px}.dot:first-child{margin-left:0}.doff{background:var(--off)}.dw{background:var(--work)}.ds{background:var(--special)}
 .modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(37,26,29,.28);opacity:0;pointer-events:none;transition:opacity .25s}
 .modal-backdrop.open{opacity:1;pointer-events:auto}
 .modal{position:absolute;left:0;right:0;bottom:0;background:#FFF8F5;border-radius:28px 28px 0 0;padding:11px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s var(--ease);box-shadow:0 -18px 60px rgba(45,30,35,.18)}
@@ -79,11 +78,8 @@ input{width:100%;margin-top:5px;border:1px solid #DED1D3;background:#fff;border-
 <body>
 <div class="app">
 <header class="header">
- <div class="header-top">
-  <div class="brand">
-   <div class="logo" aria-hidden="true">✓</div>
-   <div><div class="brand-text">Рабочий Календарь</div><div class="brand-sub" id="todayLabel">Сегодня</div></div>
-  </div>
+ <div class="header-top minimal-top">
+  <span class="today-spacer" aria-hidden="true"></span>
   <button class="today-chip" id="todayBtn">Сегодня</button>
  </div>
  <div class="weekbar"><span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span></div>
@@ -103,7 +99,7 @@ input{width:100%;margin-top:5px;border:1px solid #DED1D3;background:#fff;border-
   </div>
   <div class="toggle-wrap"><div class="toggle"><button id="monthMode">В месяце</button><button id="yearMode">В году</button></div></div>
   <div class="stats"><span id="workStat">Рабочих дней: 0</span><span id="offStat">Выходных дней: 0</span></div>
-  <div class="legend"><span><i class="dot dw"></i>рабочий</span><span><i class="dot ds"></i>особый / смена</span></div>
+  <div class="legend"><span><i class="dot doff"></i>выходной</span><span><i class="dot dw"></i>рабочий</span><span><i class="dot ds"></i>особый / смена</span></div>
  </div>
 </section>
 
@@ -123,7 +119,7 @@ input{width:100%;margin-top:5px;border:1px solid #DED1D3;background:#fff;border-
 
 <script>
 (() => {
- const KEY="rabochiy-kalendar-v2";
+ const KEY="rabochiy-kalendar-v3";
  const today=new Date(); today.setHours(0,0,0,0);
  const months=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
  const pad=n=>String(n).padStart(2,"0");
@@ -209,7 +205,6 @@ input{width:100%;margin-top:5px;border:1px solid #DED1D3;background:#fff;border-
  }
  function closeModal(){document.getElementById("modal").classList.remove("open")}
  function toast(t){let e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.remove("show"),1500)}
- document.getElementById("todayLabel").textContent=today.toLocaleDateString("ru-RU",{day:"numeric",month:"long"});
  document.getElementById("todayBtn").onclick=()=>{render();setTimeout(()=>focusToday(true),30)};
  document.getElementById("scrollTop").onclick=()=>focusToday(true);
  document.querySelectorAll("[data-pattern]").forEach(b=>b.onclick=()=>{let [w,o]=b.dataset.pattern.split("/").map(Number);openModal(w,o)});
