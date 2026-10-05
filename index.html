@@ -1,309 +1,247 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#F7EBEB">
-  <meta name="description" content="Мобильный рабочий календарь с циклическими графиками смен.">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icons/icon-192.png">
-  <title>Рабочий Календарь</title>
-  <style>
-    :root{
-      --bg:#F7EBEB; --panel:#F8EEE8; --pill:#EAE0E2;
-      --work:#3A8E9A; --special:#D33F31; --text:#2D3032;
-      --muted:#8A8587; --line:rgba(80,60,65,.08);
-      --shadow:0 10px 30px rgba(85,55,60,.10);
-      --radius:22px; --cell:44px;
-    }
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html{height:100%;scroll-behavior:smooth}
-    body{margin:0;min-height:100%;background:var(--bg);color:var(--text);
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      overscroll-behavior-y:none}
-    button,input{font:inherit}
-    button{border:0;cursor:pointer}
-    .app{min-height:100vh;padding-bottom:168px}
-    .topbar{position:sticky;top:0;z-index:30;background:rgba(247,235,235,.94);
-      backdrop-filter:blur(14px);padding:env(safe-area-inset-top) 12px 8px;
-      border-bottom:1px solid var(--line)}
-    .topbar-title{display:flex;justify-content:space-between;align-items:center;padding:9px 5px 8px}
-    .brand{font-size:18px;font-weight:800;letter-spacing:-.3px}
-    .today-btn{padding:8px 13px;border-radius:999px;background:var(--pill);color:var(--text);font-size:13px;font-weight:700}
-    .week-head{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
-    .week-head div{font-size:11px;font-weight:800;color:var(--muted);padding:6px 0}
-    main{width:min(100%,720px);margin:0 auto;padding:8px 10px}
-    .month{padding:14px 0 24px}
-    .month-title{text-align:center;font-size:24px;font-weight:850;letter-spacing:-.7px;margin:5px 0 14px}
-    .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px 3px}
-    .day{min-width:0;height:48px;display:flex;align-items:center;justify-content:center;position:relative}
-    .day.empty{pointer-events:none}
-    .day-number{width:40px;height:40px;display:flex;align-items:center;justify-content:center;
-      border-radius:50%;font-size:15px;font-weight:650;transition:transform .16s,background .16s,color .16s,box-shadow .16s}
-    .day:not(.empty):active .day-number{transform:scale(.88)}
-    .day.work .day-number{background:var(--work);color:white}
-    .day.special .day-number{background:var(--special);color:white}
-    .day.today .day-number{box-shadow:0 0 0 2px rgba(58,142,154,.28)}
-    .day.weekend:not(.work):not(.special) .day-number{color:#777174}
-    .day-note{position:absolute;bottom:0px;font-size:8px;color:var(--muted);line-height:1}
-    .bottom{position:fixed;z-index:40;left:0;right:0;bottom:0;background:rgba(248,238,232,.96);
-      backdrop-filter:blur(18px);border-top:1px solid var(--line);box-shadow:0 -8px 30px rgba(85,55,60,.08);
-      padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
-    .bottom-inner{width:min(100%,720px);margin:auto}
-    .patterns{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-    .pill{background:var(--pill);color:var(--text);border-radius:999px;padding:10px 7px;
-      font-size:12px;font-weight:750;white-space:nowrap;transition:transform .16s,background .2s}
-    .pill:active{transform:scale(.96)}
-    .pill.primary{background:var(--work);color:#fff}
-    .stats-toggle{display:flex;justify-content:center;margin:9px 0 7px}
-    .toggle{display:flex;background:var(--pill);padding:3px;border-radius:999px}
-    .toggle button{background:transparent;border-radius:999px;padding:7px 17px;font-size:12px;font-weight:800;color:var(--muted)}
-    .toggle button.active{background:var(--work);color:#fff}
-    .stats{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;padding:0 3px}
-    .stats span:last-child{text-align:right}
-    .legend{display:flex;gap:12px;justify-content:center;margin-top:5px;font-size:10px;color:var(--muted)}
-    .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;vertical-align:-1px;margin-right:3px}
-    .legend .w{background:var(--work)} .legend .s{background:var(--special)}
-    .modal-wrap{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;background:rgba(40,25,28,.28)}
-    .modal-wrap.open{display:flex}
-    .modal{width:100%;background:#FCF5F1;border-radius:28px 28px 0 0;padding:12px 18px calc(18px + env(safe-area-inset-bottom));
-      box-shadow:0 -15px 50px rgba(45,30,35,.18);animation:up .24s ease}
-    @keyframes up{from{transform:translateY(20px);opacity:.6}to{transform:none;opacity:1}}
-    .handle{width:42px;height:4px;border-radius:4px;background:#D4C7C8;margin:0 auto 14px}
-    .modal h2{margin:0 0 4px;font-size:21px}
-    .modal p{margin:0 0 14px;color:var(--muted);font-size:13px}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    label{font-size:12px;font-weight:800;color:#71696B}
-    input{width:100%;margin-top:5px;border:1px solid #E0D4D5;background:#fff;border-radius:14px;padding:11px 12px;outline:none}
-    input:focus{border-color:var(--work);box-shadow:0 0 0 3px rgba(58,142,154,.12)}
-    .modal-actions{display:flex;gap:8px;margin-top:15px}
-    .modal-actions button{flex:1;padding:12px;border-radius:999px;font-weight:800}
-    .cancel{background:var(--pill)} .save{background:var(--work);color:white}
-    .toast{position:fixed;z-index:100;left:50%;bottom:185px;transform:translate(-50%,15px);opacity:0;
-      background:#303234;color:#fff;padding:10px 15px;border-radius:999px;font-size:12px;font-weight:700;pointer-events:none;transition:.2s}
-    .toast.show{opacity:1;transform:translate(-50%,0)}
-    @media(min-width:600px){
-      :root{--cell:50px}
-      .app{padding-bottom:154px}
-      .grid{gap:8px 6px}.day{height:54px}.day-number{width:44px;height:44px}
-      .bottom{padding-left:20px;padding-right:20px}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7EBEB">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Рабочий Календарь</title>
+<style>
+:root{
+ --bg:#F7EBEB;--surface:#FFF8F5;--pill:#EAE0E2;--work:#3A8E9A;--work2:#2F7F90;
+ --special:#D33F31;--text:#292B2D;--muted:#918A8D;--line:rgba(66,45,50,.08);
+ --shadow:0 16px 45px rgba(70,45,50,.10);--ease:cubic-bezier(.2,.8,.2,1)
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+button,input{font:inherit}button{border:0;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(58,142,154,.24);outline-offset:2px}
+.app{min-height:100vh;padding-bottom:190px}
+.header{
+ position:sticky;top:0;z-index:50;background:rgba(247,235,235,.88);backdrop-filter:blur(20px);
+ -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)
+}
+.header-top{width:min(100%,760px);margin:auto;padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:9px}.logo{width:34px;height:34px;border-radius:11px;background:var(--work);display:grid;place-items:center;color:#fff;box-shadow:0 5px 15px rgba(58,142,154,.22)}
+.brand-text{font-weight:850;letter-spacing:-.4px;font-size:17px}.brand-sub{font-size:10px;color:var(--muted);font-weight:650}
+.today-chip{background:var(--pill);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800;color:var(--text);transition:.2s}
+.today-chip:active{transform:scale(.94)}
+.weekbar{width:min(100%,760px);margin:auto;padding:3px 10px 9px;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.weekbar span{text-align:center;color:var(--muted);font-size:10px;font-weight:850;letter-spacing:.3px}
+.main{width:min(100%,760px);margin:auto;padding:0 10px}
+.month{padding:17px 0 27px;scroll-margin-top:125px}
+.month-head{display:flex;align-items:center;justify-content:center;position:relative;margin:2px 0 14px}
+.month-title{font-size:25px;letter-spacing:-.9px;margin:0;font-weight:900;text-transform:none}
+.month-badge{position:absolute;right:3px;background:rgba(58,142,154,.11);color:var(--work2);font-size:9px;font-weight:850;border-radius:999px;padding:5px 8px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px 3px}
+.day{height:50px;display:grid;place-items:center;position:relative;background:transparent;padding:0}
+.day.empty{pointer-events:none}
+.num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:700;transition:transform .2s var(--ease),background .2s,color .2s,box-shadow .2s}
+.day:active .num{transform:scale(.82)}
+.day.work .num{background:var(--work);color:#fff;box-shadow:0 5px 13px rgba(58,142,154,.18)}
+.day.special .num{background:var(--special);color:#fff;box-shadow:0 5px 13px rgba(211,63,49,.16)}
+.day.today .num{box-shadow:0 0 0 3px rgba(58,142,154,.22),0 6px 15px rgba(58,142,154,.2)}
+.day.today:not(.work):not(.special) .num{background:rgba(58,142,154,.12);color:var(--work2)}
+.day.weekend:not(.work):not(.special) .num{color:#777174}
+.day-note{position:absolute;bottom:0;font-size:7px;color:var(--muted);font-weight:750}
+.scroll-top{position:fixed;right:14px;bottom:183px;z-index:38;width:42px;height:42px;border-radius:50%;background:rgba(255,248,245,.94);box-shadow:var(--shadow);color:var(--work2);font-size:18px;font-weight:900;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s}
+.scroll-top.visible{opacity:1;pointer-events:auto;transform:none}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(255,248,245,.91);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid var(--line);box-shadow:0 -14px 45px rgba(70,45,50,.10);padding:9px 12px calc(10px + env(safe-area-inset-bottom))}
+.bottom-inner{width:min(100%,760px);margin:auto}
+.patterns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pill{background:var(--pill);color:var(--text);border-radius:999px;padding:10px 5px;font-size:11px;font-weight:800;transition:transform .16s var(--ease),background .2s}
+.pill:active{transform:scale(.95)}
+.pill.add{background:var(--work);color:#fff}
+.toggle-wrap{display:flex;justify-content:center;margin:8px 0 7px}
+.toggle{display:flex;background:var(--pill);padding:3px;border-radius:999px}
+.toggle button{background:transparent;color:var(--muted);padding:7px 18px;border-radius:999px;font-size:11px;font-weight:850;transition:.2s}
+.toggle button.active{background:var(--work);color:#fff;box-shadow:0 4px 10px rgba(58,142,154,.16)}
+.stats{display:flex;justify-content:space-between;font-size:11px;font-weight:850;padding:0 3px}.stats span:last-child{text-align:right}
+.legend{text-align:center;color:var(--muted);font-size:9px;margin-top:4px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;vertical-align:0;margin:0 3px 0 8px}.dot:first-child{margin-left:0}.dw{background:var(--work)}.ds{background:var(--special)}
+.modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(37,26,29,.28);opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-backdrop.open{opacity:1;pointer-events:auto}
+.modal{position:absolute;left:0;right:0;bottom:0;background:#FFF8F5;border-radius:28px 28px 0 0;padding:11px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s var(--ease);box-shadow:0 -18px 60px rgba(45,30,35,.18)}
+.modal-backdrop.open .modal{transform:none}
+.handle{width:43px;height:4px;border-radius:5px;background:#D6C8CA;margin:0 auto 14px}.modal h2{margin:0;font-size:22px;letter-spacing:-.5px}.modal p{margin:4px 0 15px;color:var(--muted);font-size:12px;line-height:1.45}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field{font-size:11px;color:#726A6D;font-weight:800}.field.full{grid-column:1/-1}
+input{width:100%;margin-top:5px;border:1px solid #DED1D3;background:#fff;border-radius:14px;padding:11px 12px;color:var(--text)}
+.actions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}.actions button{padding:12px;border-radius:999px;font-weight:850}.cancel{background:var(--pill)}.save{background:var(--work);color:#fff}
+.toast{position:fixed;z-index:120;left:50%;bottom:205px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#303234;color:#fff;border-radius:999px;padding:10px 15px;font-size:11px;font-weight:800;transition:.22s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+.pulse{animation:pulse .45s var(--ease)}@keyframes pulse{0%{transform:scale(.92);opacity:.5}100%{transform:none;opacity:1}}
+@media(min-width:600px){.app{padding-bottom:170px}.grid{gap:8px 6px}.day{height:55px}.num{width:45px;height:45px}.scroll-top{bottom:163px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
 <div class="app">
-  <header class="topbar">
-    <div class="topbar-title">
-      <div class="brand">Рабочий Календарь</div>
-      <button class="today-btn" id="todayBtn">Сегодня</button>
-    </div>
-    <div class="week-head" aria-hidden="true">
-      <div>ПН</div><div>ВТ</div><div>СР</div><div>ЧТ</div><div>ПТ</div><div>СБ</div><div>ВС</div>
-    </div>
-  </header>
-
-  <main id="calendar" aria-live="polite"></main>
+<header class="header">
+ <div class="header-top">
+  <div class="brand">
+   <div class="logo" aria-hidden="true">✓</div>
+   <div><div class="brand-text">Рабочий Календарь</div><div class="brand-sub" id="todayLabel">Сегодня</div></div>
+  </div>
+  <button class="today-chip" id="todayBtn">Сегодня</button>
+ </div>
+ <div class="weekbar"><span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span></div>
+</header>
+<main class="main" id="calendar"></main>
 </div>
 
-<section class="bottom" aria-label="Управление графиком">
-  <div class="bottom-inner">
-    <div class="patterns">
-      <button class="pill" data-pattern="1/3">Один/три</button>
-      <button class="pill" data-pattern="2/2">Два/два</button>
-      <button class="pill" data-pattern="3/3">Три/три</button>
-      <button class="pill primary" id="customBtn">＋ Добавить</button>
-    </div>
-    <div class="stats-toggle">
-      <div class="toggle">
-        <button id="monthMode" class="active">В месяце</button>
-        <button id="yearMode">В году</button>
-      </div>
-    </div>
-    <div class="stats">
-      <span id="workStat">Рабочих дней: 0</span>
-      <span id="offStat">Выходных дней: 0</span>
-    </div>
-    <div class="legend"><span><i class="w"></i>рабочий</span><span><i class="s"></i>особый / смена</span></div>
+<button class="scroll-top" id="scrollTop" aria-label="Вернуться к сегодня">↑</button>
+
+<section class="bottom">
+ <div class="bottom-inner">
+  <div class="patterns">
+   <button class="pill" data-pattern="1/3">Один/три</button>
+   <button class="pill" data-pattern="2/2">Два/два</button>
+   <button class="pill" data-pattern="3/3">Три/три</button>
+   <button class="pill add" id="customBtn">＋ Добавить</button>
   </div>
+  <div class="toggle-wrap"><div class="toggle"><button id="monthMode">В месяце</button><button id="yearMode">В году</button></div></div>
+  <div class="stats"><span id="workStat">Рабочих дней: 0</span><span id="offStat">Выходных дней: 0</span></div>
+  <div class="legend"><span><i class="dot dw"></i>рабочий</span><span><i class="dot ds"></i>особый / смена</span></div>
+ </div>
 </section>
 
-<div class="modal-wrap" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal">
-    <div class="handle"></div>
-    <h2 id="modalTitle">Свой график</h2>
-    <p>Укажите количество рабочих и выходных дней, а также дату первого рабочего дня.</p>
-    <div class="form-row">
-      <label>Рабочих дней
-        <input id="workDays" type="number" min="1" max="31" value="4" inputmode="numeric">
-      </label>
-      <label>Выходных дней
-        <input id="offDays" type="number" min="1" max="31" value="2" inputmode="numeric">
-      </label>
-    </div>
-    <label style="display:block;margin-top:10px">Первый рабочий день
-      <input id="startDate" type="date">
-    </label>
-    <div class="modal-actions">
-      <button class="cancel" id="cancelBtn">Отмена</button>
-      <button class="save" id="saveBtn">Применить</button>
-    </div>
+<div class="modal-backdrop" id="modal">
+ <div class="modal" role="dialog" aria-modal="true">
+  <div class="handle"></div><h2>Настроить график</h2>
+  <p>Задайте цикл и дату, с которой начинается первый рабочий день. Календарь пересчитает дни вперёд и назад.</p>
+  <div class="form">
+   <label class="field">Рабочих дней<input id="workDays" type="number" min="1" max="31" inputmode="numeric"></label>
+   <label class="field">Выходных дней<input id="offDays" type="number" min="1" max="31" inputmode="numeric"></label>
+   <label class="field full">Первый рабочий день<input id="startDate" type="date"></label>
   </div>
+  <div class="actions"><button class="cancel" id="cancelBtn">Отмена</button><button class="save" id="saveBtn">Применить график</button></div>
+ </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
 (() => {
-  const KEY = "rabochiy-kalendar-v1";
-  const now = new Date();
-  const pad = n => String(n).padStart(2,"0");
-  const dateKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  const parseKey = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
-  const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return x; };
-  const daysBetween = (a,b) => Math.round((b-a)/86400000);
-  const monthName = i => ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"][i];
+ const KEY="rabochiy-kalendar-v2";
+ const today=new Date(); today.setHours(0,0,0,0);
+ const months=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+ const pad=n=>String(n).padStart(2,"0");
+ const key=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+ const parse=s=>{let [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+ const diff=(a,b)=>Math.round((b-a)/86400000);
+ const add=(d,n)=>{let x=new Date(d);x.setDate(x.getDate()+n);return x};
 
-  const defaultState = {
-    pattern:{work:2, off:2, start:dateKey(new Date(now.getFullYear(), now.getMonth(), 1))},
-    overrides:{},
-    mode:"month",
-    anchorYear:now.getFullYear(),
-    anchorMonth:now.getMonth()
-  };
-  let state;
-  try { state = JSON.parse(localStorage.getItem(KEY)) || defaultState; }
-  catch { state = defaultState; }
-  state.pattern ||= defaultState.pattern; state.overrides ||= {}; state.mode ||= "month";
+ let state;
+ try{state=JSON.parse(localStorage.getItem(KEY))}catch{}
+ state ||= {};
+ state.pattern ||= {work:2,off:2,start:key(today)};
+ state.overrides ||= {};
+ state.mode ||= "month";
+ // The anchor is always normalized to the real current date when the app opens.
+ state.anchor={year:today.getFullYear(),month:today.getMonth()};
+ function save(){localStorage.setItem(KEY,JSON.stringify({...state,anchor:undefined}))}
 
-  function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
-  function patternStatus(d){
-    const k=dateKey(d);
-    if(state.overrides[k]) return state.overrides[k];
-    const start=parseKey(state.pattern.start);
-    const n=daysBetween(start,d);
-    const cycle=state.pattern.work+state.pattern.off;
-    const pos=((n%cycle)+cycle)%cycle;
-    return pos < state.pattern.work ? "work" : "off";
-  }
-  function renderMonths(){
-    const root=document.getElementById("calendar"); root.innerHTML="";
-    // Render 18 months centered around the selected month for a smooth, long calendar scroll.
-    for(let offset=-2; offset<=15; offset++){
-      const d=new Date(state.anchorYear,state.anchorMonth+offset,1);
-      root.appendChild(renderMonth(d));
-    }
-    updateStats();
-  }
-  function renderMonth(first){
-    const section=document.createElement("section"); section.className="month";
-    const title=document.createElement("h2"); title.className="month-title";
-    title.textContent=`${monthName(first.getMonth())} ${first.getFullYear()}`;
-    section.appendChild(title);
-    const grid=document.createElement("div"); grid.className="grid";
-    const firstDay=(first.getDay()+6)%7;
-    for(let i=0;i<firstDay;i++){ const e=document.createElement("div"); e.className="day empty"; grid.appendChild(e); }
-    const count=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
-    for(let day=1;day<=count;day++){
-      const d=new Date(first.getFullYear(),first.getMonth(),day), k=dateKey(d);
-      const status=patternStatus(d);
-      const cell=document.createElement("button"); cell.className=`day ${status}`;
-      if(d.toDateString()===new Date().toDateString()) cell.classList.add("today");
-      cell.dataset.date=k; cell.setAttribute("aria-label",`${day} ${monthName(first.getMonth())} ${first.getFullYear()}`);
-      cell.innerHTML=`<span class="day-number">${day}</span>${state.overrides[k]==="special"?'<span class="day-note">особый</span>':''}`;
-      cell.addEventListener("click",()=>cycleDay(k));
-      grid.appendChild(cell);
-    }
-    section.appendChild(grid); return section;
-  }
-  function cycleDay(k){
-    const current=state.overrides[k] || patternStatus(parseKey(k));
-    // Explicit cycle: ordinary -> work -> special -> ordinary.
-    // A generated working day becomes ordinary first; an ordinary day becomes work.
-    const next=current==="off"?"work":current==="work"?"special":"off";
-    state.overrides[k]=next; save(); renderMonths();
-    showToast(next==="work"?"Рабочий день":next==="special"?"Особый день / смена":"Выходной");
-  }
-  function setPattern(w,o,start){
-    state.pattern={work:w,off:o,start:start||dateKey(new Date())};
-    // Pattern change does not erase manual exceptions.
-    save(); renderMonths(); showToast(`График ${w}/${o} применён`);
-  }
-  function updateStats(){
-    let work=0, off=0;
-    if(state.mode==="month"){
-      const y=state.anchorYear,m=state.anchorMonth, days=new Date(y,m+1,0).getDate();
-      for(let i=1;i<=days;i++){ const s=patternStatus(new Date(y,m,i)); s==="work"||s==="special"?work++:off++; }
-    }else{
-      const y=now.getFullYear();
-      for(let m=0;m<12;m++){ const days=new Date(y,m+1,0).getDate(); for(let i=1;i<=days;i++){ const s=patternStatus(new Date(y,m,i)); s==="work"||s==="special"?work++:off++; } }
-    }
-    document.getElementById("workStat").textContent=`Рабочих дней: ${work}`;
-    document.getElementById("offStat").textContent=`Выходных дней: ${off}`;
-    document.getElementById("monthMode").classList.toggle("active",state.mode==="month");
-    document.getElementById("yearMode").classList.toggle("active",state.mode==="year");
-  }
-  function openModal(){
-    document.getElementById("workDays").value=state.pattern.work;
-    document.getElementById("offDays").value=state.pattern.off;
-    document.getElementById("startDate").value=state.pattern.start;
-    document.getElementById("modal").classList.add("open");
-    setTimeout(()=>document.getElementById("workDays").focus(),80);
-  }
-  function closeModal(){document.getElementById("modal").classList.remove("open")}
-  function showToast(t){
-    const el=document.getElementById("toast"); el.textContent=t; el.classList.add("show");
-    clearTimeout(window.__toast); window.__toast=setTimeout(()=>el.classList.remove("show"),1400);
-  }
+ function status(d){
+   const k=key(d);
+   if(state.overrides[k]) return state.overrides[k];
+   const start=parse(state.pattern.start), n=diff(start,d), cycle=state.pattern.work+state.pattern.off;
+   const pos=((n%cycle)+cycle)%cycle;
+   return pos<state.pattern.work?"work":"off";
+ }
+ function makeMonth(first){
+   const section=document.createElement("section");section.className="month";section.dataset.month=`${first.getFullYear()}-${first.getMonth()}`;
+   const head=document.createElement("div");head.className="month-head";
+   const title=document.createElement("h2");title.className="month-title";title.textContent=`${months[first.getMonth()]} ${first.getFullYear()}`;
+   head.append(title);
+   if(first.getFullYear()===today.getFullYear()&&first.getMonth()===today.getMonth()){const b=document.createElement("span");b.className="month-badge";b.textContent="ТЕКУЩИЙ";head.append(b)}
+   section.append(head);
+   const grid=document.createElement("div");grid.className="grid";
+   const offset=(first.getDay()+6)%7;
+   for(let i=0;i<offset;i++){let e=document.createElement("div");e.className="day empty";grid.append(e)}
+   const count=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
+   for(let n=1;n<=count;n++){
+     const d=new Date(first.getFullYear(),first.getMonth(),n), s=status(d), cell=document.createElement("button");
+     cell.className=`day ${s}`;cell.dataset.date=key(d);
+     if(d.getDay()===0||d.getDay()===6)cell.classList.add("weekend");
+     if(key(d)===key(today))cell.classList.add("today");
+     cell.innerHTML=`<span class="num">${n}</span>${state.overrides[key(d)]==="special"?'<span class="day-note">особый</span>':''}`;
+     cell.addEventListener("click",()=>cycle(cell.dataset.date));
+     grid.append(cell);
+   }
+   section.append(grid);return section;
+ }
+ function render(){
+   const root=document.getElementById("calendar");root.innerHTML="";
+   // Keep a useful browsing window, but always center it around the real current month.
+   for(let off=-2;off<=12;off++)root.append(makeMonth(new Date(today.getFullYear(),today.getMonth()+off,1)));
+   updateStats();
+   requestAnimationFrame(()=>focusToday(false));
+ }
+ function cycle(k){
+   const d=parse(k), current=state.overrides[k]||status(d);
+   state.overrides[k]=current==="off"?"work":current==="work"?"special":"off";
+   save();render();
+   const el=document.querySelector(`[data-date="${k}"]`);if(el){el.classList.add("pulse");setTimeout(()=>el.classList.remove("pulse"),500)}
+   toast(state.overrides[k]==="work"?"Рабочий день":state.overrides[k]==="special"?"Особый день / смена":"Выходной");
+ }
+ function updateStats(){
+   let w=0,o=0;
+   if(state.mode==="month"){
+     const days=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
+     for(let i=1;i<=days;i++){let s=status(new Date(today.getFullYear(),today.getMonth(),i));s==="work"||s==="special"?w++:o++}
+   }else{
+     for(let m=0;m<12;m++){let days=new Date(today.getFullYear(),m+1,0).getDate();for(let i=1;i<=days;i++){let s=status(new Date(today.getFullYear(),m,i));s==="work"||s==="special"?w++:o++}}
+   }
+   document.getElementById("workStat").textContent=`Рабочих дней: ${w}`;
+   document.getElementById("offStat").textContent=`Выходных дней: ${o}`;
+   document.getElementById("monthMode").classList.toggle("active",state.mode==="month");
+   document.getElementById("yearMode").classList.toggle("active",state.mode==="year");
+ }
+ function focusToday(smooth=true){
+   const el=document.querySelector(`[data-date="${key(today)}"]`);
+   if(el)el.scrollIntoView({behavior:smooth?"smooth":"auto",block:"center"});
+ }
+ function openModal(w=state.pattern.work,o=state.pattern.off){
+   document.getElementById("workDays").value=w;document.getElementById("offDays").value=o;
+   document.getElementById("startDate").value=state.pattern.start;
+   document.getElementById("modal").classList.add("open");
+ }
+ function closeModal(){document.getElementById("modal").classList.remove("open")}
+ function toast(t){let e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.remove("show"),1500)}
+ document.getElementById("todayLabel").textContent=today.toLocaleDateString("ru-RU",{day:"numeric",month:"long"});
+ document.getElementById("todayBtn").onclick=()=>{render();setTimeout(()=>focusToday(true),30)};
+ document.getElementById("scrollTop").onclick=()=>focusToday(true);
+ document.querySelectorAll("[data-pattern]").forEach(b=>b.onclick=()=>{let [w,o]=b.dataset.pattern.split("/").map(Number);openModal(w,o)});
+ document.getElementById("customBtn").onclick=()=>openModal();
+ document.getElementById("cancelBtn").onclick=closeModal;
+ document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")closeModal()};
+ document.getElementById("saveBtn").onclick=()=>{
+   let w=Math.max(1,Math.min(31,Number(document.getElementById("workDays").value)||1));
+   let o=Math.max(1,Math.min(31,Number(document.getElementById("offDays").value)||1));
+   let start=document.getElementById("startDate").value||key(today);
+   state.pattern={work:w,off:o,start};save();closeModal();render();toast(`График ${w}/${o} применён`);
+ };
+ document.getElementById("monthMode").onclick=()=>{state.mode="month";save();updateStats()};
+ document.getElementById("yearMode").onclick=()=>{state.mode="year";save();updateStats()};
 
-  document.querySelectorAll("[data-pattern]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const [w,o]=btn.dataset.pattern.split("/").map(Number);
-      document.getElementById("workDays").value=w; document.getElementById("offDays").value=o;
-      document.getElementById("startDate").value=state.pattern.start || dateKey(new Date());
-      openModal();
-    });
-  });
-  document.getElementById("customBtn").addEventListener("click",openModal);
-  document.getElementById("cancelBtn").addEventListener("click",closeModal);
-  document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
-  document.getElementById("saveBtn").addEventListener("click",()=>{
-    const w=Math.max(1,Math.min(31,Number(document.getElementById("workDays").value)||1));
-    const o=Math.max(1,Math.min(31,Number(document.getElementById("offDays").value)||1));
-    const start=document.getElementById("startDate").value || dateKey(new Date());
-    setPattern(w,o,start); closeModal();
-  });
-  document.getElementById("monthMode").addEventListener("click",()=>{state.mode="month";save();updateStats()});
-  document.getElementById("yearMode").addEventListener("click",()=>{state.mode="year";save();updateStats()});
-  document.getElementById("todayBtn").addEventListener("click",()=>{
-    state.anchorYear=now.getFullYear();state.anchorMonth=now.getMonth();save();renderMonths();
-    window.scrollTo({top:0,behavior:"smooth"});
-  });
+ let sx=0,sy=0;
+ document.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+ document.addEventListener("touchend",e=>{
+   let dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+   if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy))toast(dx<0?"Листайте вниз по календарю":"Вернитесь к текущей дате");
+ },{passive:true});
+ window.addEventListener("scroll",()=>document.getElementById("scrollTop").classList.toggle("visible",scrollY>500),{passive:true});
 
-  // Swipe between months on touch screens.
-  let sx=0,sy=0;
-  document.getElementById("calendar").addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
-  document.getElementById("calendar").addEventListener("touchend",e=>{
-    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-    if(Math.abs(dx)>70 && Math.abs(dx)>Math.abs(dy)){
-      state.anchorMonth += dx<0?1:-1; state.anchorMonth=(state.anchorMonth+12)%12;
-      // adjust year using Date to avoid December/January edge cases
-      const base=new Date(state.anchorYear,state.anchorMonth,1);
-      state.anchorYear=base.getFullYear(); state.anchorMonth=base.getMonth();
-      save();renderMonths();
-    }
-  },{passive:true});
+ // Automatic date rollover: if the page stays open through midnight, update without a reload.
+ let lastDay=key(today);
+ setInterval(()=>{
+   const d=new Date();d.setHours(0,0,0,0);
+   if(key(d)!==lastDay){location.reload()}
+ },30000);
 
-  // Clicking a month title makes that month the statistics target.
-  document.getElementById("calendar").addEventListener("click",e=>{
-    const title=e.target.closest(".month-title"); if(!title)return;
-    const section=title.closest(".month"), months=[...document.querySelectorAll(".month")];
-    const idx=months.indexOf(section); if(idx<0)return;
-    const d=new Date(state.anchorYear,state.anchorMonth+(idx-2),1);
-    state.anchorYear=d.getFullYear();state.anchorMonth=d.getMonth();save();updateStats();
-  });
-
-  renderMonths();
-
-  if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
+ render();
+ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
 </script>
 </body>
