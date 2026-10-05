@@ -1,12 +1,15 @@
 const calendarContainer = document.getElementById('calendar-container');
 const workDaysCountEl = document.getElementById('work-days-count');
 const offDaysCountEl = document.getElementById('off-days-count');
-const salaryCountEl = document.getElementById('salary-count');
+const salary10CountEl = document.getElementById('salary-10-count');
+const salary25CountEl = document.getElementById('salary-25-count');
 const periodToggle = document.getElementById('period-toggle');
 const toggleLabels = document.querySelectorAll('.toggle-label');
 const shiftSelector = document.getElementById('shift-selector');
 
-const BASE_SALARY = 8300; // Зарплата за смену
+const BASE_SALARY = 8300;     // Стандартная зарплата за смену
+const SATURDAY_SALARY = 5500; // Зарплата за смену в субботу
+
 let extraIncomes = JSON.parse(localStorage.getItem('shiftAppExtraIncomes')) || {};
 
 // Настройки смен по умолчанию (Два/два)
@@ -36,6 +39,12 @@ function isWorkDay(date) {
     return cycleDay < workDaysPattern;
 }
 
+// Расчет стоимости смены с учетом суббот
+function getDaySalaryRate(date) {
+    // 6 — это Суббота в JS (0 — Воскресенье)
+    return date.getDay() === 6 ? SATURDAY_SALARY : BASE_SALARY;
+}
+
 // Вспомогательная функция расчета зарплаты за произвольный период
 function calculateSalaryForPeriod(startDate, endDate) {
     let salary = 0;
@@ -45,7 +54,7 @@ function calculateSalaryForPeriod(startDate, endDate) {
     while (current <= endDate) {
         const dateStr = formatDateStr(current);
         if (isWorkDay(current)) {
-            salary += BASE_SALARY;
+            salary += getDaySalaryRate(current);
             workDays++;
         }
         if (extraIncomes[dateStr] && extraIncomes[dateStr].amount) {
@@ -123,41 +132,38 @@ function renderCalendar() {
 function updateStats() {
     let work = 0;
     let off = 0;
-    let totalSalary = 0;
     
     const isYearly = periodToggle.checked;
     
     if (isYearly) {
-        // Подсчет за целый год
+        let totalPay10 = 0;
+        let totalPay25 = 0;
+
         for (let m = 0; m <= 11; m++) {
             const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
             for (let day = 1; day <= daysInMonth; day++) {
                 const d = new Date(currentYear, m, day);
-                const dateStr = formatDateStr(d);
-                
-                if (isWorkDay(d)) {
-                    work++;
-                    totalSalary += BASE_SALARY;
-                } else {
-                    off++;
-                }
-
-                if (extraIncomes[dateStr] && extraIncomes[dateStr].amount) {
-                    totalSalary += parseFloat(extraIncomes[dateStr].amount);
-                }
+                if (isWorkDay(d)) work++; else off++;
             }
+
+            // Сумма 10-х и 25-х чисел за весь год
+            const prevMonthLastDay = new Date(currentYear, m, 0);
+            const prevMonth15 = new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), 15);
+            totalPay10 += calculateSalaryForPeriod(prevMonth15, prevMonthLastDay).salary;
+
+            const currMonth1 = new Date(currentYear, m, 1);
+            const currMonth15 = new Date(currentYear, m, 15);
+            totalPay25 += calculateSalaryForPeriod(currMonth1, currMonth15).salary;
         }
+
+        salary10CountEl.innerText = totalPay10.toLocaleString('ru-RU') + ' ₽';
+        salary25CountEl.innerText = totalPay25.toLocaleString('ru-RU') + ' ₽';
     } else {
-        // Подсчет за текущий месяц по новым правилам выплат
+        // Подсчет за текущий месяц
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        
         for (let day = 1; day <= daysInMonth; day++) {
             const d = new Date(currentYear, currentMonth, day);
-            if (isWorkDay(d)) {
-                work++;
-            } else {
-                off++;
-            }
+            if (isWorkDay(d)) work++; else off++;
         }
 
         // 1. Выплата 10-го числа: дни с 15 по конец ПРЕДЫДУЩЕГО месяца
@@ -170,15 +176,15 @@ function updateStats() {
         const currMonth15 = new Date(currentYear, currentMonth, 15);
         const pay25 = calculateSalaryForPeriod(currMonth1, currMonth15);
 
-        totalSalary = pay10.salary + pay25.salary;
+        salary10CountEl.innerText = pay10.salary.toLocaleString('ru-RU') + ' ₽';
+        salary25CountEl.innerText = pay25.salary.toLocaleString('ru-RU') + ' ₽';
     }
     
     workDaysCountEl.innerText = work;
     offDaysCountEl.innerText = off;
-    salaryCountEl.innerText = totalSalary.toLocaleString('ru-RU') + ' ₽';
 }
 
-// Делегирование событий для кнопок смены
+// Переключение графика
 shiftSelector.addEventListener('click', (e) => {
     const btn = e.target.closest('.shift-btn');
     if (!btn) return;
@@ -196,14 +202,14 @@ shiftSelector.addEventListener('click', (e) => {
     renderCalendar();
 });
 
-// Переключение статистики В месяце / В году
+// Переключение статистики
 periodToggle.addEventListener('change', (e) => {
     toggleLabels[0].classList.toggle('active', !e.target.checked);
     toggleLabels[1].classList.toggle('active', e.target.checked);
     updateStats();
 });
 
-// Модальное окно добавления графика
+// Добавление графика
 document.getElementById('close-shift-btn').addEventListener('click', () => {
     document.getElementById('shift-modal').classList.add('hidden');
 });
@@ -223,7 +229,6 @@ document.getElementById('save-shift-btn').addEventListener('click', () => {
         shiftSelector.insertBefore(newBtn, addBtn);
         
         document.getElementById('shift-modal').classList.add('hidden');
-        
         document.getElementById('new-work-days').value = '';
         document.getElementById('new-off-days').value = '';
         
@@ -244,7 +249,6 @@ function openDayModal(date, dateStr) {
     const day = date.getDate();
     const subtitleEl = document.querySelector('.modal-subtitle');
     
-    // Динамический вывод информации о выплатах при клике на 10 и 25 число
     if (day === 10) {
         const prevMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0);
         const prevMonth15 = new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), 15);
@@ -256,7 +260,9 @@ function openDayModal(date, dateStr) {
         const calc = calculateSalaryForPeriod(curr1, curr15);
         subtitleEl.innerText = `Выплата 25-го числа (за 1–15 тек. мес.): ${calc.salary.toLocaleString('ru-RU')} ₽ (${calc.workDays} смен)`;
     } else {
-        subtitleEl.innerText = `Дополнительные выплаты / заметки`;
+        const isSat = date.getDay() === 6;
+        const rateStr = isSat ? '5 500 ₽ (суббота)' : '8 300 ₽';
+        subtitleEl.innerText = isWorkDay(date) ? `Рабочая смена: ${rateStr}` : 'Выходной день';
     }
 
     const amountInput = document.getElementById('extra-amount');
