@@ -16,14 +16,14 @@
             <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
         </div>
 
-        <!-- Контейнер для календаря (скроллится) -->
+        <!-- Контейнер для календаря -->
         <div class="calendar-scroll-area" id="calendar-container">
-            <!-- Месяцы будут генерироваться через JS -->
+            <!-- Месяцы генерируются JS -->
         </div>
 
         <!-- Нижняя панель управления -->
         <div class="bottom-panel">
-            <div class="shift-selector">
+            <div class="shift-selector" id="shift-selector">
                 <button class="shift-btn" data-work="1" data-off="3">Один/три</button>
                 <button class="shift-btn active" data-work="2" data-off="2">Два/два</button>
                 <button class="shift-btn" data-work="3" data-off="3">Три/три</button>
@@ -41,16 +41,60 @@
 
             <div class="stats">
                 <div class="stat-item">
-                    <span>Рабочих дней</span>
+                    <span>Рабочих</span>
                     <strong id="work-days-count">0</strong>
                 </div>
                 <div class="stat-item">
-                    <span>Выходных дней</span>
+                    <span>Выходных</span>
                     <strong id="off-days-count">0</strong>
+                </div>
+                <div class="stat-item">
+                    <span>Зарплата</span>
+                    <strong id="salary-count">0 ₽</strong>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Модальное окно для доп. заработка -->
+    <div id="day-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modal-date-title">Дата</h3>
+            <p class="modal-subtitle">Зарплата 10 и 25 числа</p>
+            <div class="form-group">
+                <label>Доп. выплата за этот день (₽):</label>
+                <input type="number" id="extra-amount" placeholder="Например: 1500">
+            </div>
+            <div class="form-group">
+                <label>Комментарий (за что):</label>
+                <input type="text" id="extra-note" placeholder="Например: Премия">
+            </div>
+            <div class="modal-actions">
+                <button id="save-day-btn">Сохранить</button>
+                <button id="close-day-btn" class="cancel-btn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для нового графика -->
+    <div id="shift-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Свой график</h3>
+            <div class="form-group">
+                <label>Количество рабочих дней:</label>
+                <input type="number" id="new-work-days" placeholder="Например: 4" min="1">
+            </div>
+            <div class="form-group">
+                <label>Количество выходных дней:</label>
+                <input type="number" id="new-off-days" placeholder="Например: 2" min="1">
+            </div>
+            <div class="modal-actions">
+                <button id="save-shift-btn">Добавить</button>
+                <button id="close-shift-btn" class="cancel-btn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
