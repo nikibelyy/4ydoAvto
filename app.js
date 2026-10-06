@@ -8,6 +8,11 @@ const toggleLabels = document.querySelectorAll('.toggle-label');
 const shiftSelector = document.getElementById('shift-selector');
 const cycleBadge = document.getElementById('current-cycle-badge');
 const toast = document.getElementById('toast');
+const todayStatusEl = document.getElementById('today-status');
+const todayDateEl = document.getElementById('today-date');
+const heroCycleEl = document.getElementById('hero-cycle');
+const heroNextPayEl = document.getElementById('hero-next-pay');
+const heroWorkCountEl = document.getElementById('hero-work-count');
 
 const BASE_SALARY = 8300;
 const SATURDAY_SALARY = 5500;
@@ -123,7 +128,32 @@ function renderCalendar() {
         generateMonth(currentYear, month);
     }
     updateStats();
+    updateHero();
     updateCycleUI();
+}
+
+function updateHero() {
+    const now = new Date();
+    const monthStart = new Date(currentYear, currentMonth, 1);
+    const monthEnd = new Date(currentYear, currentMonth + 1, 0);
+    const monthCalc = calculateSalaryForPeriod(monthStart, monthEnd);
+
+    const isWorking = isWorkDay(now);
+    todayStatusEl.textContent = isWorking ? 'Рабочая смена' : 'Выходной день';
+    todayStatusEl.classList.toggle('work', isWorking);
+    todayStatusEl.classList.toggle('off', !isWorking);
+    todayDateEl.textContent = now.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
+    heroCycleEl.textContent = `${workDaysPattern} / ${offDaysPattern}`;
+    heroWorkCountEl.textContent = `${monthCalc.workDays} смен`;
+
+    const day = now.getDate();
+    if (day < 10) {
+        heroNextPayEl.textContent = '10-го числа';
+    } else if (day < 25) {
+        heroNextPayEl.textContent = '25-го числа';
+    } else {
+        heroNextPayEl.textContent = '10-го числа';
+    }
 }
 
 function updateStats() {
@@ -249,6 +279,7 @@ periodToggle.addEventListener('change', (event) => {
     toggleLabels[0].classList.toggle('active', !event.target.checked);
     toggleLabels[1].classList.toggle('active', event.target.checked);
     updateStats();
+    updateHero();
 });
 
 document.getElementById('save-shift-btn').addEventListener('click', () => {
