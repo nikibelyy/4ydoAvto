@@ -96,3 +96,5 @@
 @media(prefers-reduced-motion:reduce){.splash-bg i,.hero-orb.one,.hero-orb.two{animation:none!important}.view,.tab,.day,.week-day{transition:none!important}}
 
 .field-hint{display:block;margin-top:7px;font-size:12px;line-height:1.35;opacity:.62}
+
+.sat-hours-field{display:none!important}.sat-hours-field.visible{display:block!important}
