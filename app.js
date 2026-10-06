@@ -44,9 +44,9 @@ function navigate(view){if(activeView===view)return;activeView=view;$$('.view').
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2300)}
 $$('.tab').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.target)));
 $('#hero-cycle').addEventListener('click',()=>navigate('schedule'));
-$('#add-extra-finance').addEventListener('click',()=>openExtra(new Date(),true));
+$('#add-extra-finance').addEventListener('click',()=>openExtra(new Date(),false));
 $('#open-extra-list').addEventListener('click',()=>{renderExtraList();openSheet('extra-list-modal')});
-$('#list-add-extra').addEventListener('click',()=>{closeSheet('extra-list-modal');openExtra(new Date(),true)});
+$('#list-add-extra').addEventListener('click',()=>{closeSheet('extra-list-modal');openExtra(new Date(),false)});
 $('#save-extra').addEventListener('click',saveExtra);
 $('#open-shift').addEventListener('click',()=>openSheet('shift-modal'));
 $('#save-shift').addEventListener('click',()=>{const w=Number.parseInt($('#new-work').value,10),o=Number.parseInt($('#new-off').value,10);if(!Number.isInteger(w)||!Number.isInteger(o)||w<1||o<1||w>31||o>31){toast('Введите числа от 1 до 31');return}if(!customPatterns.some(p=>p.work===w&&p.off===o))customPatterns.push({work:w,off:o});persist(STORAGE.custom,customPatterns);workDaysPattern=w;offDaysPattern=o;persist(STORAGE.pattern,{work:w,off:o});$('#new-work').value='';$('#new-off').value='';closeSheet('shift-modal');renderAll();toast(`График ${w} / ${o} добавлен`)});
