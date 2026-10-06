@@ -6,7 +6,7 @@
   "display": "standalone",
   "background_color": "#0d1728",
   "theme_color": "#0d1728",
-  "description": "Удобный календарь рабочих смен и расчёта выплат",
+  "description": "Смены — современный график и выплаты в стиле iOS",
   "lang": "ru",
   "orientation": "portrait",
   "icons": [
@@ -22,5 +22,6 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "version": "6.0.0"
 }
