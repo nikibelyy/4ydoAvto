@@ -8,14 +8,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Смены">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 <title>Смены</title>
 </head>
 <body>
 <div id="splash" class="splash" aria-label="Запуск приложения">
   <div class="splash-bg"><i></i><i></i><i></i></div>
   <div class="splash-inner">
-    <div class="app-logo"><span class="logo-shape"></span></div>
+    <div class="splash-mark"><span></span><i></i></div>
     <div class="splash-name">Смены</div>
     <div class="splash-caption">Ваш график. В одном месте.</div>
     <div class="splash-loader"><span></span></div>
@@ -27,11 +27,20 @@
   <div class="shell">
     <header class="topbar">
       <div class="topbar-copy"><span id="eyebrow">МОЙ ГРАФИК</span><h1 id="title">Сегодня</h1></div>
-      <button id="header-today" class="round-button" aria-label="Перейти к сегодня">⌖</button>
     </header>
 
     <div id="views" class="views">
       <section class="view active" data-view="calendar" id="view-calendar">
+        <div class="week-strip" id="week-strip" aria-label="Текущая неделя"></div>
+        <article class="today-insight" id="today-insight">
+          <div class="insight-main"><span class="insight-kicker" id="insight-kicker">СЕГОДНЯ</span><strong id="insight-title">Выходной</strong><p id="insight-subtitle">Сегодня можно выдохнуть и восстановиться.</p></div>
+          <div class="insight-badge" id="insight-badge"><span class="insight-dot"></span><b id="insight-badge-text">ОТДЫХ</b></div>
+          <div class="insight-metrics">
+            <div><span>Отработано</span><b id="worked-so-far">0 смен</b></div>
+            <div><span>Осталось</span><b id="work-left">0 смен</b></div>
+            <div><span>Следующая</span><b id="next-shift">—</b></div>
+          </div>
+        </article>
         <article id="hero" class="hero">
           <div class="hero-noise"></div><div class="hero-orb one"></div><div class="hero-orb two"></div>
           <div class="hero-row">
@@ -72,7 +81,7 @@
         <div class="settings-card"><label><span><b>Обычная смена</b><small>Оплата за рабочий день</small></span><div class="money"><input id="base-input" type="number" inputmode="decimal"><em>₽</em></div></label><label><span><b>Субботняя смена</b><small>Отдельный тариф на субботу</small></span><div class="money"><input id="sat-input" type="number" inputmode="decimal"><em>₽</em></div></label></div>
         <div class="group-title">ПРИЛОЖЕНИЕ</div>
         <div class="settings-card actions"><button id="settings-today"><span class="action-icon blue">⌖</span><span><b>Вернуться к сегодня</b><small>Открыть текущий месяц</small></span><i>›</i></button><button id="settings-reset"><span class="action-icon red">↺</span><span><b>Сбросить данные</b><small>Удалить доплаты и свои графики</small></span><i>›</i></button></div>
-        <div class="version">Смены · версия 7.0</div>
+        <div class="version">Смены · версия 8.0</div>
       </section>
     </div>
 
@@ -89,6 +98,6 @@
 <div id="extra-list-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="extra-list-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="extra-list-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">ФИНАНСЫ</span><h3>Доплаты</h3><p>Все дополнительные выплаты за выбранный месяц.</p><div id="extra-list" class="extra-list"></div><button id="list-add-extra" class="primary-action">＋ Добавить доплату</button></div></div>
 <div id="shift-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="shift-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="shift-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">НОВЫЙ ЦИКЛ</span><h3>Создать график</h3><p>Например, 4 рабочих дня и 2 выходных.</p><div class="cycle-fields"><label class="field"><span>Рабочих</span><input id="new-work" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label><strong>/</strong><label class="field"><span>Выходных</span><input id="new-off" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label></div><div class="sheet-actions"><button id="save-shift" class="primary-action">Добавить график</button><button class="secondary-action" data-close="shift-modal">Отмена</button></div></div></div>
 <div id="toast" class="toast"></div>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
