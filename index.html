@@ -8,14 +8,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Смены">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 <title>Смены</title>
 </head>
 <body>
 <div id="splash" class="splash" aria-label="Запуск приложения">
   <div class="splash-bg"><i></i><i></i><i></i></div>
   <div class="splash-inner">
-    <div class="splash-mark"><span></span><i></i></div>
     <div class="splash-name">Смены</div>
     <div class="splash-caption">Ваш график. В одном месте.</div>
     <div class="splash-loader"><span></span></div>
@@ -44,7 +43,7 @@
         <article id="hero" class="hero">
           <div class="hero-noise"></div><div class="hero-orb one"></div><div class="hero-orb two"></div>
           <div class="hero-row">
-            <div><span class="eyebrow-light">СЕГОДНЯ</span><h2 id="today-status">Загрузка…</h2><p id="today-date">—</p></div>
+            <div><span class="eyebrow-light">СЕГОДНЯ · <span id="hero-weekday">—</span></span><h2 id="today-status">Загрузка…</h2><p id="today-date">—</p></div>
             <button id="hero-cycle" class="cycle-chip">2 / 2</button>
           </div>
           <div class="hero-track"><span id="cycle-progress"></span></div>
@@ -52,7 +51,6 @@
         </article>
 
         <div class="section-head calendar-head"><div><span class="section-label">КАЛЕНДАРЬ</span><strong id="calendar-period">2026</strong></div><button id="jump-today" class="soft-button">Сегодня</button></div>
-        <div class="weekdays"><span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span></div>
         <div id="calendar" class="calendar"></div>
       </section>
 
@@ -94,10 +92,10 @@
   </div>
 </main>
 
-<div id="day-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="day-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="day-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">ДЕНЬ</span><h3 id="day-title">Доплата</h3><p>Добавьте премию, доплату или комментарий к выбранной дате.</p><label class="field"><span>Дата</span><input id="day-date" type="date"></label><label class="field"><span>Сумма</span><div class="field-money"><input id="extra-amount" type="number" inputmode="decimal" placeholder="0"><b>₽</b></div></label><label class="field"><span>Комментарий</span><input id="extra-note" type="text" placeholder="Например, премия"></label><div class="sheet-actions"><button id="save-extra" class="primary-action">Сохранить доплату</button><button class="secondary-action" data-close="day-modal">Отмена</button></div></div></div>
+<div id="day-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="day-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="day-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">ДЕНЬ</span><h3 id="day-title">Доплата</h3><p>Добавьте премию, доплату или комментарий к выбранной дате.</p><label class="field"><span>Сумма</span><div class="field-money"><input id="extra-amount" type="number" inputmode="decimal" placeholder="0"><b>₽</b></div></label><label class="field"><span>Комментарий</span><input id="extra-note" type="text" placeholder="Например, премия"></label><div class="sheet-actions"><button id="save-extra" class="primary-action">Сохранить доплату</button><button class="secondary-action" data-close="day-modal">Отмена</button></div></div></div>
 <div id="extra-list-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="extra-list-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="extra-list-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">ФИНАНСЫ</span><h3>Доплаты</h3><p>Все дополнительные выплаты за выбранный месяц.</p><div id="extra-list" class="extra-list"></div><button id="list-add-extra" class="primary-action">＋ Добавить доплату</button></div></div>
 <div id="shift-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="shift-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="shift-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">НОВЫЙ ЦИКЛ</span><h3>Создать график</h3><p>Например, 4 рабочих дня и 2 выходных.</p><div class="cycle-fields"><label class="field"><span>Рабочих</span><input id="new-work" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label><strong>/</strong><label class="field"><span>Выходных</span><input id="new-off" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label></div><div class="sheet-actions"><button id="save-shift" class="primary-action">Добавить график</button><button class="secondary-action" data-close="shift-modal">Отмена</button></div></div></div>
 <div id="toast" class="toast"></div>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>
