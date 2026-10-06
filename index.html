@@ -2,103 +2,159 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>График Смен</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0f766e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Смены">
+    <title>График смен</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f6ebeb">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Шапка с днями недели -->
-        <div class="weekdays">
-            <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
-        </div>
-
-        <!-- Контейнер для календаря -->
-        <div class="calendar-scroll-area" id="calendar-container">
-            <!-- Месяцы генерируются JS -->
-        </div>
-
-        <!-- Нижняя панель управления -->
-        <div class="bottom-panel">
-            <div class="shift-selector" id="shift-selector">
-                <button class="shift-btn" data-work="1" data-off="3">Один/три</button>
-                <button class="shift-btn active" data-work="2" data-off="2">Два/два</button>
-                <button class="shift-btn" data-work="3" data-off="3">Три/три</button>
-                <button class="shift-btn add-btn">Добавить</button>
-            </div>
-            
-            <div class="toggle-container">
-                <span class="toggle-label active">В месяце</span>
-                <label class="switch">
-                    <input type="checkbox" id="period-toggle">
-                    <span class="slider round"></span>
-                </label>
-                <span class="toggle-label">В году</span>
-            </div>
-
-            <div class="stats">
-                <div class="stat-item">
-                    <span>Рабочих</span>
-                    <strong id="work-days-count">0</strong>
-                </div>
-                <div class="stat-item">
-                    <span>Выходных</span>
-                    <strong id="off-days-count">0</strong>
-                </div>
-                <div class="stat-item">
-                    <span>ЗП 10-го</span>
-                    <strong id="salary-10-count">0 ₽</strong>
-                </div>
-                <div class="stat-item">
-                    <span>ЗП 25-го</span>
-                    <strong id="salary-25-count">0 ₽</strong>
+    <!-- Экран запуска приложения -->
+    <div class="splash-screen" id="splash-screen" aria-label="Загрузка приложения">
+        <div class="splash-content">
+            <div class="app-logo">
+                <div class="logo-calendar">
+                    <span class="logo-check">✓</span>
                 </div>
             </div>
+            <div class="splash-title">Смены</div>
+            <div class="splash-subtitle">Ваш рабочий график всегда под рукой</div>
+            <div class="loader" aria-hidden="true"><span></span></div>
+            <div class="loader-text" id="loader-text">Подготавливаем календарь…</div>
         </div>
     </div>
 
-    <!-- Модальное окно для доп. заработка -->
+    <main class="app-shell" id="app-shell" aria-hidden="true">
+        <div class="app-container">
+            <header class="app-header">
+                <div>
+                    <p class="eyebrow">МОЙ ГРАФИК</p>
+                    <h1>Рабочие смены</h1>
+                </div>
+                <button class="header-today" id="jump-today-btn" type="button" aria-label="Перейти к сегодняшнему дню">
+                    <span class="header-today-icon">⌁</span>
+                    <span>Сегодня</span>
+                </button>
+            </header>
+
+            <div class="weekdays">
+                <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
+            </div>
+
+            <section class="calendar-scroll-area" id="calendar-container" aria-label="Календарь"></section>
+
+            <section class="bottom-panel">
+                <div class="panel-handle" aria-hidden="true"></div>
+
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">ГРАФИК</span>
+                        <strong>Выберите режим смен</strong>
+                    </div>
+                    <span class="cycle-badge" id="current-cycle-badge">2 / 2</span>
+                </div>
+
+                <div class="shift-selector" id="shift-selector">
+                    <button class="shift-btn" data-work="1" data-off="3" type="button">
+                        <span>1 / 3</span><small>день / отдых</small>
+                    </button>
+                    <button class="shift-btn active" data-work="2" data-off="2" type="button">
+                        <span>2 / 2</span><small>день / отдых</small>
+                    </button>
+                    <button class="shift-btn" data-work="3" data-off="3" type="button">
+                        <span>3 / 3</span><small>день / отдых</small>
+                    </button>
+                    <button class="shift-btn add-btn" type="button">
+                        <span>＋</span><small>свой график</small>
+                    </button>
+                </div>
+
+                <div class="period-row">
+                    <span class="toggle-label active">Месяц</span>
+                    <label class="switch">
+                        <input type="checkbox" id="period-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label">Год</span>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="stat-icon work-icon">●</span>
+                        <span class="stat-label">Рабочих</span>
+                        <strong id="work-days-count">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon off-icon">○</span>
+                        <span class="stat-label">Выходных</span>
+                        <strong id="off-days-count">0</strong>
+                    </div>
+                    <div class="stat-card salary-card">
+                        <span class="stat-icon salary-icon">₽</span>
+                        <span class="stat-label">ЗП 10-го</span>
+                        <strong id="salary-10-count">0 ₽</strong>
+                    </div>
+                    <div class="stat-card salary-card">
+                        <span class="stat-icon salary-icon">₽</span>
+                        <span class="stat-label">ЗП 25-го</span>
+                        <strong id="salary-25-count">0 ₽</strong>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
     <div id="day-modal" class="modal hidden">
-        <div class="modal-content">
+        <div class="modal-backdrop" data-close-modal="day-modal"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-date-title">
+            <button class="modal-close" type="button" data-close-modal="day-modal" aria-label="Закрыть">×</button>
+            <div class="modal-icon">₽</div>
             <h3 id="modal-date-title">Дата</h3>
-            <p class="modal-subtitle">Зарплата 10 и 25 числа</p>
+            <p class="modal-subtitle">Информация о смене</p>
             <div class="form-group">
-                <label>Доп. выплата за этот день (₽):</label>
-                <input type="number" id="extra-amount" placeholder="Например: 1500">
+                <label for="extra-amount">Доп. выплата за этот день</label>
+                <div class="input-wrap"><input type="number" id="extra-amount" inputmode="decimal" placeholder="0"><span>₽</span></div>
             </div>
             <div class="form-group">
-                <label>Комментарий (за что):</label>
-                <input type="text" id="extra-note" placeholder="Например: Премия">
+                <label for="extra-note">Комментарий</label>
+                <input type="text" id="extra-note" placeholder="Например: премия">
             </div>
             <div class="modal-actions">
-                <button id="save-day-btn">Сохранить</button>
-                <button id="close-day-btn" class="cancel-btn">Отмена</button>
+                <button id="save-day-btn" type="button">Сохранить</button>
+                <button id="close-day-btn" class="cancel-btn" type="button">Отмена</button>
             </div>
         </div>
     </div>
 
-    <!-- Модальное окно для нового графика -->
     <div id="shift-modal" class="modal hidden">
-        <div class="modal-content">
-            <h3>Свой график</h3>
-            <div class="form-group">
-                <label>Количество рабочих дней:</label>
-                <input type="number" id="new-work-days" placeholder="Например: 4" min="1">
-            </div>
-            <div class="form-group">
-                <label>Количество выходных дней:</label>
-                <input type="number" id="new-off-days" placeholder="Например: 2" min="1">
+        <div class="modal-backdrop" data-close-modal="shift-modal"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="shift-modal-title">
+            <button class="modal-close" type="button" data-close-modal="shift-modal" aria-label="Закрыть">×</button>
+            <div class="modal-icon">＋</div>
+            <h3 id="shift-modal-title">Свой график</h3>
+            <p class="modal-subtitle">Настройте цикл под свою работу</p>
+            <div class="cycle-inputs">
+                <div class="form-group">
+                    <label for="new-work-days">Рабочих дней</label>
+                    <input type="number" id="new-work-days" placeholder="2" min="1" max="31" inputmode="numeric">
+                </div>
+                <div class="cycle-divider">:</div>
+                <div class="form-group">
+                    <label for="new-off-days">Выходных</label>
+                    <input type="number" id="new-off-days" placeholder="2" min="1" max="31" inputmode="numeric">
+                </div>
             </div>
             <div class="modal-actions">
-                <button id="save-shift-btn">Добавить</button>
-                <button id="close-shift-btn" class="cancel-btn">Отмена</button>
+                <button id="save-shift-btn" type="button">Добавить график</button>
+                <button id="close-shift-btn" class="cancel-btn" type="button">Отмена</button>
             </div>
         </div>
     </div>
 
+    <div class="toast" id="toast" role="status"></div>
     <script src="app.js"></script>
 </body>
 </html>

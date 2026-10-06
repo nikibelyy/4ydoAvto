@@ -6,23 +6,28 @@ const salary25CountEl = document.getElementById('salary-25-count');
 const periodToggle = document.getElementById('period-toggle');
 const toggleLabels = document.querySelectorAll('.toggle-label');
 const shiftSelector = document.getElementById('shift-selector');
+const cycleBadge = document.getElementById('current-cycle-badge');
+const toast = document.getElementById('toast');
 
-const BASE_SALARY = 8300;     // Стандартная зарплата за смену
-const SATURDAY_SALARY = 5500; // Зарплата за смену в субботу
+const BASE_SALARY = 8300;
+const SATURDAY_SALARY = 5500;
 
-let extraIncomes = JSON.parse(localStorage.getItem('shiftAppExtraIncomes')) || {};
+let extraIncomes = JSON.parse(localStorage.getItem('shiftAppExtraIncomes') || '{}');
+let customPatterns = JSON.parse(localStorage.getItem('shiftAppCustomPatterns') || '[]');
 
-// Настройки смен по умолчанию (Два/два)
-let workDaysPattern = 2;
-let offDaysPattern = 2;
+let savedPattern = JSON.parse(localStorage.getItem('shiftAppPattern') || '{"work":2,"off":2}');
+let workDaysPattern = Number(savedPattern.work) || 2;
+let offDaysPattern = Number(savedPattern.off) || 2;
 
-// Базовая дата отсчета
-const baseShiftDate = new Date(Date.UTC(2026, 8, 2)); 
+const baseShiftDate = new Date(Date.UTC(2026, 8, 2));
 const today = new Date();
 const currentYear = today.getFullYear();
 const currentMonth = today.getMonth();
 
-const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+const monthNames = [
+    "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+];
 
 function formatDateStr(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -30,34 +35,28 @@ function formatDateStr(date) {
 
 function isWorkDay(date) {
     const dUTC = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-    const diffTime = dUTC - baseShiftDate.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
+    const diffDays = Math.floor((dUTC - baseShiftDate.getTime()) / 86400000);
     const cycleLength = workDaysPattern + offDaysPattern;
     const cycleDay = ((diffDays % cycleLength) + cycleLength) % cycleLength;
-    
     return cycleDay < workDaysPattern;
 }
 
-// Расчет стоимости смены с учетом суббот
 function getDaySalaryRate(date) {
-    // 6 — это Суббота в JS (0 — Воскресенье)
     return date.getDay() === 6 ? SATURDAY_SALARY : BASE_SALARY;
 }
 
-// Вспомогательная функция расчета зарплаты за произвольный период
 function calculateSalaryForPeriod(startDate, endDate) {
     let salary = 0;
     let workDays = 0;
-    let current = new Date(startDate);
-    
+    const current = new Date(startDate);
+
     while (current <= endDate) {
         const dateStr = formatDateStr(current);
         if (isWorkDay(current)) {
             salary += getDaySalaryRate(current);
             workDays++;
         }
-        if (extraIncomes[dateStr] && extraIncomes[dateStr].amount) {
+        if (extraIncomes[dateStr]?.amount) {
             salary += parseFloat(extraIncomes[dateStr].amount);
         }
         current.setDate(current.getDate() + 1);
@@ -68,85 +67,81 @@ function calculateSalaryForPeriod(startDate, endDate) {
 function generateMonth(year, month) {
     const monthDiv = document.createElement('div');
     monthDiv.className = 'month-block';
-    
+    monthDiv.dataset.month = `${year}-${String(month + 1).padStart(2, '0')}`;
+
     const title = document.createElement('div');
     title.className = 'month-title';
-    title.innerText = monthNames[month] + (year !== 2026 ? ' ' + year : '');
+    title.innerText = monthNames[month] + (year !== currentYear ? ` ${year}` : '');
     monthDiv.appendChild(title);
-    
+
     const grid = document.createElement('div');
     grid.className = 'days-grid';
-    
+
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
-    let startDay = firstDay === 0 ? 6 : firstDay - 1;
-    
+    const startDay = firstDay === 0 ? 6 : firstDay - 1;
+
     for (let i = 0; i < startDay; i++) {
         const empty = document.createElement('div');
         empty.className = 'day empty';
         grid.appendChild(empty);
     }
-    
+
     for (let day = 1; day <= daysInMonth; day++) {
         const currentDate = new Date(year, month, day);
         const dateStr = formatDateStr(currentDate);
-        
-        const dayEl = document.createElement('div');
+
+        const dayEl = document.createElement('button');
+        dayEl.type = 'button';
         dayEl.className = 'day';
         dayEl.innerText = day;
-        
+        dayEl.setAttribute('aria-label', currentDate.toLocaleDateString('ru-RU', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        }));
+
         if (currentDate.toDateString() === today.toDateString()) {
             dayEl.classList.add('today');
-        } 
-        
+        }
         if (isWorkDay(currentDate)) {
             dayEl.classList.add('work');
         }
-
-        // Отметка дополнительных начислений
         if (extraIncomes[dateStr]) {
             dayEl.classList.add('has-extra');
         }
 
-        // Открытие модального окна по клику
         dayEl.addEventListener('click', () => openDayModal(currentDate, dateStr));
-        
         grid.appendChild(dayEl);
     }
-    
+
     monthDiv.appendChild(grid);
     calendarContainer.appendChild(monthDiv);
 }
 
 function renderCalendar() {
     calendarContainer.innerHTML = '';
-    
     for (let month = 0; month < 12; month++) {
         generateMonth(currentYear, month);
     }
-    
     updateStats();
+    updateCycleUI();
 }
 
 function updateStats() {
     let work = 0;
     let off = 0;
-    
     const isYearly = periodToggle.checked;
-    
+
     if (isYearly) {
         let totalPay10 = 0;
         let totalPay25 = 0;
 
-        for (let m = 0; m <= 11; m++) {
+        for (let m = 0; m < 12; m++) {
             const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
             for (let day = 1; day <= daysInMonth; day++) {
                 const d = new Date(currentYear, m, day);
                 if (isWorkDay(d)) work++; else off++;
             }
 
-            // Сумма 10-х и 25-х чисел за весь год
             const prevMonthLastDay = new Date(currentYear, m, 0);
             const prevMonth15 = new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), 15);
             totalPay10 += calculateSalaryForPeriod(prevMonth15, prevMonthLastDay).salary;
@@ -159,19 +154,16 @@ function updateStats() {
         salary10CountEl.innerText = totalPay10.toLocaleString('ru-RU') + ' ₽';
         salary25CountEl.innerText = totalPay25.toLocaleString('ru-RU') + ' ₽';
     } else {
-        // Подсчет за текущий месяц
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         for (let day = 1; day <= daysInMonth; day++) {
             const d = new Date(currentYear, currentMonth, day);
             if (isWorkDay(d)) work++; else off++;
         }
 
-        // 1. Выплата 10-го числа: дни с 15 по конец ПРЕДЫДУЩЕГО месяца
         const prevMonthLastDay = new Date(currentYear, currentMonth, 0);
         const prevMonth15 = new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), 15);
         const pay10 = calculateSalaryForPeriod(prevMonth15, prevMonthLastDay);
 
-        // 2. Выплата 25-го числа: дни с 1 по 15 число ТЕКУЩЕГО месяца
         const currMonth1 = new Date(currentYear, currentMonth, 1);
         const currMonth15 = new Date(currentYear, currentMonth, 15);
         const pay25 = calculateSalaryForPeriod(currMonth1, currMonth15);
@@ -179,139 +171,239 @@ function updateStats() {
         salary10CountEl.innerText = pay10.salary.toLocaleString('ru-RU') + ' ₽';
         salary25CountEl.innerText = pay25.salary.toLocaleString('ru-RU') + ' ₽';
     }
-    
+
     workDaysCountEl.innerText = work;
     offDaysCountEl.innerText = off;
 }
 
-// Переключение графика
-shiftSelector.addEventListener('click', (e) => {
-    const btn = e.target.closest('.shift-btn');
+function updateCycleUI() {
+    cycleBadge.innerText = `${workDaysPattern} / ${offDaysPattern}`;
+
+    document.querySelectorAll('.shift-btn:not(.add-btn)').forEach(btn => {
+        const active = Number(btn.dataset.work) === workDaysPattern &&
+            Number(btn.dataset.off) === offDaysPattern;
+        btn.classList.toggle('active', active);
+    });
+}
+
+function savePattern() {
+    localStorage.setItem('shiftAppPattern', JSON.stringify({
+        work: workDaysPattern,
+        off: offDaysPattern
+    }));
+}
+
+function addCustomPatternButton(work, off) {
+    const exists = [...shiftSelector.querySelectorAll('.shift-btn:not(.add-btn)')]
+        .some(btn => Number(btn.dataset.work) === work && Number(btn.dataset.off) === off);
+
+    if (exists) return;
+
+    const newBtn = document.createElement('button');
+    newBtn.type = 'button';
+    newBtn.className = 'shift-btn';
+    newBtn.dataset.work = work;
+    newBtn.dataset.off = off;
+    newBtn.innerHTML = `<span>${work} / ${off}</span><small>свой график</small>`;
+
+    const addBtn = shiftSelector.querySelector('.add-btn');
+    shiftSelector.insertBefore(newBtn, addBtn);
+}
+
+function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function openModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+    document.body.classList.add('modal-open');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.add('hidden');
+    if (!document.querySelector('.modal:not(.hidden)')) {
+        document.body.classList.remove('modal-open');
+    }
+}
+
+shiftSelector.addEventListener('click', (event) => {
+    const btn = event.target.closest('.shift-btn');
     if (!btn) return;
-    
+
     if (btn.classList.contains('add-btn')) {
-        document.getElementById('shift-modal').classList.remove('hidden');
+        openModal('shift-modal');
+        setTimeout(() => document.getElementById('new-work-days').focus(), 150);
         return;
     }
 
-    document.querySelectorAll('.shift-btn:not(.add-btn)').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    workDaysPattern = parseInt(btn.dataset.work);
-    offDaysPattern = parseInt(btn.dataset.off);
+    workDaysPattern = Number(btn.dataset.work);
+    offDaysPattern = Number(btn.dataset.off);
+    savePattern();
     renderCalendar();
 });
 
-// Переключение статистики
-periodToggle.addEventListener('change', (e) => {
-    toggleLabels[0].classList.toggle('active', !e.target.checked);
-    toggleLabels[1].classList.toggle('active', e.target.checked);
+periodToggle.addEventListener('change', (event) => {
+    toggleLabels[0].classList.toggle('active', !event.target.checked);
+    toggleLabels[1].classList.toggle('active', event.target.checked);
     updateStats();
 });
 
-// Добавление графика
-document.getElementById('close-shift-btn').addEventListener('click', () => {
-    document.getElementById('shift-modal').classList.add('hidden');
+document.getElementById('save-shift-btn').addEventListener('click', () => {
+    const w = parseInt(document.getElementById('new-work-days').value, 10);
+    const o = parseInt(document.getElementById('new-off-days').value, 10);
+
+    if (!Number.isInteger(w) || !Number.isInteger(o) || w < 1 || o < 1 || w > 31 || o > 31) {
+        showToast('Введите рабочие и выходные дни от 1 до 31');
+        return;
+    }
+
+    addCustomPatternButton(w, o);
+
+    if (!customPatterns.some(item => item.work === w && item.off === o)) {
+        customPatterns.push({ work: w, off: o });
+        localStorage.setItem('shiftAppCustomPatterns', JSON.stringify(customPatterns));
+    }
+
+    workDaysPattern = w;
+    offDaysPattern = o;
+    savePattern();
+    renderCalendar();
+    closeModal('shift-modal');
+
+    document.getElementById('new-work-days').value = '';
+    document.getElementById('new-off-days').value = '';
+    showToast(`График ${w} / ${o} добавлен`);
 });
 
-document.getElementById('save-shift-btn').addEventListener('click', () => {
-    const w = parseInt(document.getElementById('new-work-days').value);
-    const o = parseInt(document.getElementById('new-off-days').value);
-    
-    if (w > 0 && o > 0) {
-        const newBtn = document.createElement('button');
-        newBtn.className = 'shift-btn';
-        newBtn.dataset.work = w;
-        newBtn.dataset.off = o;
-        newBtn.innerText = `${w}/${o}`;
-        
-        const addBtn = document.querySelector('.add-btn');
-        shiftSelector.insertBefore(newBtn, addBtn);
-        
-        document.getElementById('shift-modal').classList.add('hidden');
-        document.getElementById('new-work-days').value = '';
-        document.getElementById('new-off-days').value = '';
-        
-        newBtn.click();
-    } else {
-        alert("Пожалуйста, введите корректные значения (минимум 1).");
+document.getElementById('close-shift-btn').addEventListener('click', () => closeModal('shift-modal'));
+document.getElementById('close-day-btn').addEventListener('click', () => closeModal('day-modal'));
+
+document.querySelectorAll('[data-close-modal]').forEach(element => {
+    element.addEventListener('click', () => closeModal(element.dataset.closeModal));
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        document.querySelectorAll('.modal:not(.hidden)').forEach(modal => closeModal(modal.id));
     }
 });
 
-// Модальное окно дня
 let currentSelectedDateStr = null;
 
 function openDayModal(date, dateStr) {
     currentSelectedDateStr = dateStr;
+
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('modal-date-title').innerText = date.toLocaleDateString('ru-RU', options);
-    
+    document.getElementById('modal-date-title').innerText =
+        date.toLocaleDateString('ru-RU', options);
+
     const day = date.getDate();
-    const subtitleEl = document.querySelector('.modal-subtitle');
-    
+    const subtitleEl = document.querySelector('#day-modal .modal-subtitle');
+
     if (day === 10) {
         const prevMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0);
         const prevMonth15 = new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), 15);
         const calc = calculateSalaryForPeriod(prevMonth15, prevMonthLastDay);
-        subtitleEl.innerText = `Выплата 10-го числа (за 15–${prevMonthLastDay.getDate()} прошл. мес.): ${calc.salary.toLocaleString('ru-RU')} ₽ (${calc.workDays} смен)`;
+        subtitleEl.innerText =
+            `Выплата 10-го: ${calc.salary.toLocaleString('ru-RU')} ₽ · ${calc.workDays} смен`;
     } else if (day === 25) {
         const curr1 = new Date(date.getFullYear(), date.getMonth(), 1);
         const curr15 = new Date(date.getFullYear(), date.getMonth(), 15);
         const calc = calculateSalaryForPeriod(curr1, curr15);
-        subtitleEl.innerText = `Выплата 25-го числа (за 1–15 тек. мес.): ${calc.salary.toLocaleString('ru-RU')} ₽ (${calc.workDays} смен)`;
+        subtitleEl.innerText =
+            `Выплата 25-го: ${calc.salary.toLocaleString('ru-RU')} ₽ · ${calc.workDays} смен`;
     } else {
         const isSat = date.getDay() === 6;
-        const rateStr = isSat ? '5 500 ₽ (суббота)' : '8 300 ₽';
-        subtitleEl.innerText = isWorkDay(date) ? `Рабочая смена: ${rateStr}` : 'Выходной день';
+        const rateStr = isSat ? '5 500 ₽ · суббота' : '8 300 ₽';
+        subtitleEl.innerText = isWorkDay(date)
+            ? `Рабочая смена · ${rateStr}`
+            : 'Выходной день';
     }
 
     const amountInput = document.getElementById('extra-amount');
     const noteInput = document.getElementById('extra-note');
-    
-    if (extraIncomes[dateStr]) {
-        amountInput.value = extraIncomes[dateStr].amount || '';
-        noteInput.value = extraIncomes[dateStr].note || '';
-    } else {
-        amountInput.value = '';
-        noteInput.value = '';
-    }
-    
-    document.getElementById('day-modal').classList.remove('hidden');
-}
+    const income = extraIncomes[dateStr];
 
-document.getElementById('close-day-btn').addEventListener('click', () => {
-    document.getElementById('day-modal').classList.add('hidden');
-});
+    amountInput.value = income?.amount || '';
+    noteInput.value = income?.note || '';
+
+    openModal('day-modal');
+    setTimeout(() => amountInput.focus(), 120);
+}
 
 document.getElementById('save-day-btn').addEventListener('click', () => {
     const amount = document.getElementById('extra-amount').value;
     const note = document.getElementById('extra-note').value.trim();
-    
-    if (amount) {
-        extraIncomes[currentSelectedDateStr] = { 
-            amount: parseFloat(amount), 
-            note: note 
+
+    if (amount && parseFloat(amount) >= 0) {
+        extraIncomes[currentSelectedDateStr] = {
+            amount: parseFloat(amount),
+            note
         };
+        showToast('Доплата сохранена');
     } else {
         delete extraIncomes[currentSelectedDateStr];
+        showToast('Доплата удалена');
     }
-    
+
     localStorage.setItem('shiftAppExtraIncomes', JSON.stringify(extraIncomes));
-    document.getElementById('day-modal').classList.add('hidden');
-    
+    closeModal('day-modal');
     renderCalendar();
 });
 
-// Инициализация
-renderCalendar();
-
-setTimeout(() => {
+document.getElementById('jump-today-btn').addEventListener('click', () => {
     const todayElement = document.querySelector('.today');
     if (todayElement) {
         todayElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast('Сегодня');
     }
-}, 100);
+});
+
+function restoreCustomPatterns() {
+    customPatterns.forEach(({ work, off }) => {
+        if (Number.isInteger(work) && Number.isInteger(off)) {
+            addCustomPatternButton(work, off);
+        }
+    });
+}
+
+function bootApp() {
+    restoreCustomPatterns();
+    renderCalendar();
+
+    requestAnimationFrame(() => {
+        const todayElement = document.querySelector('.today');
+        if (todayElement) {
+            todayElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }
+    });
+
+    const appShell = document.getElementById('app-shell');
+    const splash = document.getElementById('splash-screen');
+    const loaderText = document.getElementById('loader-text');
+
+    setTimeout(() => {
+        loaderText.textContent = 'Календарь готов';
+        appShell.classList.add('ready');
+    }, 260);
+
+    setTimeout(() => {
+        splash.classList.add('is-hidden');
+        appShell.setAttribute('aria-hidden', 'false');
+    }, 850);
+}
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootApp);
+} else {
+    bootApp();
 }
