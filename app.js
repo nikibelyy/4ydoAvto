@@ -57,3 +57,34 @@ $('#settings-reset').addEventListener('click',()=>{if(!confirm('Сбросить
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('.modal:not(.hidden)').forEach(m=>closeModal(m.id))});
 
 window.addEventListener('load',()=>{renderAll();const loader=$('#loader-text');setTimeout(()=>loader.textContent='Готовим ваш график…',450);setTimeout(()=>{loader.textContent='Готово';$('#splash-screen').classList.add('is-hidden');$('#app-shell').classList.add('ready');$('#app-shell').setAttribute('aria-hidden','false')},850)});
+
+/* ===== Interaction polish ===== */
+function haptic(ms=8){
+  try{if(navigator.vibrate) navigator.vibrate(ms)}catch{}
+}
+document.addEventListener('click',e=>{
+  const target=e.target.closest('button');
+  if(target && !target.disabled) haptic(7);
+});
+function refreshViewportHeight(){
+  document.documentElement.style.setProperty('--app-height',`${window.innerHeight}px`);
+}
+window.addEventListener('resize',refreshViewportHeight,{passive:true});
+window.addEventListener('orientationchange',()=>setTimeout(refreshViewportHeight,120),{passive:true});
+refreshViewportHeight();
+
+const _navigate=navigate;
+navigate=function(view){
+  const previous=activeView;
+  _navigate(view);
+  if(previous!==view){
+    const current=$(`#view-${view}`);
+    if(current){
+      current.scrollTop=0;
+      current.animate(
+        [{opacity:.35,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],
+        {duration:280,easing:'cubic-bezier(.2,.8,.2,1)'}
+      );
+    }
+  }
+};
