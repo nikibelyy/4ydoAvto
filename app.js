@@ -2,7 +2,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const STORAGE={extra:'shiftAppExtraIncomes',custom:'shiftAppCustomPatterns',pattern:'shiftAppPattern',base:'shiftAppBaseSalary',sat:'shiftAppSaturdaySalary'};
 const DEFAULT_BASE=8300,DEFAULT_SAT=5500;
 const monthNames=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-const today=new Date(), currentYear=today.getFullYear(), currentMonth=today.getMonth(), baseShiftDate=new Date(Date.UTC(2026,9,1));
+const today=new Date(), currentYear=today.getFullYear(), currentMonth=today.getMonth(), baseShiftDate=new Date(Date.UTC(2026,9,4));
 let extraIncomes=readJSON(STORAGE.extra,{}), customPatterns=readJSON(STORAGE.custom,[]), savedPattern=readJSON(STORAGE.pattern,{work:2,off:2});
 let workDaysPattern=Number(savedPattern.work)||2, offDaysPattern=Number(savedPattern.off)||2;
 let baseSalary=Number(localStorage.getItem(STORAGE.base)); if(!Number.isFinite(baseSalary)||baseSalary<0)baseSalary=DEFAULT_BASE;
