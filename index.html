@@ -59,7 +59,7 @@
           <div class="finance-orbit"><span></span></div>
         </article>
         <div class="section-head"><div><span class="section-label">ФИНАНСЫ</span><h2>Выплаты</h2></div><button id="add-extra-finance" class="primary-mini">＋ Доплата</button></div>
-        <div class="pay-grid"><article class="pay-card"><div class="date-badge teal">10</div><div><span>Выплата 10-го</span><b id="payout-10">0 ₽</b><small>вторая половина прошлого месяца</small></div></article><article class="pay-card"><div class="date-badge violet">25</div><div><span>Выплата 25-го</span><b id="payout-25">0 ₽</b><small>первая половина текущего месяца</small></div></article></div>
+        <div class="pay-grid"><article class="pay-card"><div class="date-badge teal">10</div><div><span>Выплата 10-го</span><b id="payout-10">0 ₽</b><small>последние 7 дней прошлого месяца</small></div></article><article class="pay-card"><div class="date-badge violet">25</div><div><span>Выплата 25-го</span><b id="payout-25">0 ₽</b><small>первые 8 дней текущего месяца</small></div></article></div>
         <div class="finance-saturday-block"><div class="finance-saturday-head"><div><span class="section-label">СУББОТЫ</span><h3>Часы после 17:00</h3></div><small>550 ₽ / час</small></div><div id="finance-saturdays" class="finance-saturday-list"></div></div>
         <div class="section-head compact"><div><span class="section-label">СТАТИСТИКА</span><h2>Этот месяц</h2></div></div>
         <div class="metric-grid"><article><span>Рабочих дней</span><b id="pay-work">0</b></article><article><span>Выходных</span><b id="pay-off">0</b></article><article><span>Доплаты</span><b id="pay-extra">0 ₽</b></article><article><span>Среднее за смену</span><b id="pay-average">0 ₽</b></article></div>
@@ -96,6 +96,6 @@
 <div id="extra-list-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="extra-list-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="extra-list-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">ФИНАНСЫ</span><h3>Доплаты</h3><p>Все дополнительные выплаты за выбранный месяц.</p><div id="extra-list" class="extra-list"></div><button id="list-add-extra" class="primary-action">＋ Добавить доплату</button></div></div>
 <div id="shift-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="shift-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="shift-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">НОВЫЙ ЦИКЛ</span><h3>Создать график</h3><p>Например, 4 рабочих дня и 2 выходных.</p><div class="cycle-fields"><label class="field"><span>Рабочих</span><input id="new-work" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label><strong>/</strong><label class="field"><span>Выходных</span><input id="new-off" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label></div><div class="sheet-actions"><button id="save-shift" class="primary-action">Добавить график</button><button class="secondary-action" data-close="shift-modal">Отмена</button></div></div></div>
 <div id="toast" class="toast"></div>
-<script src="app.js?v=14"></script>
+<script src="app.js?v=16"></script>
 </body>
 </html>
