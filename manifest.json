@@ -4,8 +4,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#080f1b",
-  "theme_color": "#080f1b",
+  "background_color": "#f3f5f8",
+  "theme_color": "#f3f5f8",
   "description": "Смены — современный график и выплаты в стиле iOS",
   "lang": "ru",
   "orientation": "portrait",
@@ -23,5 +23,5 @@
       "purpose": "any maskable"
     }
   ],
-  "version": "8.1.0"
+  "version": "6.0.0"
 }
