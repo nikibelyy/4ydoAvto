@@ -4,9 +4,9 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f3f5f8",
-  "theme_color": "#f3f5f8",
-  "description": "Смены — современный график и выплаты в стиле iOS",
+  "background_color": "#f4f7fa",
+  "theme_color": "#0d1726",
+  "description": "Личный рабочий календарь, график смен и расчёт выплат",
   "lang": "ru",
   "orientation": "portrait",
   "icons": [
@@ -23,5 +23,5 @@
       "purpose": "any maskable"
     }
   ],
-  "version": "6.0.0"
+  "version": "9.0.0"
 }

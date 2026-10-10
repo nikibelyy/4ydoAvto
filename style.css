@@ -129,3 +129,34 @@ button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus
 @media(max-width:390px){.topbar{padding-left:17px;padding-right:17px}.view{padding-left:14px;padding-right:14px}.view[data-view=calendar]>:not(.calendar){margin-left:14px;margin-right:14px}.today-insight{border-radius:23px}.tabbar{backdrop-filter:blur(22px)}}
 @media(hover:none){.pay-card:hover,.metric-grid article:hover,.extra-card:hover,.schedule-list>*:hover,.settings-card:hover,.hero:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* Smeny Studio — refined visual system */
+:root{--bg:#edf1f5;--ink:#152235;--muted:#738095;--teal:#087f72;--teal2:#5ee2c5;--line:rgba(23,39,60,.075);--shadow:0 18px 44px rgba(22,36,55,.075)}
+body{background:radial-gradient(ellipse at 4% 2%,rgba(76,226,192,.17),transparent 32%),radial-gradient(ellipse at 98% 28%,rgba(112,139,255,.13),transparent 30%),#e9eef4;color:var(--ink)}
+.shell{background:linear-gradient(160deg,#fbfcfe 0%,#f4f7fa 54%,#edf2f7 100%)}
+.topbar{position:relative;isolation:isolate}
+.topbar:after{content:"";position:absolute;right:20px;top:25px;width:42px;height:42px;border-radius:15px;background:linear-gradient(145deg,#14263b,#087f72);box-shadow:0 8px 20px rgba(8,127,114,.2);z-index:-1}
+.topbar:before{content:"";position:absolute;right:33px;top:38px;width:15px;height:15px;border:2px solid rgba(255,255,255,.92);border-radius:5px;transform:rotate(-8deg);z-index:-1}
+.topbar h1{font-size:clamp(29px,7vw,36px);font-weight:800;letter-spacing:-1.7px}
+.topbar-copy span,.section-label,.group-title,.sheet-kicker{font-size:10px;font-weight:800;letter-spacing:1.9px}
+.week-day{position:relative;overflow:hidden}.week-day span{font-weight:750;letter-spacing:.5px}
+.week-day.active{background:linear-gradient(150deg,#14263b 0%,#087f72 100%);box-shadow:0 11px 24px rgba(8,127,114,.25)}
+.week-day.active:after{content:"";position:absolute;inset:auto 30% 6px;height:3px;border-radius:4px;background:#79f1d7}
+.today-insight{box-shadow:0 12px 32px rgba(24,40,60,.045)}.insight-kicker{font-weight:800;letter-spacing:1.6px}
+.hero{background:linear-gradient(125deg,#101a2a 0%,#123d45 56%,#087f72 100%);overflow:hidden}
+.hero:after{content:"";position:absolute;right:-65px;top:-95px;width:230px;height:230px;border:1px solid rgba(255,255,255,.12);border-radius:50%;box-shadow:0 0 0 28px rgba(255,255,255,.025),0 0 0 58px rgba(255,255,255,.02);pointer-events:none}
+.hero-row,.hero-track,.hero-stats{position:relative;z-index:1}.hero h2{letter-spacing:-1.1px}.hero-stats small{color:rgba(255,255,255,.62)}
+.month{scroll-margin-top:18px}.month-title{font-weight:800}.month-weekdays span{font-weight:800;letter-spacing:.5px}.day{font-weight:650}
+.day.work{background:linear-gradient(145deg,#dff8f1,#d3f1e9);color:#087b6d;box-shadow:inset 0 0 0 1px rgba(8,127,114,.1)}
+.day.today{background:linear-gradient(145deg,#14263b,#087f72);color:white;box-shadow:0 7px 17px rgba(8,127,114,.23)}.day.today.work{color:#fff}
+.day.week-selected{outline:3px solid #f0b84b;outline-offset:2px;z-index:3}.day.has-extra:after{background:#f0a93a;box-shadow:0 0 0 2px rgba(240,169,58,.16)}
+.finance-hero{background:linear-gradient(125deg,#101a2a 0%,#12494b 62%,#079b86 100%)}.finance-hero strong{letter-spacing:-1.7px}
+.pay-card,.metric-grid article,.extra-card,.settings-card,.profile-card,.hint-card,.finance-saturday-block{border-color:rgba(255,255,255,.95);border-radius:22px}
+.primary-mini,.primary-action{font-weight:800;letter-spacing:.1px}.secondary-action{font-weight:750}.tabbar{bottom:calc(12px + env(safe-area-inset-bottom))}
+.tab.active{background:linear-gradient(145deg,rgba(8,127,114,.11),rgba(94,226,197,.12))}.tab.active small{color:#087f72;font-weight:800}
+.sheet-panel{padding-bottom:calc(26px + env(safe-area-inset-bottom))}.sheet-close{transition:transform .2s,background .2s}.sheet-close:active{transform:scale(.9)}
+input,button{-webkit-tap-highlight-color:transparent}input{accent-color:#087f72}
+@media(min-width:700px){body{padding:18px 0}.shell{border-radius:34px;overflow:hidden;min-height:calc(100dvh - 36px);box-shadow:0 28px 100px rgba(18,33,52,.18)}.topbar{border-radius:34px 34px 0 0}}
+@media(max-width:390px){.topbar:after{right:16px;width:38px;height:38px}.topbar:before{right:28px}.hero:after{right:-105px}}
+@media(prefers-contrast:more){.day.work{border:1px solid #087f72}.tab.active{outline:1px solid #087f72}}
