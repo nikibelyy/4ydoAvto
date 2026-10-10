@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#0d1726">
+<meta name="theme-color" content="#f4f6f8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Смены">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css?v=16">
-<meta name="color-scheme" content="light"><meta name="description" content="Личный рабочий календарь, график смен и понятный расчёт выплат."><title>Смены — рабочий календарь</title>
+<link rel="stylesheet" href="style.css?v=14">
+<title>Смены</title>
 </head>
 <body>
 <div id="splash" class="splash" aria-label="Запуск приложения">
@@ -96,6 +96,6 @@
 <div id="extra-list-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="extra-list-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="extra-list-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">ФИНАНСЫ</span><h3>Доплаты</h3><p>Все дополнительные выплаты за выбранный месяц.</p><div id="extra-list" class="extra-list"></div><button id="list-add-extra" class="primary-action">＋ Добавить доплату</button></div></div>
 <div id="shift-modal" class="sheet hidden"><div class="sheet-backdrop" data-close="shift-modal"></div><div class="sheet-panel"><button class="sheet-close" data-close="shift-modal">×</button><div class="sheet-handle"></div><span class="sheet-kicker">НОВЫЙ ЦИКЛ</span><h3>Создать график</h3><p>Например, 4 рабочих дня и 2 выходных.</p><div class="cycle-fields"><label class="field"><span>Рабочих</span><input id="new-work" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label><strong>/</strong><label class="field"><span>Выходных</span><input id="new-off" type="number" min="1" max="31" inputmode="numeric" placeholder="2"></label></div><div class="sheet-actions"><button id="save-shift" class="primary-action">Добавить график</button><button class="secondary-action" data-close="shift-modal">Отмена</button></div></div></div>
 <div id="toast" class="toast"></div>
-<script src="app.js?v=16"></script>
+<script src="app.js?v=14"></script>
 </body>
 </html>
