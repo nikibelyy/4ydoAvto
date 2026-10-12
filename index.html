@@ -1,72 +1,29 @@
 <!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#070d1b">
-  <meta name="description" content="Рабочий календарь 2/2, зарплата и даты выплат в одном приложении.">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
-  <title>Рабочий календарь</title>
-</head>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080d19"><meta name="description" content="Рабочий календарь 2/2 и расчёт зарплаты"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><link rel="stylesheet" href="styles.css"><title>Мой рабочий календарь</title></head>
 <body>
-  <div id="splash" class="splash" aria-label="Загрузка приложения">
-    <div class="splash-mark"><span class="calendar-emoji">▦</span><span class="clock-dot">◷</span></div>
-    <h1>Рабочий<br><span>календарь</span></h1>
-    <p>Твой график · Твоя зарплата · Твоё время</p>
-    <div class="load-track"><i></i></div><small>Загружаем твой календарь…</small>
-  </div>
-
-  <div class="app-shell" id="app">
-    <header class="topbar">
-      <div class="brand"><div class="brand-icon">▦</div><div><strong>Рабочий календарь</strong><small>Твой ритм — под контролем</small></div></div>
-      <button class="icon-btn" id="themeBtn" aria-label="Переключить тему" title="Переключить тему">☼</button>
-    </header>
-
-    <main>
-      <section class="view active" id="view-home">
-        <div class="greeting"><div><span class="eyebrow">ПРИВЕТ!</span><h1>Твой график, <span>как на ладони.</span></h1></div><div class="live-pill"><i></i><span id="todayStatus">Сегодня рабочий день</span></div></div>
-        <div class="hero-card">
-          <div class="hero-copy"><span class="eyebrow">ЗАРПЛАТА В МЕСЯЦ</span><div class="salary-big" id="heroSalary">8 300 ₽</div><p>Выплаты два раза в месяц</p><button class="primary-btn" data-nav="salary">Мои выплаты <span>↗</span></button></div>
-          <div class="hero-orbit"><div class="orbit-ring"></div><div class="hero-calendar">▦<small>2/2</small></div><span class="spark s1">✦</span><span class="spark s2">✧</span></div>
-        </div>
-        <div class="section-heading"><div><span class="eyebrow">ТВОЙ РИТМ</span><h2 id="todayHeading">Сегодня и завтра</h2></div><button class="text-btn" data-nav="calendar">Весь календарь ↗</button></div>
-        <div class="shift-row" id="nextDays"></div>
-        <div class="section-heading"><div><span class="eyebrow">БЛИЖАЙШАЯ ВЫПЛАТА</span><h2 id="nextPayTitle">25 октября</h2></div><span class="amount-chip" id="nextPayAmount">4 150 ₽</span></div>
-        <div class="pay-preview"><div class="pay-icon">₽</div><div class="pay-info"><strong id="nextPayLabel">Первая половина текущего месяца</strong><small id="nextPayDesc">До выплаты осталось …</small></div><div class="progress-ring" id="payProgress">↗</div></div>
-        <div class="tip-card"><div class="tip-star">✦</div><div><strong>Маленький совет</strong><p>Отмечай свои смены заранее — так легче планировать отдых и расходы.</p></div></div>
-      </section>
-
-      <section class="view" id="view-calendar">
-        <div class="page-heading"><div><span class="eyebrow">ПЛАНИРУЙ ВПЕРЁД</span><h1>Календарь</h1></div><div class="legend"><span><i class="work-dot"></i> Работа</span><span><i class="off-dot"></i> Отдых</span></div></div>
-        <div class="month-switch"><button class="icon-btn" id="prevMonth" aria-label="Предыдущий месяц">‹</button><strong id="monthLabel"></strong><button class="icon-btn" id="nextMonth" aria-label="Следующий месяц">›</button></div>
-        <div class="calendar-card"><div class="weekdays"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div><div class="calendar-grid" id="calendarGrid"></div></div>
-        <div class="selected-day-card" id="selectedDayCard"></div>
-        <div class="legend-detail"><div><i class="work-dot"></i><span><b>Рабочая смена</b><small>Два дня на работе</small></span></div><div><i class="off-dot"></i><span><b>Выходной</b><small>Два дня отдыха</small></span></div></div>
-      </section>
-
-      <section class="view" id="view-salary">
-        <div class="page-heading"><div><span class="eyebrow">ДЕНЬГИ БЕЗ СЮРПРИЗОВ</span><h1>Зарплата</h1></div><div class="coin-badge">₽</div></div>
-        <div class="salary-card"><span class="eyebrow">ТВОЯ ЗАРПЛАТА В МЕСЯЦ</span><div class="salary-big" id="salaryPageAmount">8 300 ₽</div><p>Плановые выплаты: 10-го и 25-го числа</p><div class="salary-bar"><i></i></div><div class="salary-split"><span>10 число <b id="split10">4 150 ₽</b></span><span>25 число <b id="split25">4 150 ₽</b></span></div></div>
-        <div class="section-heading"><div><span class="eyebrow">КАК НАЧИСЛЯЕТСЯ</span><h2>Два платежа</h2></div></div>
-        <div class="payout-card"><div class="payout-symbol purple">10</div><div class="payout-text"><strong>Вторая половина прошлого месяца</strong><small>Выплата каждого 10-го числа</small></div><b id="payout10">4 150 ₽</b></div>
-        <div class="payout-card"><div class="payout-symbol blue">25</div><div class="payout-text"><strong>Первая половина текущего месяца</strong><small>Выплата каждого 25-го числа</small></div><b id="payout25">4 150 ₽</b></div>
-        <div class="settings-card"><div class="setting-title"><div><span class="eyebrow">НАСТРОЙКИ</span><h2>Подстрой под себя</h2></div></div><label for="salaryInput">Зарплата в месяц, ₽</label><div class="input-row"><input id="salaryInput" type="number" min="0" step="100" value="8300" inputmode="numeric"><button class="primary-btn" id="saveSalary">Сохранить</button></div><small class="muted">Сумма делится поровну между двумя выплатами. Изменения сохраняются на этом устройстве.</small></div>
-      </section>
-
-      <section class="view" id="view-profile">
-        <div class="page-heading"><div><span class="eyebrow">ТВОИ ПАРАМЕТРЫ</span><h1>Профиль</h1></div><div class="avatar">✦</div></div>
-        <div class="profile-card"><div class="profile-avatar">☺</div><div><strong>Мой календарь</strong><small>Личный рабочий план</small></div><span class="profile-check">✓</span></div>
-        <div class="settings-card"><span class="eyebrow">РАБОЧИЙ ГРАФИК</span><h2>2 через 2</h2><p class="muted">Два рабочих дня, затем два выходных. Цикл повторяется непрерывно.</p><div class="cycle"><span class="cycle-work">РАБОТА</span><span class="cycle-work">РАБОТА</span><span class="cycle-off">ОТДЫХ</span><span class="cycle-off">ОТДЫХ</span></div><label for="anchorDate">Первый день рабочего цикла</label><input id="anchorDate" type="date"><button class="primary-btn full" id="saveAnchor">Сохранить график</button><small class="muted">По умолчанию сегодня и завтра — рабочие дни. Меняй дату, если нужно скорректировать цикл.</small></div>
-        <div class="settings-card"><span class="eyebrow">ВНЕШНИЙ ВИД</span><div class="setting-line"><div><strong>Анимации</strong><small>Плавные переходы и эффекты</small></div><label class="switch"><input id="motionToggle" type="checkbox" checked><span></span></label></div><div class="setting-line"><div><strong>Установка приложения</strong><small id="installHint">Добавь на главный экран для быстрого доступа</small></div><button class="outline-btn" id="installBtn">Установить</button></div></div>
-        <div class="footer-note">Сделано для твоего ритма <span>✦</span></div>
-      </section>
-    </main>
-
-    <nav class="bottom-nav" aria-label="Основная навигация"><button class="nav-item active" data-nav="home"><span>⌂</span><small>Главная</small></button><button class="nav-item" data-nav="calendar"><span>▦</span><small>Календарь</small></button><button class="nav-item" data-nav="salary"><span>₽</span><small>Зарплата</small></button><button class="nav-item" data-nav="profile"><span>☻</span><small>Профиль</small></button></nav>
-  </div>
-  <div class="toast" id="toast" role="status"></div>
-  <script src="app.js"></script>
-</body>
-</html>
+<div class="splash" id="splash"><div class="splash-icon">▦<i>◷</i></div><h1>Мой рабочий<br><em>календарь</em></h1><p>Твой график · Твоя зарплата · Твоё время</p><div class="load"><i></i></div><small>Загружаем приложение…</small></div>
+<div class="app" id="app">
+<header><div class="brand-icon">▦</div><div class="brand"><b>Мой календарь</b><small>График и зарплата под контролем</small></div><span class="live">● 2/2</span></header>
+<main>
+<section class="view active" id="home">
+<div class="intro"><span class="eyebrow">ТВОЙ РИТМ</span><h1>Всё по плану<span>.</span></h1><p id="statusText">Считаем твои рабочие дни</p></div>
+<div class="hero"><div><span class="eyebrow">ЗАРАБОТОК ЗА ДЕНЬ</span><strong class="hero-number" id="dailyHero">8 300 ₽</strong><p>Оплата за один рабочий день</p><button class="primary" data-go="salary">Моя зарплата <span>↗</span></button></div><div class="hero-art"><div class="ring"></div><div class="calendar-emoji">▦<small>2/2</small></div></div></div>
+<div class="section-title"><div><span class="eyebrow">БЛИЖАЙШИЕ ДНИ</span><h2>Твой график</h2></div><button class="link" data-go="calendar">Календарь ↗</button></div><div class="day-list" id="nextDays"></div>
+<div class="section-title"><div><span class="eyebrow">ТЕКУЩИЙ МЕСЯЦ</span><h2>Ожидаемая зарплата</h2></div></div>
+<div class="summary"><div><span>Рабочих дней в месяце</span><b id="monthWorkDays">—</b></div><div><span>Начислено за смены</span><b id="monthBasePay">—</b></div><div><span>Доплаты</span><b id="monthExtraPay">—</b></div><div class="summary-total"><span>Итого за месяц</span><b id="monthTotal">—</b></div></div>
+</section>
+<section class="view" id="calendar"><div class="page-head"><div><span class="eyebrow">ПЛАНИРУЙ ВПЕРЁД</span><h1>Календарь</h1></div><div class="legend"><span><i class="work-dot"></i> Работа</span><span><i class="off-dot"></i> Отдых</span></div></div>
+<div class="month-switch"><button id="prevMonth">‹</button><b id="monthLabel"></b><button id="nextMonth">›</button></div><div class="calendar-card"><div class="weekdays"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div><div class="grid" id="calendarGrid"></div></div><div class="selected-card" id="selectedCard"></div></section>
+<section class="view" id="salary"><div class="page-head"><div><span class="eyebrow">ПОНЯТНЫЙ РАСЧЁТ</span><h1>Зарплата</h1></div><div class="coin">₽</div></div>
+<div class="salary-hero"><span class="eyebrow">ЗАРАБОТОК ЗА РАБОЧИЙ ДЕНЬ</span><div class="salary-number" id="dailyBig">8 300 ₽</div><p>Количество рабочих дней рассчитывается по твоему графику 2/2.</p><div class="salary-fields"><label>Оплата за день, ₽<input id="dailyInput" type="number" min="0" step="100" inputmode="decimal" value="8300"></label><label>Рабочих дней в месяце<input id="daysInput" type="number" min="0" max="31" step="1" inputmode="numeric" value="15"></label></div><button class="primary full" id="savePay">Сохранить расчёт</button></div>
+<div class="section-title"><div><span class="eyebrow">РАСЧЁТ ЗА МЕСЯЦ</span><h2 id="salaryMonthTitle">Текущий месяц</h2></div></div>
+<div class="summary"><div><span>Рабочих дней по графику</span><b id="calcDays">—</b></div><div><span>Зарплата за смены</span><b id="calcBase">—</b></div><div><span>Доплаты за месяц</span><b id="calcExtras">—</b></div><div class="summary-total"><span>Итого начислено</span><b id="calcTotal">—</b></div></div>
+<div class="section-title"><div><span class="eyebrow">ДОПОЛНИТЕЛЬНЫЙ ДОХОД</span><h2>Добавить доплату</h2></div></div>
+<div class="extra-form"><label>Название доплаты<input id="extraName" maxlength="60" placeholder="Например, премия или подработка"></label><label>Сумма, ₽<input id="extraAmount" type="number" min="0" step="100" inputmode="decimal" placeholder="0"></label><label>К какому месяцу относится<input id="extraMonth" type="month"></label><button class="primary full" id="addExtra">＋ Добавить доплату</button><p class="hint">Доплаты прибавляются к зарплате выбранного месяца. Их можно удалить в списке ниже.</p></div>
+<div class="section-title"><div><span class="eyebrow">ИСТОРИЯ НАЧИСЛЕНИЙ</span><h2>Доплаты</h2></div></div><div id="extrasList" class="extras-list"></div>
+<div class="payout-note"><b>Даты выплат</b><p><strong>10-го числа</strong> — вторая половина прошлого месяца.</p><p><strong>25-го числа</strong> — первая половина текущего месяца.</p><small>Сумма выплаты 25-го зависит от фактического расчёта работодателя. В приложении месячное начисление считается как рабочие дни × ставка за день + доплаты.</small></div>
+</section>
+<section class="view" id="profile"><div class="page-head"><div><span class="eyebrow">ТВОИ ПАРАМЕТРЫ</span><h1>Настройки</h1></div></div><div class="profile-card"><div class="profile-icon">✦</div><div><b>Рабочий график 2/2</b><small>2 дня работа · 2 дня отдых</small></div></div><div class="settings"><span class="eyebrow">НАЧАЛО ЦИКЛА</span><h2>От какой даты считать?</h2><p>По умолчанию сегодня и завтра — рабочие дни. Выбери другой первый рабочий день, если нужно скорректировать календарь.</p><label>Первый рабочий день<input id="anchorDate" type="date"></label><button class="primary full" id="saveAnchor">Сохранить график</button></div><div class="settings"><span class="eyebrow">ПРИЛОЖЕНИЕ</span><h2>Установка на телефон</h2><p>Добавь приложение на главный экран, чтобы запускать его отдельно от браузера. После первого открытия оно сможет работать офлайн.</p><button class="secondary full" id="installBtn">Установить приложение</button><small id="installHint">Если кнопка установки недоступна, открой меню браузера и выбери «Добавить на главный экран».</small></div></section>
+</main>
+<nav class="bottom-nav"><button class="nav-item active" data-go="home"><span>⌂</span><small>Главная</small></button><button class="nav-item" data-go="calendar"><span>▦</span><small>Календарь</small></button><button class="nav-item" data-go="salary"><span>₽</span><small>Зарплата</small></button><button class="nav-item" data-go="profile"><span>☻</span><small>Настройки</small></button></nav>
+</div><div class="toast" id="toast"></div><script src="app.js"></script></body></html>
