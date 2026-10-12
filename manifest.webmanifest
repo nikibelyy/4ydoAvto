@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Рабочий календарь — график 2/2",
+  "short_name": "Мой график",
+  "description": "Рабочий календарь 2/2, выплаты и планирование зарплаты.",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070b16",
+  "theme_color": "#070d1b",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
