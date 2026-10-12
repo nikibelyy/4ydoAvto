@@ -8,25 +8,37 @@ const fmt=(d,o={day:'numeric',month:'long'})=>new Intl.DateTimeFormat('ru-RU',o)
 const months=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
 let anchor=localStorage.getItem('wc_anchor')||key(today);
 let daily=Number(localStorage.getItem('wc_daily')||8300);
+let payout=Number(localStorage.getItem('wc_payout')||66400);
 let manualDays=localStorage.getItem('wc_days')===null?15:Number(localStorage.getItem('wc_days'));
 let extras=JSON.parse(localStorage.getItem('wc_extras')||'[]');
 let month=new Date(today.getFullYear(),today.getMonth(),1),selected=new Date(today),installPrompt=null;
-$('#anchorDate').value=anchor;$('#dailyInput').value=daily;$('#daysInput').value=manualDays;$('#extraMonth').value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+$('#anchorDate').value=anchor;$('#dailyInput').value=daily;$('#payoutInput').value=payout;$('#daysInput').value=manualDays;$('#extraMonth').value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
 function work(d){const a=parse(anchor),b=new Date(d.getFullYear(),d.getMonth(),d.getDate());const diff=Math.round((b-new Date(a.getFullYear(),a.getMonth(),a.getDate()))/86400000);return ((diff%4)+4)%4<2}
 function monthKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
 function countWork(d){let n=0;const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();for(let i=1;i<=last;i++)if(work(new Date(d.getFullYear(),d.getMonth(),i,12)))n++;return n}
 function extraTotal(k){return extras.filter(x=>x.month===k).reduce((s,x)=>s+Number(x.amount),0)}
 function calc(d,daysOverride=null){const days=daysOverride===null?countWork(d):daysOverride;const base=days*daily,extra=extraTotal(monthKey(d));return {days,base,extra,total:base+extra}}
 function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2400)}
-function save(){localStorage.setItem('wc_anchor',anchor);localStorage.setItem('wc_daily',String(daily));localStorage.setItem('wc_days',String(manualDays));localStorage.setItem('wc_extras',JSON.stringify(extras))}
+function save(){localStorage.setItem('wc_anchor',anchor);localStorage.setItem('wc_daily',String(daily));localStorage.setItem('wc_payout',String(payout));localStorage.setItem('wc_days',String(manualDays));localStorage.setItem('wc_extras',JSON.stringify(extras))}
 function plural(n){return n%10===1&&n%100!==11?'день':n%10>=2&&n%10<=4&&(n%100<12||n%100>14)?'дня':'дней'}
 function nav(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.go===id));if(id==='calendar')renderCalendar();if(id==='salary')renderSalary();window.scrollTo({top:0,behavior:'smooth'})}
 $$('[data-go]').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.go)));
+function renderPayday(){
+ const now=new Date(today), day=25;let next=new Date(now.getFullYear(),now.getMonth(),day,12);
+ if(now.getDate()>day) next=new Date(now.getFullYear(),now.getMonth()+1,day,12);
+ const diff=Math.max(0,Math.ceil((next-now)/86400000));
+ $('#paydayDate').textContent=fmt(next,{day:'numeric',month:'long'});
+ $('#paydayCountdown').textContent=diff===0?'Выплата сегодня':`До выплаты ${diff} ${plural(diff)}`;
+ $('#paydayAmount').textContent=money(payout);
+ const total=new Date(next.getFullYear(),next.getMonth(),0).getDate();
+ $('#paydayProgress').style.width=`${Math.max(4,Math.min(100,((total-diff)/total)*100))}%`;
+}
 function renderHome(){
+ renderPayday();
  $('#statusText').textContent=work(today)?'Сегодня и завтра у тебя рабочие дни':'Сегодня у тебя выходной';
  $('#dailyHero').textContent=money(daily);
  const list=$('#nextDays');list.innerHTML='';
- for(let i=0;i<4;i++){const d=new Date(today);d.setDate(d.getDate()+i);const w=work(d),el=document.createElement('div');el.className='day-card '+(w?'':'off');el.innerHTML=`<div class="day-icon">${w?'▣':'☾'}</div><div><small class="date">${i===0?'Сегодня':i===1?'Завтра':fmt(d,{weekday:'short'})} · ${fmt(d,{day:'numeric',month:'short'})}</small><strong>${w?'Рабочая смена':'День отдыха'}</strong><small>${w?money(daily)+' за день':'Отдых по графику 2/2'}</small></div>`;list.append(el)}
+ for(let i=0;i<4;i++){const d=new Date(today);d.setDate(d.getDate()+i);const w=work(d),el=document.createElement('div');el.className='day-card '+(w?'':'off');el.innerHTML=`<div class="day-icon"><svg viewBox="0 0 24 24" aria-hidden="true">${w?'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 2v4m8-4v4M4 9h16M8 13h3m-3 3h5"/>':'<path d="M20 15.5A8 8 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"/>'}</svg></div><div><small class="date">${i===0?'Сегодня':i===1?'Завтра':fmt(d,{weekday:'short'})} · ${fmt(d,{day:'numeric',month:'short'})}</small><strong>${w?'Рабочая смена':'День отдыха'}</strong><small>${w?money(daily)+' за день':'Отдых по графику 2/2'}</small></div>`;list.append(el)}
  const c=calc(today,manualDays);$('#monthWorkDays').textContent=manualDays+' дн.';$('#monthBasePay').textContent=money(c.base);$('#monthExtraPay').textContent=money(c.extra);$('#monthTotal').textContent=money(c.total);
 }
 function renderCalendar(){
@@ -37,13 +49,13 @@ function renderCalendar(){
  const w=work(selected);$('#selectedCard').innerHTML=`<div class="selected-num">${selected.getDate()}</div><div class="selected-text"><b>${fmt(selected,{weekday:'long',day:'numeric',month:'long'})}</b><small>${w?'Рабочая смена по графику 2/2':'Выходной по графику 2/2'}</small></div><span class="status-badge ${w?'':'off'}">${w?'Работа':'Отдых'}</span>`;
 }
 function renderSalary(){
- const d=calc(today,manualDays);$('#dailyBig').textContent=money(daily);$('#salaryMonthTitle').textContent=months[today.getMonth()]+' '+today.getFullYear();$('#calcDays').textContent=manualDays+' дн.';$('#calcBase').textContent=money(d.base);$('#calcExtras').textContent=money(d.extra);$('#calcTotal').textContent=money(d.total);
+ const d=calc(today,manualDays);$('#dailyBig').textContent=money(daily);$('#payoutInput').value=payout;$('#salaryMonthTitle').textContent=months[today.getMonth()]+' '+today.getFullYear();$('#calcDays').textContent=manualDays+' дн.';$('#calcBase').textContent=money(d.base);$('#calcExtras').textContent=money(d.extra);$('#calcTotal').textContent=money(d.total);
  const list=$('#extrasList');list.innerHTML='';const current=monthKey(today),filtered=extras.filter(x=>x.month===current);
  if(!filtered.length){list.innerHTML='<div class="empty-state">В этом месяце доплат пока нет. Добавь премию, бонус или другую выплату выше.</div>';return}
  filtered.forEach(x=>{const el=document.createElement('div');el.className='extra-item';const desc=document.createElement('div');desc.className='extra-desc';const b=document.createElement('b');b.textContent=x.name;const sm=document.createElement('small');sm.textContent=x.month;desc.append(b,sm);const val=document.createElement('strong');val.className='extra-value';val.textContent='+'+money(Number(x.amount));const del=document.createElement('button');del.className='delete-extra';del.textContent='Удалить';del.setAttribute('aria-label','Удалить доплату '+x.name);del.addEventListener('click',()=>{extras=extras.filter(a=>a.id!==x.id);save();renderSalary();renderHome();toast('Доплата удалена')});el.append(Object.assign(document.createElement('div'),{className:'extra-symbol',textContent:'+'}),desc,val,del);list.append(el)})
 }
 $('#prevMonth').addEventListener('click',()=>{month.setMonth(month.getMonth()-1);renderCalendar()});$('#nextMonth').addEventListener('click',()=>{month.setMonth(month.getMonth()+1);renderCalendar()});
-$('#savePay').addEventListener('click',()=>{const d=Number($('#dailyInput').value),n=Number($('#daysInput').value);if(!Number.isFinite(d)||d<0||!Number.isInteger(n)||n<0||n>31){toast('Проверь ставку и количество рабочих дней');return}daily=d;manualDays=n;save();renderSalary();renderHome();toast('Расчёт зарплаты сохранён')});
+$('#savePay').addEventListener('click',()=>{const p=Number($('#payoutInput').value),d=Number($('#dailyInput').value),n=Number($('#daysInput').value);if(!Number.isFinite(p)||p<0||!Number.isFinite(d)||d<0||!Number.isInteger(n)||n<0||n>31){toast('Проверь ставку и количество рабочих дней');return}payout=p;daily=d;manualDays=n;save();renderSalary();renderHome();toast('Расчёт зарплаты сохранён')});
 $('#addExtra').addEventListener('click',()=>{const name=$('#extraName').value.trim(),amount=Number($('#extraAmount').value),m=$('#extraMonth').value;if(!name){toast('Укажи название доплаты');$('#extraName').focus();return}if(!Number.isFinite(amount)||amount<=0){toast('Введи сумму больше нуля');$('#extraAmount').focus();return}if(!m){toast('Выбери месяц для доплаты');return}extras.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,amount,month:m});save();$('#extraName').value='';$('#extraAmount').value='';renderSalary();renderHome();toast('Доплата добавлена к выбранному месяцу')});
 $('#saveAnchor').addEventListener('click',()=>{if(!$('#anchorDate').value){toast('Выбери дату');return}anchor=$('#anchorDate').value;save();renderHome();renderCalendar();toast('График 2/2 обновлён')});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installHint').textContent='Можно установить приложение на устройство';$('#installBtn').textContent='Установить сейчас'});
