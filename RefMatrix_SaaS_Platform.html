@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RefMatrix SaaS - Платформа Продажи Лицензий и Франшиз</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                            accent: '#6366f1'
+                        },
+                        dark: {
+                            bg: '#060911',
+                            card: '#0d1322',
+                            border: '#1e293b',
+                            hover: '#182238'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(16, 185, 129, 0.2)' },
+                            '100%': { boxShadow: '0 0 30px rgba(16, 185, 129, 0.6)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #060911;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(13, 19, 34, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-nav {
+            background: rgba(6, 9, 17, 0.90);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #34d399 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(13, 19, 34, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(51, 65, 85, 0.8);
+            border-radius: 9999px;
+        }
+        .nav-item-active {
+            background: rgba(16, 185, 129, 0.14);
+            color: #34d399;
+            border-right: 3px solid #10b981;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row antialiased custom-scrollbar">
+
+    <!-- SIDEBAR (Desktop) -->
+    <aside class="hidden md:flex flex-col w-64 glass-card border-r border-slate-800/80 sticky top-0 h-screen z-30 shrink-0">
+        <div class="p-6 flex items-center gap-3 border-b border-slate-800/80">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/25">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-base tracking-tight gradient-text">RefMatrix SaaS</h1>
+                <p class="text-[11px] text-slate-400 font-medium">Платформа Лицензий</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 py-6 space-y-1.5 px-3">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all nav-item-active">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                <span>Обзор и Статистика</span>
+            </button>
+            <button onclick="switchTab('links')" id="nav-links" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all">
+                <i data-lucide="link" class="w-4 h-4"></i>
+                <span>Мои Платные Ссылки</span>
+                <span id="badgeLinksCount" class="ml-auto bg-brand-500/10 text-brand-400 text-[10px] px-2 py-0.5 rounded-full border border-brand-500/20">0</span>
+            </button>
+            <button onclick="switchTab('orders')" id="nav-orders" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all relative">
+                <i data-lucide="receipt" class="w-4 h-4"></i>
+                <span>Заявки на Активацию</span>
+                <span id="badgePendingOrders" class="ml-auto bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full hidden">0</span>
+            </button>
+            <button onclick="switchTab('referrals')" id="nav-referrals" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                <span>Партнеры / Сеть</span>
+                <span id="badgeRefsCount" class="ml-auto bg-indigo-500/10 text-indigo-400 text-[10px] px-2 py-0.5 rounded-full border border-indigo-500/20">0</span>
+            </button>
+            <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-800/60 hover:text-white transition-all">
+                <i data-lucide="settings" class="w-4 h-4"></i>
+                <span>Реквизиты СБП и Карты</span>
+            </button>
+        </nav>
+
+        <!-- Current User Info Widget -->
+        <div class="p-4 m-3 rounded-2xl bg-slate-900/90 border border-slate-800/80 space-y-3">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs" id="userAvatar">
+                    АД
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-xs font-bold text-white truncate" id="sidebarUserName">Главный Владелец</p>
+                    <p class="text-[10px] text-brand-400 font-medium truncate" id="sidebarUserRole">Владелец Сети</p>
+                </div>
+            </div>
+            <button onclick="openCreateLinkModal()" class="w-full py-2.5 px-3 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md shadow-brand-500/20">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Создать Ссылку</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAVBAR -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 glass-nav z-40 px-2 py-2 flex justify-around items-center border-t border-slate-800">
+        <button onclick="switchTab('dashboard')" class="flex flex-col items-center gap-1 text-[10px] text-slate-400 hover:text-brand-400">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            <span>Обзор</span>
+        </button>
+        <button onclick="switchTab('links')" class="flex flex-col items-center gap-1 text-[10px] text-slate-400 hover:text-brand-400">
+            <i data-lucide="link" class="w-5 h-5"></i>
+            <span>Ссылки</span>
+        </button>
+        <button onclick="openCreateLinkModal()" class="w-10 h-10 rounded-full bg-brand-500 text-slate-950 flex items-center justify-center shadow-lg shadow-brand-500/40 -mt-5 border-2 border-slate-900 font-bold">
+            <i data-lucide="plus" class="w-6 h-6"></i>
+        </button>
+        <button onclick="switchTab('orders')" class="flex flex-col items-center gap-1 text-[10px] text-slate-400 hover:text-amber-400 relative">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+            <span>Заявки</span>
+            <span id="badgePendingOrdersMobile" class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 hidden"></span>
+        </button>
+        <button onclick="switchTab('settings')" class="flex flex-col items-center gap-1 text-[10px] text-slate-400 hover:text-brand-400">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+            <span>Оплата</span>
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="flex-1 flex flex-col min-w-0 pb-20 md:pb-10">
+        <!-- HEADER -->
+        <header class="glass-nav sticky top-0 z-20 px-4 sm:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="md:hidden w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <h2 class="text-base sm:text-lg font-bold text-white tracking-tight" id="pageTitle">Обзор и Статистика</h2>
+                    <p class="text-xs text-slate-400 hidden sm:block">Управление продажами франшиз и подтверждением P2P оплаты</p>
+                </div>
+            </div>
+
+            <!-- Account Switcher & Actions -->
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <button id="accountSelectBtn" onclick="toggleAccountMenu()" class="flex items-center gap-2 bg-slate-900/90 border border-slate-700/80 hover:border-brand-500/50 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-200 transition-all">
+                        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                        <span id="currentAccountLabel">Главный Владелец</span>
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
+                    </button>
+
+                    <!-- Account Menu Dropdown -->
+                    <div id="accountDropdown" class="hidden absolute right-0 mt-2 w-64 glass-card rounded-2xl shadow-2xl border border-slate-700/80 p-2 z-50 space-y-1">
+                        <div class="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400 border-b border-slate-800">
+                            Переключить Кабинет Админа
+                        </div>
+                        <div id="accountList" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar">
+                            <!-- Accounts via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="resetData()" class="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800/60 rounded-xl transition-all" title="Сбросить все данные платформы">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT BODY -->
+        <main class="p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-8">
+
+            <!-- TAB 1: DASHBOARD -->
+            <div id="tab-dashboard" class="tab-content space-y-8">
+                <!-- METRICS GRID -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-brand-500/40 transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-semibold text-slate-400">Заработанный Доход</span>
+                            <div class="p-2 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20">
+                                <i data-lucide="wallet" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" id="statTotalEarnings">0 ₽</div>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-brand-400 font-medium">
+                            <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                            <span>100% прямо на ваши реквизиты</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-indigo-500/40 transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-semibold text-slate-400">Подтвержденные Лицензии</span>
+                            <div class="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                                <i data-lucide="award" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" id="statSalesCount">0</div>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-indigo-400 font-medium">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                            <span>Активных владельцев панелей</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-amber-500/40 transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-semibold text-slate-400">Заявок Ожидает</span>
+                            <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                <i data-lucide="clock" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" id="statPendingCount">0</div>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-amber-400 font-medium">
+                            <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                            <span>Требуют вашей проверки СБП</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-purple-500/40 transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-semibold text-slate-400">Средний Чек</span>
+                            <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                <i data-lucide="trending-up" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" id="statAvgCheck">0 ₽</div>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-purple-400 font-medium">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            <span>Прямой маржинальный доход</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CHART & LINK CREATOR -->
+                <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-base font-bold text-white">Динамика Подтвержденных Поступлений (₽)</h3>
+                                <p class="text-xs text-slate-400">График реальных оплат, зачисленных на ваши реквизиты</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20">В Рублях (₽)</span>
+                        </div>
+                        <div class="h-64 sm:h-72 w-full">
+                            <canvas id="earningsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Fast Link Generator -->
+                    <div class="glass-card rounded-2xl p-6 flex flex-col justify-between space-y-4 border border-brand-500/30 relative overflow-hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-2.5">
+                                <div class="p-2 bg-brand-500/20 text-brand-400 rounded-xl">
+                                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-white">Быстрая Платная Ссылка</h3>
+                                    <p class="text-xs text-slate-400">Создайте ссылку для клиента с указанной суммой</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 pt-2">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">Цена Лицензии (₽)</label>
+                                    <div class="relative">
+                                        <input type="number" id="fastLinkPrice" value="3500" min="500" step="500" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-bold focus:outline-none focus:border-brand-500">
+                                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">₽</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">Название Тарифа / Панели</label>
+                                    <input type="text" id="fastLinkTitle" placeholder="Франшиза Админ-Панели PRO" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="createFastLink()" class="w-full py-3 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 active:scale-95">
+                            <i data-lucide="link" class="w-4 h-4"></i>
+                            <span>Сгенерировать Ссылку Оплаты</span>
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB 2: PAID LINKS -->
+            <div id="tab-links" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Мои Платные Ссылки</h3>
+                        <p class="text-xs text-slate-400">Отправляйте эти ссылки покупателям. Они ведут на страницу оплаты по вашим реквизитам</p>
+                    </div>
+                    <button onclick="openCreateLinkModal()" class="px-4 py-2.5 bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md shadow-brand-500/20 flex items-center gap-2 self-start sm:self-auto">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Новая Платная Ссылка</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="linksCardsGrid">
+                    <!-- Links via JS -->
+                </div>
+            </div>
+
+            <!-- TAB 3: P2P ORDERS / APPLICATIONS -->
+            <div id="tab-orders" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Заявки на Активацию и P2P Оплаты</h3>
+                        <p class="text-xs text-slate-400">Проверьте поступление денег на вашем банке/СБП и подтвердите активирование панели</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-medium flex items-center gap-1.5">
+                            <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+                            <span>Подтверждайте только после фактического зачисления</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-900/90 border-b border-slate-800 text-[11px] text-slate-400 uppercase font-bold tracking-wider">
+                                    <th class="py-3.5 px-4">Покупатель</th>
+                                    <th class="py-3.5 px-4">Контакты</th>
+                                    <th class="py-3.5 px-4">Сумма (₽)</th>
+                                    <th class="py-3.5 px-4">Дата / Время</th>
+                                    <th class="py-3.5 px-4">Статус</th>
+                                    <th class="py-3.5 px-4 text-right">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody" class="divide-y divide-slate-800/60 text-xs">
+                                <!-- Orders via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: REFERRALS / PARTNERS -->
+            <div id="tab-referrals" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Партнерская Сеть Покупателей</h3>
+                        <p class="text-xs text-slate-400">Покупатели, у которых активирована собственная админ-панель</p>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-900/90 border-b border-slate-800 text-[11px] text-slate-400 uppercase font-bold tracking-wider">
+                                    <th class="py-3.5 px-4">Владелец Панели</th>
+                                    <th class="py-3.5 px-4">Оплачено (₽)</th>
+                                    <th class="py-3.5 px-4">Дата Активации</th>
+                                    <th class="py-3.5 px-4">Статус Доступа</th>
+                                    <th class="py-3.5 px-4 text-right">Управление</th>
+                                </tr>
+                            </thead>
+                            <tbody id="referralsTableBody" class="divide-y divide-slate-800/60 text-xs">
+                                <!-- Partners via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: SETTINGS (PAYMENT REQUISITES) -->
+            <div id="tab-settings" class="tab-content hidden space-y-6">
+                <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-6 max-w-2xl">
+                    <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+                        <div class="p-3 bg-brand-500/10 text-brand-400 rounded-2xl">
+                            <i data-lucide="credit-card" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Настройки Ваших Реквизитов Оплаты</h3>
+                            <p class="text-xs text-slate-400">Эти данные будут отображаться вашим клиентам при переходе по вашей платной ссылке</p>
+                        </div>
+                    </div>
+
+                    <form id="paymentSettingsForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Номер Телефона для СБП</label>
+                            <div class="relative">
+                                <input type="text" id="settingSbpPhone" placeholder="+7 (999) 000-00-00" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-brand-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Банк Получателя</label>
+                            <input type="text" id="settingSbpBank" placeholder="Т-Банк (Тинькофф) / Сбербанк" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Номер Банковской Карты</label>
+                            <input type="text" id="settingCardNumber" placeholder="2200 0000 0000 0000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-brand-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">ФИО Получателя (для сверки)</label>
+                            <input type="text" id="settingRecipientName" placeholder="Иван Иваноич И." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold rounded-xl text-xs transition-all shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Сохранить Реквизиты</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- PUBLIC CHECKOUT VIEW OVERLAY (Simulating Client Opening Ref Link) -->
+    <div id="checkoutOverlay" class="fixed inset-0 bg-slate-950/95 backdrop-blur-xl z-50 flex items-center justify-center p-4 overflow-y-auto hidden">
+        <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 border border-brand-500/30 shadow-2xl relative my-auto">
+            <button onclick="closeCheckoutOverlay()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-xl bg-slate-900/60">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center mx-auto">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-white" id="checkoutTitle">Приобретение Франшизы Админ-Панели</h3>
+                <p class="text-xs text-slate-400">Переведите точную сумму по реквизитам продавца через СБП или Картам</p>
+            </div>
+
+            <!-- Price Badge -->
+            <div class="bg-gradient-to-r from-brand-500/10 via-indigo-500/10 to-brand-500/10 p-4 rounded-2xl border border-brand-500/20 text-center">
+                <span class="text-xs text-slate-400 font-medium">Сумма к оплате:</span>
+                <div class="text-3xl font-extrabold text-brand-400" id="checkoutPrice">0 ₽</div>
+            </div>
+
+            <!-- Requisites Cards -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Реквизиты для перевода:</h4>
+                
+                <div class="p-3.5 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Телефон (СБП):</span>
+                        <span class="text-xs font-mono font-bold text-white" id="checkoutSbpPhone">+7 (900) 000-00-00</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Банк:</span>
+                        <span class="text-xs font-bold text-brand-400" id="checkoutSbpBank">Т-Банк</span>
+                    </div>
+                    <button onclick="copyElementText('checkoutSbpPhone')" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl flex items-center justify-center gap-2">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>Скопировать Телефон СБП</span>
+                    </button>
+                </div>
+
+                <div class="p-3.5 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Номер Карты:</span>
+                        <span class="text-xs font-mono font-bold text-white" id="checkoutCardNumber">0000 0000 0000 0000</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Получатель:</span>
+                        <span class="text-xs font-bold text-slate-300" id="checkoutRecipientName">Иван И.</span>
+                    </div>
+                    <button onclick="copyElementText('checkoutCardNumber')" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl flex items-center justify-center gap-2">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>Скопировать Номер Карты</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Buyer Form -->
+            <form id="checkoutSubmitForm" class="space-y-3 pt-2 border-t border-slate-800">
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Подтверждение оплаты:</h4>
+                
+                <div>
+                    <input type="text" id="buyerInputName" required placeholder="Ваше Имя и Фамилия" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <input type="text" id="buyerInputContact" required placeholder="Ваш Telegram (@username) или Телефон" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-brand-500 to-indigo-600 hover:from-brand-400 hover:to-indigo-500 text-slate-950 font-extrabold rounded-xl text-xs transition-all shadow-xl shadow-brand-500/25 flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span>Я оплатил(а) — Отправить заявку</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CREATE LINK MODAL -->
+    <div id="createLinkModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card rounded-2xl max-w-md w-full p-6 space-y-5 border border-slate-700/80 shadow-2xl transform scale-95 transition-transform duration-200" id="createLinkCard">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 rounded-xl bg-brand-500/10 text-brand-400">
+                        <i data-lucide="link" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Новая Платная Ссылка</h3>
+                </div>
+                <button onclick="closeCreateLinkModal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="createLinkForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Название Тарифа / Франшизы</label>
+                    <input type="text" id="modalLinkTitle" required placeholder="Франшиза Admin Panel VIP" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Стоимость Лицензии (₽)</label>
+                    <div class="relative">
+                        <input type="number" id="modalLinkPrice" required value="3000" min="100" step="100" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-3.5 pr-8 py-2.5 text-xs text-white font-bold focus:outline-none focus:border-brand-500">
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">₽</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Код ссылки (Slug)</label>
+                    <div class="flex gap-1 items-center bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-400">
+                        <span>lic/</span>
+                        <input type="text" id="modalLinkSlug" placeholder="vip-franchise" class="bg-transparent text-white focus:outline-none flex-1 font-mono">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeCreateLinkModal()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs">Отмена</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold rounded-xl text-xs shadow-lg shadow-brand-500/20">Создать Ссылку</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 glass-card border border-brand-500/40 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <div class="p-1.5 rounded-lg bg-brand-500/20 text-brand-400" id="toastIcon">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+        </div>
+        <span class="text-xs font-semibold" id="toastMessage">Сообщение</span>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'refmatrix_production_db_v3';
+
+        // Initial Seed Structure
+        const defaultData = {
+            currentAccountId: 'acc_master',
+            accounts: [
+                {
+                    id: 'acc_master',
+                    name: 'Главный Администратор',
+                    role: 'Master Admin',
+                    balance: 10500,
+                    paymentDetails: {
+                        sbpPhone: '+7 (926) 888-77-66',
+                        sbpBank: 'Т-Банк (Тинькофф)',
+                        cardNumber: '2202 2024 8888 9999',
+                        recipientName: 'Михаил А.'
+                    },
+                    links: [
+                        { id: 'link_m1', title: 'Лицензия Admin Panel Standard', price: 3500, slug: 'standard-panel', clicks: 24, sales: 2 },
+                        { id: 'link_m2', title: 'Франшиза VIP Business', price: 7000, slug: 'vip-franchise', clicks: 12, sales: 1 }
+                    ],
+                    orders: [
+                        { id: 'ord_101', buyerName: 'Сергей Николаев', buyerContact: '@sergey_biz', linkId: 'link_m1', price: 3500, status: 'approved', date: '2026-10-11 14:20', createdAccId: 'acc_sergey' },
+                        { id: 'ord_102', buyerName: 'Анна Громова', buyerContact: '+79165554433', linkId: 'link_m2', price: 7000, status: 'approved', date: '2026-10-12 09:15', createdAccId: 'acc_anna' },
+                        { id: 'ord_103', buyerName: 'Игорь Решетов', buyerContact: '@igor_reshet', linkId: 'link_m1', price: 3500, status: 'pending', date: '2026-10-13 16:45' }
+                    ],
+                    referrals: [
+                        { id: 'ref_1', name: 'Сергей Николаев', price: 3500, date: '2026-10-11', createdAccountId: 'acc_sergey' },
+                        { id: 'ref_2', name: 'Анна Громова', price: 7000, date: '2026-10-12', createdAccountId: 'acc_anna' }
+                    ]
+                },
+                {
+                    id: 'acc_sergey',
+                    name: 'Сергей Николаев',
+                    role: 'Владелец Лицензии',
+                    balance: 0,
+                    paymentDetails: {
+                        sbpPhone: '+7 (900) 111-22-33',
+                        sbpBank: 'Сбербанк',
+                        cardNumber: '4276 0000 1111 2222',
+                        recipientName: 'Сергей Н.'
+                    },
+                    links: [
+                        { id: 'link_s1', title: 'Панель от Сергея', price: 3500, slug: 'sergey-start', clicks: 5, sales: 0 }
+                    ],
+                    orders: [],
+                    referrals: []
+                }
+            ]
+        };
+
+        let appData = loadData();
+        let activeCheckoutLink = null;
+        let earningsChartInstance = null;
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { return JSON.parse(saved); } catch (e) { console.error(e); }
+            }
+            return JSON.parse(JSON.stringify(defaultData));
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            renderAll();
+        }
+
+        function getCurrentAccount() {
+            return appData.accounts.find(a => a.id === appData.currentAccountId) || appData.accounts[0];
+        }
+
+        // DOM Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initChart();
+            renderAll();
+            setupForms();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('nav-item-active');
+            });
+            const activeNavBtn = document.getElementById(`nav-${tabId}`);
+            if (activeNavBtn) activeNavBtn.classList.add('nav-item-active');
+
+            const titles = {
+                dashboard: 'Обзор и Статистика',
+                links: 'Мои Платные Ссылки',
+                orders: 'Заявки на Активацию и P2P Оплаты',
+                referrals: 'Партнерская Сеть Покупателей',
+                settings: 'Настройки Реквизитов Оплаты'
+            };
+            document.getElementById('pageTitle').innerText = titles[tabId] || 'Дашборд';
+        }
+
+        function renderAll() {
+            const curAcc = getCurrentAccount();
+
+            // Headers & User Profile
+            document.getElementById('currentAccountLabel').innerText = curAcc.name;
+            document.getElementById('sidebarUserName').innerText = curAcc.name;
+            document.getElementById('sidebarUserRole').innerText = curAcc.role;
+            document.getElementById('userAvatar').innerText = curAcc.name.substring(0, 2).toUpperCase();
+
+            // Stats Calculations
+            const totalEarnings = curAcc.balance;
+            const salesCount = curAcc.referrals.length;
+            const pendingOrders = curAcc.orders.filter(o => o.status === 'pending').length;
+            const avgCheck = salesCount > 0 ? Math.round(totalEarnings / salesCount) : 0;
+
+            document.getElementById('statTotalEarnings').innerText = `${totalEarnings.toLocaleString()} ₽`;
+            document.getElementById('statSalesCount').innerText = salesCount;
+            document.getElementById('statPendingCount').innerText = pendingOrders;
+            document.getElementById('statAvgCheck').innerText = `${avgCheck.toLocaleString()} ₽`;
+
+            // Badges
+            document.getElementById('badgeLinksCount').innerText = curAcc.links.length;
+            document.getElementById('badgeRefsCount').innerText = salesCount;
+
+            const badgePending = document.getElementById('badgePendingOrders');
+            const badgePendingMobile = document.getElementById('badgePendingOrdersMobile');
+            if (pendingOrders > 0) {
+                badgePending.innerText = pendingOrders;
+                badgePending.classList.remove('hidden');
+                badgePendingMobile.classList.remove('hidden');
+            } else {
+                badgePending.classList.add('hidden');
+                badgePendingMobile.classList.add('hidden');
+            }
+
+            // Fill Settings Form
+            if (curAcc.paymentDetails) {
+                document.getElementById('settingSbpPhone').value = curAcc.paymentDetails.sbpPhone || '';
+                document.getElementById('settingSbpBank').value = curAcc.paymentDetails.sbpBank || '';
+                document.getElementById('settingCardNumber').value = curAcc.paymentDetails.cardNumber || '';
+                document.getElementById('settingRecipientName').value = curAcc.paymentDetails.recipientName || '';
+            }
+
+            renderAccountsMenu();
+            renderLinksCards(curAcc);
+            renderOrdersTable(curAcc);
+            renderReferralsTable(curAcc);
+            updateChartData(curAcc);
+        }
+
+        // Accounts Selector
+        function renderAccountsMenu() {
+            const list = document.getElementById('accountList');
+            list.innerHTML = '';
+
+            appData.accounts.forEach(acc => {
+                const isActive = acc.id === appData.currentAccountId;
+                const item = document.createElement('button');
+                item.className = `w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all ${isActive ? 'bg-brand-500/20 text-brand-400 font-bold' : 'text-slate-300 hover:bg-slate-800'}`;
+                item.onclick = () => switchAccount(acc.id);
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <div class="w-6 h-6 rounded-lg bg-slate-800 flex items-center justify-center font-bold text-[10px]">
+                            ${acc.name.charAt(0)}
+                        </div>
+                        <span class="truncate">${acc.name}</span>
+                    </div>
+                    <span class="font-bold text-[11px]">${acc.balance.toLocaleString()} ₽</span>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function toggleAccountMenu() {
+            document.getElementById('accountDropdown').classList.toggle('hidden');
+        }
+
+        function switchAccount(accId) {
+            appData.currentAccountId = accId;
+            document.getElementById('accountDropdown').classList.add('hidden');
+            saveData();
+            showToast(`Переключено в кабинет: ${getCurrentAccount().name}`);
+        }
+
+        function renderLinksCards(curAcc) {
+            const container = document.getElementById('linksCardsGrid');
+            container.innerHTML = '';
+
+            if (curAcc.links.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass-card rounded-2xl text-slate-500 text-xs">
+                        У вас пока нет созданных платных ссылок. Нажмите «Создать Ссылку».
+                    </div>
+                `;
+                return;
+            }
+
+            curAcc.links.forEach(link => {
+                const linkIncome = link.sales * link.price;
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl p-5 space-y-4 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between";
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="font-bold text-white text-sm">${link.title}</h4>
+                                <span class="text-[11px] text-slate-400 font-mono">/lic/${link.slug}</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-brand-500/10 text-brand-400 font-extrabold text-xs border border-brand-500/20">
+                                ${link.price.toLocaleString()} ₽
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 p-3 bg-slate-900/80 rounded-xl text-center border border-slate-800">
+                            <div>
+                                <div class="text-[10px] text-slate-400">Продано</div>
+                                <div class="font-bold text-white text-xs">${link.sales}</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-slate-400">Выручка</div>
+                                <div class="font-bold text-brand-400 text-xs">${linkIncome.toLocaleString()} ₽</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 pt-2 border-t border-slate-800/80">
+                        <button onclick="openCheckoutForLink('${link.id}')" class="w-full py-2.5 bg-gradient-to-r from-brand-500 to-indigo-600 hover:from-brand-400 hover:to-indigo-500 text-slate-950 font-bold rounded-xl text-xs transition-all shadow-md shadow-brand-500/20 flex items-center justify-center gap-2">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            <span>Открыть Страницу Оплаты Клиента</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function renderOrdersTable(curAcc) {
+            const tbody = document.getElementById('ordersTableBody');
+            tbody.innerHTML = '';
+
+            if (curAcc.orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-8 text-center text-slate-500 text-xs">
+                            Заявок на активацию нет. Отправьте клиентам ссылку для оплаты.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            curAcc.orders.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+
+                let statusBadge = '';
+                if (order.status === 'pending') {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                        Ожидает проверки
+                    </span>`;
+                } else if (order.status === 'approved') {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-brand-400 bg-brand-500/10 px-2.5 py-1 rounded-full border border-brand-500/20">
+                        Подтверждено & Активировано
+                    </span>`;
+                } else {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-red-400 bg-red-500/10 px-2.5 py-1 rounded-full border border-red-500/20">
+                        Отклонено
+                    </span>`;
+                }
+
+                let actions = '';
+                if (order.status === 'pending') {
+                    actions = `
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="approveOrder('${order.id}')" class="px-3 py-1.5 bg-brand-500 hover:bg-brand-400 text-slate-950 font-extrabold rounded-xl text-xs transition-all shadow-md shadow-brand-500/20">
+                                Подтвердить Оплату
+                            </button>
+                            <button onclick="rejectOrder('${order.id}')" class="px-2 py-1.5 bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded-xl text-xs transition-all">
+                                Отклонить
+                            </button>
+                        </div>
+                    `;
+                } else if (order.status === 'approved' && order.createdAccId) {
+                    actions = `
+                        <button onclick="switchAccount('${order.createdAccId}')" class="px-2.5 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 rounded-xl text-[11px] font-semibold transition-all">
+                            Войти в Панель Клиента
+                        </button>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-semibold text-white">${order.buyerName}</td>
+                    <td class="py-3.5 px-4 text-slate-300 font-mono">${order.buyerContact}</td>
+                    <td class="py-3.5 px-4 font-bold text-brand-400">${order.price.toLocaleString()} ₽</td>
+                    <td class="py-3.5 px-4 text-slate-400 text-[11px]">${order.date}</td>
+                    <td class="py-3.5 px-4">${statusBadge}</td>
+                    <td class="py-3.5 px-4 text-right">${actions}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Render Referrals
+        function renderReferralsTable(curAcc) {
+            const tbody = document.getElementById('referralsTableBody');
+            tbody.innerHTML = '';
+
+            if (curAcc.referrals.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-slate-500 text-xs">
+                            Партнеры пока отсутствуют.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            curAcc.referrals.forEach(ref => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-semibold text-white">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs">
+                                ${ref.name.charAt(0)}
+                            </div>
+                            <span>${ref.name}</span>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-4 font-bold text-brand-400">${ref.price.toLocaleString()} ₽</td>
+                    <td class="py-3.5 px-4 text-slate-400 text-[11px]">${ref.date}</td>
+                    <td class="py-3.5 px-4">
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-semibold text-brand-400 bg-brand-500/10 px-2.5 py-1 rounded-full border border-brand-500/20">
+                            <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
+                            Активная Лицензия
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-right">
+                        <button onclick="switchAccount('${ref.createdAccountId}')" class="px-2.5 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 rounded-xl text-[11px] font-semibold transition-all">
+                            Перейти в Кабинет
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function approveOrder(orderId) {
+            const curAcc = getCurrentAccount();
+            const order = curAcc.orders.find(o => o.id === orderId);
+            if (!order || order.status !== 'pending') return;
+
+            order.status = 'approved';
+            curAcc.balance += order.price;
+
+            // Find link sales count
+            const link = curAcc.links.find(l => l.id === order.linkId);
+            if (link) link.sales += 1;
+
+            // Create new Admin Panel for the buyer
+            const newAccId = 'acc_' + Date.now();
+            const newBuyerAccount = {
+                id: newAccId,
+                name: order.buyerName,
+                role: 'Владелец Лицензии',
+                balance: 0,
+                paymentDetails: {
+                    sbpPhone: order.buyerContact,
+                    sbpBank: 'Укажите банк в настройках',
+                    cardNumber: 'Укажите карту в настройках',
+                    recipientName: order.buyerName
+                },
+                links: [
+                    { id: 'link_b_' + Date.now(), title: `Панель ${order.buyerName}`, price: order.price, slug: 'ref-' + Math.random().toString(36).substring(2, 6), clicks: 0, sales: 0 }
+                ],
+                orders: [],
+                referrals: []
+            };
+
+            order.createdAccId = newAccId;
+            appData.accounts.push(newBuyerAccount);
+
+            curAcc.referrals.unshift({
+                id: 'ref_' + Date.now(),
+                name: order.buyerName,
+                price: order.price,
+                date: new Date().toISOString().split('T')[0],
+                createdAccountId: newAccId
+            });
+
+            saveData();
+
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            showToast(`Оплата подтверждена! +${order.price.toLocaleString()} ₽ зачислено, панель создана.`);
+        }
+
+        function rejectOrder(orderId) {
+            const curAcc = getCurrentAccount();
+            const order = curAcc.orders.find(o => o.id === orderId);
+            if (!order) return;
+            order.status = 'rejected';
+            saveData();
+            showToast('Заявка отклонена');
+        }
+
+        function openCheckoutForLink(linkId) {
+            const curAcc = getCurrentAccount();
+            const link = curAcc.links.find(l => l.id === linkId);
+            if (!link) return;
+
+            activeCheckoutLink = link;
+
+            document.getElementById('checkoutTitle').innerText = link.title;
+            document.getElementById('checkoutPrice').innerText = `${link.price.toLocaleString()} ₽`;
+
+            const pay = curAcc.paymentDetails || {};
+            document.getElementById('checkoutSbpPhone').innerText = pay.sbpPhone || 'Не указан';
+            document.getElementById('checkoutSbpBank').innerText = pay.sbpBank || 'Банк не указан';
+            document.getElementById('checkoutCardNumber').innerText = pay.cardNumber || 'Не указана';
+            document.getElementById('checkoutRecipientName').innerText = pay.recipientName || 'Не указан';
+
+            document.getElementById('checkoutOverlay').classList.remove('hidden');
+        }
+
+        function closeCheckoutOverlay() {
+            document.getElementById('checkoutOverlay').classList.add('hidden');
+        }
+
+        function createFastLink() {
+            const price = parseFloat(document.getElementById('fastLinkPrice').value) || 3500;
+            const title = document.getElementById('fastLinkTitle').value.trim() || 'Франшиза Admin Panel';
+            const slug = 'lic-' + Math.random().toString(36).substring(2, 7);
+
+            const curAcc = getCurrentAccount();
+            curAcc.links.unshift({
+                id: 'link_' + Date.now(),
+                title: title,
+                price: price,
+                slug: slug,
+                clicks: 0,
+                sales: 0
+            });
+
+            document.getElementById('fastLinkTitle').value = '';
+            saveData();
+            showToast(`Платная ссылка "${title}" успешно создана!`);
+        }
+
+        function openCreateLinkModal() {
+            const modal = document.getElementById('createLinkModal');
+            const card = document.getElementById('createLinkCard');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeCreateLinkModal() {
+            const modal = document.getElementById('createLinkModal');
+            const card = document.getElementById('createLinkCard');
+            modal.classList.add('opacity-0');
+            card.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function setupForms() {
+            // Payment Settings Form Submit
+            document.getElementById('paymentSettingsForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const curAcc = getCurrentAccount();
+                curAcc.paymentDetails = {
+                    sbpPhone: document.getElementById('settingSbpPhone').value.trim(),
+                    sbpBank: document.getElementById('settingSbpBank').value.trim(),
+                    cardNumber: document.getElementById('settingCardNumber').value.trim(),
+                    recipientName: document.getElementById('settingRecipientName').value.trim()
+                };
+                saveData();
+                showToast('Реквизиты оплаты успешно сохранены!');
+            });
+
+            // Buyer Form Submit in Checkout View
+            document.getElementById('checkoutSubmitForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!activeCheckoutLink) return;
+
+                const name = document.getElementById('buyerInputName').value.trim();
+                const contact = document.getElementById('buyerInputContact').value.trim();
+
+                const curAcc = getCurrentAccount();
+                curAcc.orders.unshift({
+                    id: 'ord_' + Date.now(),
+                    buyerName: name,
+                    buyerContact: contact,
+                    linkId: activeCheckoutLink.id,
+                    price: activeCheckoutLink.price,
+                    status: 'pending',
+                    date: new Date().toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })
+                });
+
+                document.getElementById('buyerInputName').value = '';
+                document.getElementById('buyerInputContact').value = '';
+
+                saveData();
+                closeCheckoutOverlay();
+                showToast('Заявка отправлена! Продавец подтвердит оплату после проверки.');
+                switchTab('orders');
+            });
+
+            // Create Link Form Modal Submit
+            document.getElementById('createLinkForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('modalLinkTitle').value;
+                const price = parseFloat(document.getElementById('modalLinkPrice').value) || 3000;
+                let slug = document.getElementById('modalLinkSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+                if (!slug) slug = 'lic-' + Math.random().toString(36).substring(2, 7);
+
+                const curAcc = getCurrentAccount();
+                curAcc.links.unshift({
+                    id: 'link_' + Date.now(),
+                    title: title,
+                    price: price,
+                    slug: slug,
+                    clicks: 0,
+                    sales: 0
+                });
+
+                saveData();
+                closeCreateLinkModal();
+                showToast(`Платная ссылка "${title}" создана!`);
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('earningsChart').getContext('2d');
+            earningsChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+                    datasets: [{
+                        label: 'Доход (₽)',
+                        data: [0, 0, 0, 0, 0, 0, 0],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#10b981',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        function updateChartData(curAcc) {
+            if (!earningsChartInstance) return;
+            const total = curAcc.balance;
+            const mockData = [
+                Math.round(total * 0.1),
+                Math.round(total * 0.2),
+                Math.round(total * 0.35),
+                Math.round(total * 0.5),
+                Math.round(total * 0.65),
+                Math.round(total * 0.8),
+                total
+            ];
+            earningsChartInstance.data.datasets[0].data = mockData;
+            earningsChartInstance.update();
+        }
+
+        function copyElementText(id) {
+            const txt = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(txt).then(() => {
+                showToast('Скопировано!');
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3200);
+        }
+
+        function resetData() {
+            if (confirm('Внимание: это полностью сбросит все созданные ссылки, аккаунты и заявки платформы. Продолжить?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                appData = JSON.parse(JSON.stringify(defaultData));
+                saveData();
+                showToast('Все данные платформы сброшены!');
+            }
+        }
+    </script>
+</body>
+</html>
