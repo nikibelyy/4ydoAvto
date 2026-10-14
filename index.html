@@ -3,84 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RefMatrix (Local Edition)</title>
+    <title>RefMatrix — Платформа платежей</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between" x-data="app()">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white" x-data="app()">
 
-<header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-50">
+<!-- Шапкa -->
+<header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/30">R</div>
-            <span class="text-xl font-bold tracking-tight">refmatrix</span>
+        <div class="flex items-center space-x-3 cursor-pointer" @click="currentPayCode = null">
+            <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">R</div>
+            <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">refmatrix</span>
         </div>
         <div>
-            <template x-if="loggedIn">
-                <button @click="logout()" class="text-sm bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl hover:bg-slate-800 transition">Выйти</button>
+            <template x-if="currentUser">
+                <div class="flex items-center space-x-4">
+                    <span class="text-xs text-slate-400 hidden sm:inline" x-text="currentUser.username"></span>
+                    <button @click="logout()" class="text-xs bg-slate-900 border border-slate-800 hover:border-slate-700 px-4 py-2 rounded-xl transition font-medium">Выйти</button>
+                </div>
             </template>
         </div>
     </div>
 </header>
 
+<!-- Основной контент -->
 <main class="max-w-7xl mx-auto px-6 py-12 w-full flex-grow flex items-center justify-center">
-    
-    <!-- Форма входа -->
-    <div x-show="!loggedIn" class="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-3xl shadow-xl">
-        <h2 class="text-2xl font-bold mb-1">Авторизация</h2>
-        <p class="text-slate-400 text-sm mb-6">Логин: <code class="text-blue-400">admin</code> | Пароль: <code class="text-blue-400">admin123</code></p>
-        
-        <form @submit.prevent="login">
-            <div class="mb-4">
-                <label class="block text-xs text-slate-400 mb-1">Логин</label>
-                <input type="text" x-model="loginForm.username" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition">
-            </div>
-            <div class="mb-6">
-                <label class="block text-xs text-slate-400 mb-1">Пароль</label>
-                <input type="password" x-model="loginForm.password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition">
-            </div>
-            <p x-text="loginError" class="text-red-400 text-xs mb-4" x-show="loginError"></p>
-            <button type="submit" class="w-full py-3 bg-blue-600 rounded-xl font-semibold hover:bg-blue-500 transition shadow-lg shadow-blue-600/20">Войти</button>
-        </form>
-    </div>
 
-    <!-- Админ панель -->
-    <template x-if="loggedIn && user.isAdmin">
-        <div class="w-full space-y-8">
+    <!-- СТРАНИЦА ОПЛАТЫ ДЛЯ КЛИЕНТА (если открыта ссылка вида /#pay-CODE) -->
+    <template x-if="currentPayCode">
+        <div class="w-full max-w-md bg-slate-900/90 border border-slate-800/80 p-8 rounded-3xl shadow-2xl backdrop-blur-xl animate-fade-in">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl font-bold">₽</div>
+                <h1 class="text-2xl font-bold tracking-tight">Оплата по СБП</h1>
+                <p class="text-slate-400 text-xs mt-1">Переведите точную сумму по реквизитам ниже</p>
+            </div>
+            
+            <template x-if="getPayDetails()">
+                <div class="space-y-4 mb-6">
+                    <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60">
+                        <span class="text-[10px] uppercase tracking-wider text-slate-500 block mb-1">Банк получателя</span>
+                        <span class="text-emerald-400 font-semibold text-base" x-text="getPayDetails().bank"></span>
+                    </div>
+                    <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60">
+                        <span class="text-[10px] uppercase tracking-wider text-slate-500 block mb-1">Номер телефона СБП</span>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-mono font-bold tracking-wider text-white" x-text="getPayDetails().phone"></span>
+                            <button @click="navigator.clipboard.writeText(getPayDetails().phone); alert('Номер скопирован!')" class="text-xs bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-3 py-1.5 rounded-lg transition">Копировать</button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template x-if="!getPayDetails()">
+                <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl text-center text-sm mb-6">
+                    Ссылка недействительна или создатель не указал реквизиты.
+                </div>
+            </template>
+
+            <button @click="currentPayCode = null; window.location.hash = ''" class="w-full py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-semibold text-sm transition">На главную</button>
+        </div>
+    </template>
+
+    <!-- АВТОРИЗАЦИЯ / РЕГИСТРАЦИЯ -->
+    <template x-if="!currentUser && !currentPayCode">
+        <div class="w-full max-w-md bg-slate-900/90 border border-slate-800/80 p-8 rounded-3xl shadow-2xl backdrop-blur-xl">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold tracking-tight" x-text="isRegistering ? 'Регистрация' : 'Вход в систему'"></h2>
+                <p class="text-slate-400 text-xs mt-1" x-text="isRegistering ? 'Создайте новый аккаунт участника' : 'Войдите под своими учетными данными'"></p>
+            </div>
+            
+            <form @submit.prevent="handleAuth()" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1.5 font-medium">Логин</label>
+                    <input type="text" x-model="authForm.username" required class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1.5 font-medium">Пароль</label>
+                    <input type="password" x-model="authForm.password" required class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white">
+                </div>
+                <p x-text="authError" class="text-red-400 text-xs font-medium" x-show="authError"></p>
+                
+                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-semibold text-sm transition shadow-lg shadow-blue-600/20" x-text="isRegistering ? 'Зарегистрироваться' : 'Войти'"></button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <button @click="isRegistering = !isRegistering; authError = ''" class="text-xs text-slate-400 hover:text-blue-400 transition" x-text="isRegistering ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'"></button>
+            </div>
+        </div>
+    </template>
+
+    <!-- ПАНЕЛЬ АДМИНИСТРАТОРА -->
+    <template x-if="currentUser && currentUser.isAdmin && !currentPayCode">
+        <div class="w-full space-y-8 animate-fade-in">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold">Панель Администратора</h1>
-                    <p class="text-slate-400 text-sm mt-1">Управление реферальными ссылками и активациями</p>
+                    <h1 class="text-3xl font-bold tracking-tight">Панель Администратора</h1>
+                    <p class="text-slate-400 text-sm mt-1">Полный контроль над пользователями и платежными ссылками</p>
                 </div>
-                <button @click="createLink()" class="bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-blue-600/20">+ Создать ссылку</button>
+                <button @click="createLink()" class="bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-blue-600/20 flex items-center space-x-2">
+                    <span>+ Создать ссылку</span>
+                </button>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+            <!-- Список ссылок -->
+            <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
+                <div class="p-6 border-b border-slate-800 font-semibold text-base">Активные платежные ссылки</div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-950 text-slate-400 uppercase text-xs border-b border-slate-800">
+                        <thead class="bg-slate-950/50 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
                             <tr>
-                                <th class="p-4">ID</th>
-                                <th class="p-4">Ссылка</th>
+                                <th class="p-4">Код</th>
+                                <th class="p-4">Ссылка для клиента</th>
                                 <th class="p-4">Создатель</th>
                                 <th class="p-4">Статус</th>
                                 <th class="p-4 text-right">Действие</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-800">
+                        <tbody class="divide-y divide-slate-800/60">
                             <template x-for="link in links" :key="link.id">
-                                <tr class="hover:bg-slate-800/40 transition">
-                                    <td class="p-4 font-mono text-slate-400" x-text="link.id"></td>
+                                <tr class="hover:bg-slate-800/20 transition">
+                                    <td class="p-4 font-mono text-slate-400" x-text="link.code"></td>
                                     <td class="p-4">
-                                        <a :href="`#pay-${link.code}`" @click.prevent="currentPayCode = link.code" class="text-blue-400 hover:underline font-mono" x-text="window.location.origin + '/#pay-' + link.code"></a>
+                                        <a :href="`#pay-${link.code}`" @click.prevent="currentPayCode = link.code; window.location.hash = 'pay-' + link.code" class="text-blue-400 hover:underline font-mono text-xs" x-text="window.location.origin + window.location.pathname + '#pay-' + link.code"></a>
                                     </td>
-                                    <td class="p-4" x-text="link.creator"></td>
+                                    <td class="p-4 text-slate-300" x-text="link.creator"></td>
                                     <td class="p-4">
                                         <span class="px-2.5 py-1 rounded-full text-xs font-medium" :class="link.status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'" x-text="link.status === 'paid' ? 'Оплачено' : 'Ожидает'"></span>
                                     </td>
                                     <td class="p-4 text-right">
                                         <template x-if="link.status !== 'paid'">
-                                            <button @click="confirmPayment(link.id)" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded-lg text-xs font-semibold transition">Подтвердить</button>
+                                            <button @click="confirmPayment(link.id)" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm">Подтвердить</button>
                                         </template>
                                     </td>
                                 </tr>
@@ -92,118 +144,170 @@
         </div>
     </template>
 
-    <!-- Просмотр страницы оплаты по ссылке (если в URL есть #pay-...) -->
-    <template x-if="currentPayCode">
-        <div class="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center shadow-2xl">
-            <h1 class="text-2xl font-bold mb-2">Оплата доступа</h1>
-            <p class="text-slate-400 text-sm mb-6">Переведите средства по СБП реквизитам:</p>
-            
-            <div class="bg-slate-950 p-4 rounded-xl mb-6 text-left border border-slate-800 space-y-2">
-                <div>
-                    <span class="text-xs text-slate-500 block">Банк получателя:</span>
-                    <span class="text-emerald-400 font-semibold" x-text="getLinkCreatorBank(currentPayCode)"></span>
-                </div>
-                <div>
-                    <span class="text-xs text-slate-500 block">Номер телефона СБП:</span>
-                    <span class="text-lg font-mono font-bold tracking-wider" x-text="getLinkCreatorPhone(currentPayCode)"></span>
-                </div>
+    <!-- КАБИНЕТ ОБЫЧНОГО ПОЛЬЗОВАТЕЛЯ -->
+    <template x-if="currentUser && !currentUser.isAdmin && !currentPayCode">
+        <div class="w-full max-w-2xl space-y-8 animate-fade-in">
+            <div class="bg-slate-900/90 border border-slate-800/80 p-8 rounded-3xl shadow-2xl backdrop-blur-xl">
+                <h1 class="text-2xl font-bold tracking-tight mb-1">Личный кабинет</h1>
+                <p class="text-slate-400 text-xs mb-6">Укажите ваши реквизиты СБП для получения переводов по вашим ссылкам</p>
+                
+                <form @submit.prevent="saveUserSettings()" class="space-y-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1.5 font-medium">Номер телефона СБП</label>
+                        <input type="text" x-model="userSettings.phone" placeholder="+7 (900) 000-00-00" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1.5 font-medium">Банк (например: Сбер, Т-Банк, Альфа)</label>
+                        <input type="text" x-model="userSettings.bank" placeholder="Сбербанк" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white">
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-semibold text-sm transition shadow-lg shadow-blue-600/20">Сохранить реквизиты</button>
+                </form>
             </div>
 
-            <button @click="currentPayCode = null" class="w-full py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-semibold transition">Назад на главную</button>
+            <div class="bg-slate-900/90 border border-slate-800/80 p-8 rounded-3xl shadow-2xl backdrop-blur-xl">
+                <h3 class="font-bold text-lg mb-2">Генерация платежной ссылки</h3>
+                <p class="text-slate-400 text-xs mb-6">Создайте уникальную ссылку на оплату для ваших клиентов</p>
+                <button @click="createLink()" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg shadow-blue-600/20">Сгенерировать ссылку</button>
+                
+                <div class="mt-6 space-y-3" x-show="userNewLink">
+                    <label class="block text-xs text-slate-400">Ваша новая ссылка:</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" readonly :value="userNewLink" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm font-mono text-blue-400">
+                        <button @click="navigator.clipboard.writeText(userNewLink); alert('Скопировано!')" class="bg-slate-800 hover:bg-slate-700 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition">Копировать</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </template>
 
 </main>
 
-<footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
-    &copy; 2026 refmatrix • Local Static Version
+<!-- Футер -->
+<footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
+    &copy; 2026 refmatrix • Secured Local Architecture
 </footer>
 
 <script>
 function app() {
     return {
-        loggedIn: false,
-        user: { username: '', isAdmin: false },
-        loginForm: { username: '', password: '' },
-        loginError: '',
-        links: JSON.parse(localStorage.getItem('refmatrix_links')) || [
-            { id: 1, code: 'demo123', creator: 'admin', status: 'pending', phone: '+7 (999) 000-00-00', bank: 'Сбербанк' }
+        currentUser: null,
+        isRegistering: false,
+        authForm: { username: '', password: '' },
+        authError: '',
+        
+        users: JSON.parse(localStorage.getItem('refmatrix_db_users')) || [
+            { username: 'admin', password: 'admin123', isAdmin: true, phone: '+7 (999) 000-00-00', bank: 'Сбербанк' }
         ],
+        links: JSON.parse(localStorage.getItem('refmatrix_db_links')) || [],
+        
+        userSettings: { phone: '', bank: '' },
+        userNewLink: '',
         currentPayCode: null,
 
         init() {
-            // Проверка URL на наличие ссылки оплаты
-            if (window.location.hash.startsWith('#pay-')) {
-                this.currentPayCode = window.location.hash.replace('#pay-', '');
-            }
-            window.addEventListener('hashchange', () => {
-                if (window.location.hash.startsWith('#pay-')) {
-                    this.currentPayCode = window.location.hash.replace('#pay-', '');
-                } else {
-                    this.currentPayCode = null;
-                }
-            });
+            // Проверка хэша ссылки для клиента
+            this.checkHash();
+            window.addEventListener('hashchange', () => this.checkHash());
 
-            // Автовосстановление сессии
-            const savedUser = localStorage.getItem('refmatrix_user');
+            // Восстановление сессии
+            const savedUser = localStorage.getItem('refmatrix_session');
             if (savedUser) {
-                this.user = JSON.parse(savedUser);
-                this.loggedIn = true;
+                this.currentUser = JSON.parse(savedUser);
+                this.userSettings.phone = this.currentUser.phone || '';
+                this.userSettings.bank = this.currentUser.bank || '';
             }
         },
 
-        login() {
-            if (this.loginForm.username === 'admin' && this.loginForm.password === 'admin123') {
-                this.user = { username: 'admin', isAdmin: true };
-                this.loggedIn = true;
-                this.loginError = '';
-                localStorage.setItem('refmatrix_user', JSON.stringify(this.user));
+        checkHash() {
+            if (window.location.hash.startsWith('#pay-')) {
+                this.currentPayCode = window.location.hash.replace('#pay-', '');
             } else {
-                this.loginError = 'Неверный логин или пароль';
+                this.currentPayCode = null;
+            }
+        },
+
+        handleAuth() {
+            this.authError = '';
+            if (this.isRegistering) {
+                const exists = this.users.find(u => u.username === this.authForm.username);
+                if (exists) {
+                    this.authError = 'Пользователь с таким логином уже существует';
+                    return;
+                }
+                const newUser = { username: this.authForm.username, password: this.authForm.password, isAdmin: false, phone: '', bank: '' };
+                this.users.push(newUser);
+                localStorage.setItem('refmatrix_db_users', JSON.stringify(this.users));
+                this.currentUser = newUser;
+                localStorage.setItem('refmatrix_session', JSON.stringify(this.currentUser));
+            } else {
+                const user = this.users.find(u => u.username === this.authForm.username && u.password === this.authForm.password);
+                if (!user) {
+                    this.authError = 'Неверный логин или пароль';
+                    return;
+                }
+                this.currentUser = user;
+                this.userSettings.phone = user.phone || '';
+                this.userSettings.bank = user.bank || '';
+                localStorage.setItem('refmatrix_session', JSON.stringify(this.currentUser));
             }
         },
 
         logout() {
-            this.loggedIn = false;
-            this.user = {};
-            localStorage.removeItem('refmatrix_user');
+            this.currentUser = null;
+            localStorage.removeItem('refmatrix_session');
+            this.currentPayCode = null;
+            window.location.hash = '';
+        },
+
+        saveUserSettings() {
+            this.currentUser.phone = this.userSettings.phone;
+            this.currentUser.bank = this.userSettings.bank;
+            
+            // Обновляем в общем массиве пользователей
+            const idx = this.users.findIndex(u => u.username === this.currentUser.username);
+            if (idx !== -1) {
+                this.users[idx] = this.currentUser;
+                localStorage.setItem('refmatrix_db_users', JSON.stringify(this.users));
+                localStorage.setItem('refmatrix_session', JSON.stringify(this.currentUser));
+            }
+            alert('Реквизиты успешно сохранены!');
         },
 
         createLink() {
-            const newCode = Math.random().toString(36).substring(2, 10);
-            this.links.unshift({
+            const code = Math.random().toString(36).substring(2, 10);
+            const newLink = {
                 id: Date.now(),
-                code: newCode,
-                creator: this.user.username,
-                status: 'pending',
-                phone: '+7 (900) 123-45-67',
-                bank: 'Тинькофф'
-            });
-            this.saveLinks();
+                code: code,
+                creator: this.currentUser.username,
+                status: 'pending'
+            };
+            this.links.unshift(newLink);
+            localStorage.setItem('refmatrix_db_links', JSON.stringify(this.links));
+            
+            const fullLink = window.location.origin + window.location.pathname + '#pay-' + code;
+            if (this.currentUser.isAdmin) {
+                alert('Ссылка создана и добавлена в таблицу!');
+            } else {
+                this.userNewLink = fullLink;
+            }
         },
 
         confirmPayment(id) {
-            if (!confirm('Подтвердить поступление оплаты?')) return;
+            if (!confirm('Подтвердить поступление средств по этой ссылке?')) return;
             const link = this.links.find(l => l.id === id);
             if (link) {
                 link.status = 'paid';
-                this.saveLinks();
+                localStorage.setItem('refmatrix_db_links', JSON.stringify(this.links));
                 alert('Оплата подтверждена!');
             }
         },
 
-        saveLinks() {
-            localStorage.setItem('refmatrix_links', JSON.stringify(this.links));
-        },
-
-        getLinkCreatorPhone(code) {
-            const link = this.links.find(l => l.code === code);
-            return link ? link.phone : 'Не указан';
-        },
-
-        getLinkCreatorBank(code) {
-            const link = this.links.find(l => l.code === code);
-            return link ? link.bank : 'Не указан';
+        getPayDetails() {
+            const link = this.links.find(l => l.code === this.currentPayCode);
+            if (!link) return null;
+            const creator = this.users.find(u => u.username === link.creator);
+            if (!creator || !creator.phone) return null;
+            return { phone: creator.phone, bank: creator.bank || 'Не указан' };
         }
     }
 }
