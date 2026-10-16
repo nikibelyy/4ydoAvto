@@ -1,0 +1,20 @@
+{
+  "name": "Tempo — рабочий календарь",
+  "short_name": "Tempo",
+  "description": "Быстрый современный календарь для работы и личных планов.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d0f16",
+  "theme_color": "#11131b",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
