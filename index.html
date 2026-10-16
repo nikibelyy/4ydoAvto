@@ -1,786 +1,703 @@
 <!DOCTYPE html>
-<html lang="ru" class="antialiased">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0B1120">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="График 2/2">
-    <title>Рабочий Календарь 2/2 — Native App UI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f2f0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="График смен" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Календарь смен</title>
+  <style>
+    :root {
+      --bg-color: #f6f2f0;
+      --text-main: #2c2c2e;
+      --text-muted: #5c5c5e;
+      --teal: #3b8c99;
+      --red: #e03a2d;
+      --pill-bg: #e5e1df;
+      --white: #ffffff;
+      --spring: cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
-    <!-- Tailwind CSS (for layout utilities) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
 
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    html, body {
+      height: 100%;
+      width: 100%;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, sans-serif;
+      overflow: hidden;
+    }
 
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+      background: var(--bg-color);
+    }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        app: {
-                            bg: '#0B1120',      // Deep slate/navy background
-                            surface: '#151D30', // Card surface
-                            border: '#232D42',
-                            primary: '#3B82F6', // Blue
-                            primaryTo: '#4F46E5',// Indigo
-                            payday: '#F59E0B',  // Gold/Amber
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    /* Верхняя шапка с днями недели */
+    .weekdays-header {
+      padding-top: max(14px, env(safe-area-inset-top));
+      padding-bottom: 10px;
+      padding-left: 12px;
+      padding-right: 12px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: rgba(246, 242, 240, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
 
-    <style>
-        /* ==========================================
-           CORE NATIVE APP STYLES & CSS VARIABLES
-           ========================================== */
-        :root {
-            --app-bg: #0B1120;
-            --safe-area-bottom: env(safe-area-inset-bottom, 20px);
-        }
+    /* Область прокрутки календаря */
+    .calendar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 12px 32px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
 
-        * {
-            -webkit-tap-highlight-color: transparent;
-            box-sizing: border-box;
-            user-select: none;
-        }
+    .calendar-scroll::-webkit-scrollbar {
+      display: none;
+    }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            background-color: var(--app-bg);
-            color: #F8FAFC;
-            /* 100dvh prevents mobile browser URL bar issues */
-            height: 100dvh;
-            width: 100vw;
-            overflow: hidden; 
-        }
+    .month-block {
+      margin-bottom: 28px;
+      transition: transform 0.35s var(--spring), opacity 0.35s ease;
+    }
 
-        /* App Container bounds it to mobile width on desktop, full screen on mobile */
-        #app-container {
-            width: 100%;
-            max-width: 480px;
-            height: 100dvh;
-            margin: 0 auto;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--app-bg);
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
-            overflow: hidden;
-        }
+    .month-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin: 18px 0 16px;
+      color: var(--text-main);
+    }
 
-        /* Views (Tabs) */
-        .view-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding-bottom: calc(80px + var(--safe-area-bottom)); /* Space for bottom nav */
-            display: none;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        
-        .view-content.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      row-gap: 8px;
+      column-gap: 2px;
+      justify-items: center;
+      align-items: center;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .day-cell {
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-main);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s var(--spring), color 0.25s ease;
+      z-index: 1;
+    }
 
-        /* Hide Scrollbar */
-        ::-webkit-scrollbar { display: none; }
-        
-        /* Glassmorphism Navigation */
-        .glass-nav {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: var(--safe-area-bottom);
-        }
+    .day-cell:active {
+      transform: scale(0.86);
+    }
 
-        .nav-item {
-            color: #64748B;
-            transition: all 0.25s ease;
-        }
-        .nav-item.active {
-            color: #3B82F6;
-            transform: translateY(-2px);
-        }
+    /* Бирюзовый круг смены */
+    .day-cell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-color: var(--teal);
+      transform: scale(0.3);
+      opacity: 0;
+      transition: transform 0.38s var(--spring), opacity 0.25s ease;
+      z-index: -2;
+    }
 
-        /* Glass Cards */
-        .glass-card {
-            background: rgba(21, 29, 48, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-        }
+    .day-cell.work::before {
+      transform: scale(1);
+      opacity: 1;
+    }
 
-        /* Active Button Press effect */
-        .active-scale:active {
-            transform: scale(0.95);
-            transition: transform 0.1s;
-        }
+    .day-cell.work {
+      color: var(--white);
+      font-weight: 500;
+    }
 
-        /* Calendar Grid Enhancements */
-        .cal-day {
-            transition: all 0.2s ease;
-        }
-        .cal-day.work {
-            background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
-            border: none;
-            color: white;
-        }
-        .cal-day.off {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255,255,255,0.03);
-            color: #94A3B8;
-        }
-        .cal-day.today {
-            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.8);
-        }
-        .cal-day.payday::after {
-            content: '💰';
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            font-size: 10px;
-            background: #0B1120;
-            border-radius: 50%;
-            padding: 1px;
-        }
+    /* Красный внутренний круг (опорная дата / выбранный день) */
+    .day-cell::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--red);
+      transform: scale(0);
+      opacity: 0;
+      transition: transform 0.35s var(--spring), opacity 0.25s ease;
+      z-index: -1;
+    }
 
-        /* Native iOS-like Bottom Sheet */
-        .bottom-sheet-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 50;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .bottom-sheet {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #151D30;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            z-index: 51;
-            transform: translateY(100%);
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            padding-bottom: var(--safe-area-bottom);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
-        }
-        .bottom-sheet.open {
-            transform: translateY(0);
-        }
-        .bottom-sheet-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .sheet-handle {
-            width: 36px;
-            height: 4px;
-            background: #334155;
-            border-radius: 2px;
-            margin: 12px auto 20px auto;
-        }
-    </style>
+    .day-cell.anchor::after {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .day-cell.anchor {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* Нижняя панель управления */
+    .bottom-panel {
+      background: rgba(246, 242, 240, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      z-index: 20;
+    }
+
+    /* Переключатель режимов (Segmented Control) */
+    .segmented-control {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--pill-bg);
+      border-radius: 999px;
+      padding: 4px;
+      margin-bottom: 18px;
+    }
+
+    .segment-indicator {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: calc((100% - 8px) / 4);
+      background: var(--white);
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: transform 0.38s var(--spring);
+      z-index: 0;
+    }
+
+    .segment-btn {
+      position: relative;
+      z-index: 1;
+      border: none;
+      background: none;
+      padding: 8px 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      cursor: pointer;
+      border-radius: 999px;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    /* Переключатель В месяце / В году */
+    .period-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 14px;
+      font-size: 17px;
+      color: var(--text-main);
+    }
+
+    .switch {
+      width: 58px;
+      height: 32px;
+      background: #d5d1cf;
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      padding: 3px;
+      transition: background 0.3s ease;
+    }
+
+    .switch-thumb {
+      width: 32px;
+      height: 26px;
+      background: var(--teal);
+      border-radius: 999px;
+      transition: transform 0.35s var(--spring);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+
+    .switch.year-mode .switch-thumb {
+      transform: translateX(20px);
+    }
+
+    /* Счетчики дней */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 17px;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: inline-block;
+      transition: transform 0.25s var(--spring), opacity 0.2s ease;
+    }
+
+    .stat-value.bump {
+      transform: scale(1.22);
+    }
+
+    /* Модальное окно для кнопки "Добавить" */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--bg-color);
+      width: 100%;
+      max-width: 320px;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+      transform: scale(0.9) translateY(12px);
+      transition: transform 0.35s var(--spring);
+    }
+
+    .modal-backdrop.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      border: 1px solid #d0ccca;
+      border-radius: 12px;
+      background: var(--white);
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 11px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: var(--pill-bg);
+      color: var(--text-main);
+    }
+
+    .btn-save {
+      background: var(--teal);
+      color: var(--white);
+    }
+
+    @media (max-width: 360px) {
+      .day-cell {
+        width: 39px;
+        height: 39px;
+        font-size: 15px;
+      }
+      .segment-btn {
+        font-size: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="app-container">
+    <!-- Шапка дней недели -->
+    <header class="weekdays-header">
+      <div>пн</div>
+      <div>вт</div>
+      <div>ср</div>
+      <div>чт</div>
+      <div>пт</div>
+      <div>сб</div>
+      <div>вс</div>
+    </header>
 
-<div id="app-container">
+    <!-- Скролл календаря -->
+    <main class="calendar-scroll" id="calendarScroll"></main>
 
-    <!-- ==========================================
-         TAB 1: HOME (Dashboard)
-         ========================================== -->
-    <main id="view-home" class="view-content active px-4 pt-6">
-        <!-- Header -->
-        <header class="flex justify-between items-center mb-6">
-            <div>
-                <p class="text-slate-400 text-sm font-medium">С возвращением,</p>
-                <h1 class="text-2xl font-bold text-white tracking-tight">Рабочий График</h1>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white border border-white/10 active-scale" onclick="switchTab('finances')">
-                <i class="fa-solid fa-wallet text-lg"></i>
-            </div>
-        </header>
+    <!-- Нижняя панель -->
+    <footer class="bottom-panel">
+      <div class="segmented-control" id="segmentedControl">
+        <div class="segment-indicator" id="segmentIndicator"></div>
+        <button class="segment-btn" data-index="0" data-work="1" data-rest="3">Один/три</button>
+        <button class="segment-btn" data-index="1" data-work="2" data-rest="2">Два/два</button>
+        <button class="segment-btn" data-index="2" data-work="3" data-rest="3">Три/три</button>
+        <button class="segment-btn" data-index="3" id="customBtn">Добавить</button>
+      </div>
 
-        <!-- Current Shift Cycle (4-day cards) -->
-        <section class="mb-6">
-            <div class="flex items-center justify-between mb-3">
-                <h2 class="text-sm font-semibold tracking-wide text-slate-300 uppercase">Текущий цикл 2/2</h2>
-                <span class="text-xs font-medium px-2 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20">8 300 ₽/день</span>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3" id="home4DayStrip">
-                <!-- Dynamically populated -->
-            </div>
-        </section>
-
-        <!-- Next Payday Widget -->
-        <section class="glass-card p-5 relative overflow-hidden mb-6 active-scale" onclick="switchTab('finances')">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div class="flex items-start justify-between">
-                <div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider" id="homeNextPayType">Ближайшая выплата</h3>
-                    </div>
-                    <div class="text-3xl font-extrabold text-white mt-2 mb-1 font-mono" id="homeNextPayAmt">-- ₽</div>
-                    <p class="text-sm text-slate-400 font-medium" id="homeNextPayDesc">-- смен</p>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xl">
-                    <i class="fa-solid fa-sack-dollar"></i>
-                </div>
-            </div>
-            
-            <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
-                <span class="text-sm font-medium text-slate-300" id="homeNextPayDate">--</span>
-                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30" id="homeNextPayDaysLeft">--</span>
-            </div>
-        </section>
-
-        <!-- Mini Stats Summary -->
-        <section class="grid grid-cols-2 gap-3">
-             <div class="glass-card p-4">
-                 <i class="fa-solid fa-briefcase text-blue-400 mb-2"></i>
-                 <div class="text-lg font-bold text-white">15 смен</div>
-                 <div class="text-xs text-slate-400">Норма в месяц</div>
-             </div>
-             <div class="glass-card p-4">
-                 <i class="fa-solid fa-coins text-amber-400 mb-2"></i>
-                 <div class="text-lg font-bold text-white">124 500 ₽</div>
-                 <div class="text-xs text-slate-400">ЗП за месяц</div>
-             </div>
-        </section>
-    </main>
-
-    <!-- ==========================================
-         TAB 2: CALENDAR
-         ========================================== -->
-    <main id="view-calendar" class="view-content px-4 pt-6">
-        <header class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white tracking-tight">Календарь</h1>
-            <button onclick="jumpToToday()" class="text-sm font-semibold text-blue-400 bg-blue-500/10 px-3 py-1.5 rounded-lg active-scale">Сегодня</button>
-        </header>
-
-        <section class="glass-card p-4">
-            <!-- Month Nav -->
-            <div class="flex items-center justify-between mb-4">
-                <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/5 active-scale">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-                <div class="text-center">
-                    <h2 class="text-base font-bold text-white capitalize" id="calMonthTitle">--</h2>
-                </div>
-                <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/5 active-scale">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-            </div>
-
-            <!-- Weekdays -->
-            <div class="grid grid-cols-7 gap-1 text-center mb-2">
-                <div class="text-[10px] font-bold text-slate-500">ПН</div>
-                <div class="text-[10px] font-bold text-slate-500">ВТ</div>
-                <div class="text-[10px] font-bold text-slate-500">СР</div>
-                <div class="text-[10px] font-bold text-slate-500">ЧТ</div>
-                <div class="text-[10px] font-bold text-slate-500">ПТ</div>
-                <div class="text-[10px] font-bold text-rose-400/70">СБ</div>
-                <div class="text-[10px] font-bold text-rose-400/70">ВС</div>
-            </div>
-
-            <!-- Grid -->
-            <div id="calendarGrid" class="grid grid-cols-7 gap-2">
-                <!-- JS populated -->
-            </div>
-            
-            <!-- Legend -->
-            <div class="mt-5 flex items-center justify-center gap-4 text-xs font-medium text-slate-400">
-                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Рабочий</div>
-                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-600"></span> Выходной</div>
-                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Выплата</div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ==========================================
-         TAB 3: FINANCES
-         ========================================== -->
-    <main id="view-finances" class="view-content px-4 pt-6">
-        <header class="mb-6">
-            <h1 class="text-2xl font-bold text-white tracking-tight">Финансы</h1>
-            <p class="text-slate-400 text-sm mt-1">Ожидаемый доход по графику 2/2</p>
-        </header>
-
-        <!-- Total Overview -->
-        <section class="glass-card p-5 mb-5 border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] relative overflow-hidden">
-            <div class="relative z-10 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-blue-400 uppercase tracking-wider">Всего за 15 рабочих дней</p>
-                    <h2 class="text-3xl font-extrabold text-white mt-1 mb-1 font-mono">124 500 ₽</h2>
-                    <p class="text-sm text-slate-300">Ставка: 8 300 ₽ / смена</p>
-                </div>
-            </div>
-            
-            <!-- Progress Bar Total -->
-            <div class="mt-4">
-                <div class="flex justify-between text-xs text-slate-400 mb-1.5">
-                    <span>10 число (46.7%)</span>
-                    <span>25 число (53.3%)</span>
-                </div>
-                <div class="w-full h-2 rounded-full bg-slate-800 flex overflow-hidden">
-                    <div class="h-full bg-amber-400" style="width: 46.7%"></div>
-                    <div class="h-full bg-blue-500" style="width: 53.3%"></div>
-                </div>
-            </div>
-        </section>
-
-        <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wide mb-3 px-1">Детализация выплат</h3>
-
-        <!-- Payout: 10th -->
-        <section class="glass-card p-4 mb-3 border-l-4 border-l-amber-400">
-            <div class="flex items-start justify-between">
-                <div>
-                    <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-bold uppercase mb-2">
-                        <i class="fa-solid fa-calendar-check"></i> За прошлый месяц
-                    </div>
-                    <h4 class="text-lg font-bold text-white">10 число</h4>
-                    <p class="text-sm text-slate-400 mt-0.5">Оплата за 7 рабочих смен</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-xl font-bold font-mono text-amber-400">58 100 ₽</div>
-                    <div class="text-xs text-slate-500 mt-1">7 × 8 300 ₽</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Payout: 25th -->
-        <section class="glass-card p-4 mb-5 border-l-4 border-l-blue-500">
-            <div class="flex items-start justify-between">
-                <div>
-                    <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase mb-2">
-                        <i class="fa-solid fa-bolt"></i> Аванс за текущий месяц
-                    </div>
-                    <h4 class="text-lg font-bold text-white">25 число</h4>
-                    <p class="text-sm text-slate-400 mt-0.5">Оплата за 8 рабочих смен</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-xl font-bold font-mono text-blue-400">66 400 ₽</div>
-                    <div class="text-xs text-slate-500 mt-1">8 × 8 300 ₽</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Action / Reset -->
-        <button onclick="resetApp()" class="w-full py-3.5 rounded-xl border border-rose-500/20 text-rose-400 text-sm font-semibold active-scale bg-rose-500/5">
-            Сбросить график и настройки
-        </button>
-    </main>
-
-    <!-- ==========================================
-         BOTTOM NAVIGATION BAR
-         ========================================== -->
-    <nav class="glass-nav absolute bottom-0 left-0 w-full h-20 px-6 flex justify-between items-center z-40">
-        <button onclick="switchTab('home')" id="nav-home" class="nav-item active flex flex-col items-center gap-1 w-16 active-scale">
-            <i class="fa-solid fa-layer-group text-xl"></i>
-            <span class="text-[10px] font-bold">Главная</span>
-        </button>
-        <button onclick="switchTab('calendar')" id="nav-calendar" class="nav-item flex flex-col items-center gap-1 w-16 active-scale">
-            <i class="fa-solid fa-calendar-days text-xl"></i>
-            <span class="text-[10px] font-bold">График</span>
-        </button>
-        <button onclick="switchTab('finances')" id="nav-finances" class="nav-item flex flex-col items-center gap-1 w-16 active-scale">
-            <i class="fa-solid fa-wallet text-xl"></i>
-            <span class="text-[10px] font-bold">Финансы</span>
-        </button>
-    </nav>
-
-    <!-- ==========================================
-         BOTTOM SHEET MODAL (Day Details)
-         ========================================== -->
-    <div class="bottom-sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
-    <div class="bottom-sheet" id="bottomSheet">
-        <div class="sheet-handle"></div>
-        <div class="px-5 pb-6">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <h3 class="text-xl font-bold text-white" id="sheetDateTitle">--</h3>
-                    <p class="text-sm font-medium mt-1 px-2.5 py-0.5 rounded-md inline-block" id="sheetStatusBadge">--</p>
-                </div>
-                <button onclick="closeSheet()" class="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 active-scale">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-            </div>
-            
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Изменить статус смены:</p>
-            <div class="space-y-2 mb-4">
-                <button onclick="overrideDay('default')" id="btnOptDefault" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800/50 flex justify-between items-center active-scale transition-colors">
-                    <span class="text-sm font-semibold text-white">По графику 2/2</span>
-                    <i class="fa-solid fa-rotate-left text-slate-500 text-sm"></i>
-                </button>
-                <button onclick="overrideDay('extra')" id="btnOptExtra" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800/50 flex justify-between items-center active-scale transition-colors">
-                    <span class="text-sm font-semibold text-blue-400">Подработка (+8 300 ₽)</span>
-                    <i class="fa-solid fa-plus text-blue-500 text-sm"></i>
-                </button>
-                <button onclick="overrideDay('off')" id="btnOptOff" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800/50 flex justify-between items-center active-scale transition-colors">
-                    <span class="text-sm font-semibold text-rose-400">Выходной / Отгул</span>
-                    <i class="fa-solid fa-bed text-rose-500 text-sm"></i>
-                </button>
-            </div>
-            
-            <p class="text-xs text-slate-500 text-center">Изменения сохраняются автоматически</p>
+      <div class="period-toggle-row">
+        <span>В месяце</span>
+        <div class="switch" id="periodSwitch" role="switch" aria-checked="false">
+          <div class="switch-thumb"></div>
         </div>
+        <span>В году</span>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-label">Рабочих дней</div>
+          <div class="stat-value" id="workDaysCount">15</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Выходных дней</div>
+          <div class="stat-value" id="restDaysCount">16</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Модальное окно своего графика -->
+  <div class="modal-backdrop" id="customModal">
+    <div class="modal-card">
+      <div class="modal-title">Свой график смен</div>
+      <div class="modal-inputs">
+        <div class="input-group">
+          <label>Рабочих дней</label>
+          <input type="number" id="customWorkInput" min="1" max="30" value="4" />
+        </div>
+        <div class="input-group">
+          <label>Выходных дней</label>
+          <input type="number" id="customRestInput" min="1" max="30" value="2" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" id="cancelModal">Отмена</button>
+        <button class="btn btn-save" id="saveModal">Применить</button>
+      </div>
     </div>
+  </div>
 
-</div>
+  <script>
+    const MONTH_NAMES = [
+      "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+      "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+    ];
 
-<!-- ==========================================
-     APP LOGIC (JavaScript)
-     ========================================== -->
-<script>
-    // ------------------------------------
-    // Configuration & Constants
-    // ------------------------------------
-    const CONFIG = {
-        rate: 8300,
-        shifts25: 8,
-        shifts10: 7,
-        totalShifts: 15
+    // Начальное состояние в точности как на скриншоте (2026 год, график 2/2, отметка 5 октября)
+    const state = JSON.parse(localStorage.getItem("shift_pwa_state")) || {
+      year: 2026,
+      workDays: 2,
+      restDays: 2,
+      segmentIndex: 1,
+      // 2 сентября 2026 — первый день смены, чтобы график 2/2 совпал день в день со скриншотом
+      cycleStartISO: "2026-09-02",
+      anchorDateISO: "2026-10-05",
+      isYearStats: false,
+      activeMonth: 8 // Сентябрь (0-based)
     };
 
-    const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-    const MONTHS_GENITIVE = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-    const WEEKDAYS = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-    
-    // State
-    let appState = {
-        anchorDateKey: '', // Defined on init (Yesterday)
-        overrides: {},     // 'YYYY-MM-DD': 'extra' | 'off'
-        viewYear: new Date().getFullYear(),
-        viewMonth: new Date().getMonth(),
-        selectedDateKey: null
-    };
-
-    // ------------------------------------
-    // Utilities
-    // ------------------------------------
-    function toDateKey(d) {
-        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    }
-    function parseDateKey(key) {
-        const [y,m,d] = key.split('-').map(Number);
-        return new Date(y, m-1, d);
-    }
-    function diffDays(d1, d2) {
-        const u1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
-        const u2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
-        return Math.floor((u1 - u2) / 86400000);
-    }
-    function formatRub(val) {
-        return val.toLocaleString('ru-RU') + ' ₽';
-    }
-
-    // ------------------------------------
-    // Core Logic (2/2 Schedule)
-    // ------------------------------------
-    function getDayInfo(dateObj) {
-        const key = toDateKey(dateObj);
-        const anchor = parseDateKey(appState.anchorDateKey);
-        
-        // Cycle: diff % 4. 
-        // Index 0: Work 1, Index 1: Work 2, Index 2: Off 1, Index 3: Off 2
-        let diff = diffDays(dateObj, anchor);
-        const cycleIndex = ((diff % 4) + 4) % 4; 
-        const isBaseWork = (cycleIndex === 0 || cycleIndex === 1);
-        
-        const override = appState.overrides[key];
-        let isWork = isBaseWork;
-        let type = isBaseWork ? 'work' : 'off';
-        
-        if (override === 'extra') {
-            isWork = true; type = 'extra';
-        } else if (override === 'off') {
-            isWork = false; type = 'off';
-        }
-
-        return {
-            key, dateObj, isBaseWork, isWork, type, cycleIndex,
-            isPay10: dateObj.getDate() === 10,
-            isPay25: dateObj.getDate() === 25
-        };
-    }
-
-    // ------------------------------------
-    // Initial Setup & Storage
-    // ------------------------------------
-    function initApp() {
-        const saved = localStorage.getItem('calendar22_native');
-        const today = new Date();
-        const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
-        
-        if (saved) {
-            appState = JSON.parse(saved);
-        } else {
-            // "Yesterday and today are WORK days" -> Anchor is yesterday (Work Day 1)
-            appState.anchorDateKey = toDateKey(yesterday);
-            appState.overrides = {};
-            saveState();
-        }
-        
-        // Reset view to current month
-        appState.viewYear = today.getFullYear();
-        appState.viewMonth = today.getMonth();
-        
-        renderAll();
-    }
+    const calendarScroll = document.getElementById("calendarScroll");
+    const segmentIndicator = document.getElementById("segmentIndicator");
+    const segmentedControl = document.getElementById("segmentedControl");
+    const periodSwitch = document.getElementById("periodSwitch");
+    const workDaysCountEl = document.getElementById("workDaysCount");
+    const restDaysCountEl = document.getElementById("restDaysCount");
+    const customModal = document.getElementById("customModal");
+    const customBtn = document.getElementById("customBtn");
 
     function saveState() {
-        localStorage.setItem('calendar22_native', JSON.stringify(appState));
+      localStorage.setItem("shift_pwa_state", JSON.stringify(state));
     }
 
-    function resetApp() {
-        if(confirm('Сбросить все настройки и пометки? График вернется к базовому состоянию.')) {
-            localStorage.removeItem('calendar22_native');
-            initApp();
-            switchTab('home');
-        }
+    // Разница в днях между двумя датами YYYY-MM-DD (UTC, без сбоев часовых поясов)
+    function diffDays(dateISO1, dateISO2) {
+      const [y1, m1, d1] = dateISO1.split("-").map(Number);
+      const [y2, m2, d2] = dateISO2.split("-").map(Number);
+      const utc1 = Date.UTC(y1, m1 - 1, d1);
+      const utc2 = Date.UTC(y2, m2 - 1, d2);
+      return Math.round((utc1 - utc2) / 86400000);
     }
 
-    // ------------------------------------
-    // Render Functions
-    // ------------------------------------
-    function renderAll() {
-        renderHome();
-        renderCalendar();
+    function formatISO(year, monthIndex, day) {
+      const m = String(monthIndex + 1).padStart(2, "0");
+      const d = String(day).padStart(2, "0");
+      return `${year}-${m}-${d}`;
     }
 
-    function renderHome() {
-        const today = new Date();
-        
-        // Render 4-Day Strip (Yesterday, Today, Tomorrow, Day After)
-        const stripOffsets = [-1, 0, 1, 2];
-        const stripTitles = ['Вчера', 'Сегодня', 'Завтра', 'Послезавтра'];
-        const stripHtml = stripOffsets.map((offset, i) => {
-            const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset);
-            const info = getDayInfo(d);
-            const isToday = offset === 0;
-            
-            let bgClass = info.isWork ? 'bg-gradient-to-br from-blue-600/90 to-indigo-600/90 border-blue-500/50 text-white' : 'glass-card border-white/5 text-slate-300';
-            if (isToday && info.isWork) bgClass += ' ring-2 ring-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.4)]';
-            if (isToday && !info.isWork) bgClass += ' ring-2 ring-slate-400';
+    function isWorkDay(dateISO) {
+      const cycleLength = state.workDays + state.restDays;
+      const diff = diffDays(dateISO, state.cycleStartISO);
+      const mod = ((diff % cycleLength) + cycleLength) % cycleLength;
+      return mod < state.workDays;
+    }
 
-            const statusText = info.isWork ? '+8 300 ₽' : 'Выходной';
-            const statusColor = info.isWork ? (isToday ? 'text-blue-100' : 'text-blue-200') : 'text-slate-500';
+    // Генерация сетки всех 12 месяцев
+    function buildCalendar() {
+      calendarScroll.innerHTML = "";
+      const year = state.year;
 
-            return `
-                <div class="${bgClass} rounded-2xl p-3 flex flex-col justify-between active-scale" onclick="openSheet('${info.key}')">
-                    <div class="text-[10px] font-bold uppercase tracking-wide opacity-80 mb-2">${stripTitles[i]}</div>
-                    <div>
-                        <div class="text-xl font-extrabold font-mono">${d.getDate()}</div>
-                        <div class="text-xs font-semibold mt-0.5 ${statusColor}">${statusText}</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        document.getElementById('home4DayStrip').innerHTML = stripHtml;
+      for (let month = 0; month < 12; month++) {
+        const monthBlock = document.createElement("section");
+        monthBlock.className = "month-block";
+        monthBlock.dataset.month = month;
 
-        // Next Payday Logic
-        let nextPayDate;
-        let pType;
-        const curDay = today.getDate();
-        if (curDay <= 10) {
-            nextPayDate = new Date(today.getFullYear(), today.getMonth(), 10);
-            pType = 10;
-        } else if (curDay <= 25) {
-            nextPayDate = new Date(today.getFullYear(), today.getMonth(), 25);
-            pType = 25;
-        } else {
-            nextPayDate = new Date(today.getFullYear(), today.getMonth() + 1, 10);
-            pType = 10;
+        const title = document.createElement("h2");
+        title.className = "month-title";
+        title.textContent = MONTH_NAMES[month];
+        monthBlock.appendChild(title);
+
+        const grid = document.createElement("div");
+        grid.className = "days-grid";
+
+        const firstDayJS = new Date(year, month, 1).getDay();
+        const mondayOffset = (firstDayJS + 6) % 7; // Пн = 0 ... Вс = 6
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < mondayOffset; i++) {
+          const empty = document.createElement("div");
+          grid.appendChild(empty);
         }
 
-        const daysLeft = diffDays(nextPayDate, today);
-        document.getElementById('homeNextPayType').textContent = pType === 25 ? 'Аванс • 25 число' : 'Зарплата • 10 число';
-        document.getElementById('homeNextPayAmt').textContent = pType === 25 ? formatRub(66400) : formatRub(58100);
-        document.getElementById('homeNextPayDesc').textContent = pType === 25 ? 'За 8 рабочих смен' : 'За 7 рабочих смен (прошл. мес.)';
-        document.getElementById('homeNextPayDate').textContent = `${nextPayDate.getDate()} ${MONTHS_GENITIVE[nextPayDate.getMonth()]}`;
-        
-        let leftText = `Через ${daysLeft} дн.`;
-        if(daysLeft === 0) leftText = 'Сегодня!';
-        if(daysLeft === 1) leftText = 'Завтра';
-        document.getElementById('homeNextPayDaysLeft').textContent = leftText;
-    }
+        for (let day = 1; day <= daysInMonth; day++) {
+          const cell = document.createElement("div");
+          cell.className = "day-cell";
+          const iso = formatISO(year, month, day);
+          cell.dataset.iso = iso;
+          cell.textContent = day;
 
-    function renderCalendar() {
-        const y = appState.viewYear;
-        const m = appState.viewMonth;
-        document.getElementById('calMonthTitle').textContent = `${MONTHS[m]} ${y}`;
+          cell.addEventListener("click", () => {
+            state.anchorDateISO = iso;
+            state.cycleStartISO = iso;
+            saveState();
+            updateCalendarHighlights();
+            updateStats();
+          });
 
-        const firstDay = new Date(y, m, 1);
-        const daysInMonth = new Date(y, m + 1, 0).getDate();
-        const startDay = (firstDay.getDay() + 6) % 7; // Mon=0
-        
-        const todayKey = toDateKey(new Date());
-        let html = '';
-
-        for (let i = 0; i < startDay; i++) {
-            html += `<div class="h-12 rounded-xl"></div>`;
+          grid.appendChild(cell);
         }
 
-        for (let d = 1; d <= daysInMonth; d++) {
-            const dateObj = new Date(y, m, d);
-            const info = getDayInfo(dateObj);
-            const isToday = info.key === todayKey;
-            
-            let classes = 'cal-day relative h-12 flex items-center justify-center rounded-xl text-sm font-bold active-scale ';
-            
-            if (info.isWork) classes += 'work ';
-            else classes += 'off ';
-            
-            if (isToday) classes += 'today ';
-            if (info.isPay10 || info.isPay25) classes += 'payday ';
+        monthBlock.appendChild(grid);
+        calendarScroll.appendChild(monthBlock);
+      }
 
-            // If manual override, add subtle visual cue
-            let overrideDot = '';
-            if (appState.overrides[info.key]) {
-                overrideDot = `<div class="absolute bottom-1 w-1 h-1 rounded-full ${info.isWork ? 'bg-white' : 'bg-rose-500'}"></div>`;
-            }
-
-            html += `
-                <div class="${classes}" onclick="openSheet('${info.key}')">
-                    ${d}
-                    ${overrideDot}
-                </div>
-            `;
-        }
-
-        document.getElementById('calendarGrid').innerHTML = html;
+      setupIntersectionObserver();
+      updateCalendarHighlights();
+      updateControlsUI();
+      updateStats();
     }
 
-    // ------------------------------------
-    // Tab Navigation
-    // ------------------------------------
-    function switchTab(tabId) {
-        ['home', 'calendar', 'finances'].forEach(id => {
-            const view = document.getElementById(`view-${id}`);
-            const nav = document.getElementById(`nav-${id}`);
-            if (id === tabId) {
-                view.classList.add('active');
-                nav.classList.add('active');
-            } else {
-                view.classList.remove('active');
-                nav.classList.remove('active');
-            }
+    // Обновление классов кружков без пересоздания DOM (для плавной CSS-анимации)
+    function updateCalendarHighlights() {
+      const cells = calendarScroll.querySelectorAll(".day-cell");
+      cells.forEach((cell) => {
+        const iso = cell.dataset.iso;
+        cell.classList.toggle("work", isWorkDay(iso));
+        cell.classList.toggle("anchor", iso === state.anchorDateISO);
+      });
+    }
+
+    function updateControlsUI() {
+      segmentIndicator.style.transform = `translateX(${state.segmentIndex * 100}%)`;
+      periodSwitch.classList.toggle("year-mode", state.isYearStats);
+      if (state.segmentIndex === 3) {
+        customBtn.textContent = `${state.workDays}/${state.restDays}`;
+      } else {
+        customBtn.textContent = "Добавить";
+      }
+    }
+
+    function animateCounter(el, newValue) {
+      if (el.textContent === String(newValue)) return;
+      el.classList.add("bump");
+      el.textContent = newValue;
+      setTimeout(() => el.classList.remove("bump"), 180);
+    }
+
+    function updateStats() {
+      let workCount = 0;
+      let restCount = 0;
+      const year = state.year;
+
+      if (state.isYearStats) {
+        for (let m = 0; m < 12; m++) {
+          const days = new Date(year, m + 1, 0).getDate();
+          for (let d = 1; d <= days; d++) {
+            isWorkDay(formatISO(year, m, d)) ? workCount++ : restCount++;
+          }
+        }
+      } else {
+        const m = state.activeMonth;
+        const days = new Date(year, m + 1, 0).getDate();
+        for (let d = 1; d <= days; d++) {
+          isWorkDay(formatISO(year, m, d)) ? workCount++ : restCount++;
+        }
+      }
+
+      animateCounter(workDaysCountEl, workCount);
+      animateCounter(restDaysCountEl, restCount);
+    }
+
+    // Отслеживание текущего месяца при скролле
+    function setupIntersectionObserver() {
+      const options = {
+        root: calendarScroll,
+        threshold: 0.55
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            state.activeMonth = Number(entry.target.dataset.month);
+            if (!state.isYearStats) updateStats();
+          }
         });
-        
-        if(tabId === 'calendar' || tabId === 'home') renderAll();
+      }, options);
+
+      document.querySelectorAll(".month-block").forEach((block) => observer.observe(block));
     }
 
-    function changeMonth(delta) {
-        const d = new Date(appState.viewYear, appState.viewMonth + delta, 1);
-        appState.viewYear = d.getFullYear();
-        appState.viewMonth = d.getMonth();
-        renderCalendar();
+    // Обработчики сегментированного переключателя
+    segmentedControl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".segment-btn");
+      if (!btn) return;
+
+      const idx = Number(btn.dataset.index);
+      if (idx === 3) {
+        customModal.classList.add("open");
+        return;
+      }
+
+      state.segmentIndex = idx;
+      state.workDays = Number(btn.dataset.work);
+      state.restDays = Number(btn.dataset.rest);
+      saveState();
+      updateControlsUI();
+      updateCalendarHighlights();
+      updateStats();
+    });
+
+    // Переключатель В месяце / В году
+    periodSwitch.addEventListener("click", () => {
+      state.isYearStats = !state.isYearStats;
+      saveState();
+      updateControlsUI();
+      updateStats();
+    });
+
+    // Модальное окно для кнопки "Добавить"
+    document.getElementById("cancelModal").addEventListener("click", () => {
+      customModal.classList.remove("open");
+    });
+
+    document.getElementById("saveModal").addEventListener("click", () => {
+      const w = Math.max(1, parseInt(document.getElementById("customWorkInput").value, 10) || 2);
+      const r = Math.max(1, parseInt(document.getElementById("customRestInput").value, 10) || 2);
+      state.workDays = w;
+      state.restDays = r;
+      state.segmentIndex = 3;
+      saveState();
+      customModal.classList.remove("open");
+      updateControlsUI();
+      updateCalendarHighlights();
+      updateStats();
+    });
+
+    // Инициализация и прокрутка к Сентябрю (как на фото)
+    window.addEventListener("DOMContentLoaded", () => {
+      buildCalendar();
+      const targetBlock = document.querySelector(`.month-block[data-month="8"]`);
+      if (targetBlock) {
+        calendarScroll.scrollTop = targetBlock.offsetTop - 75;
+      }
+    });
+
+    // Регистрация Service Worker для PWA
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
     }
-
-    function jumpToToday() {
-        const d = new Date();
-        appState.viewYear = d.getFullYear();
-        appState.viewMonth = d.getMonth();
-        renderCalendar();
-    }
-
-    // ------------------------------------
-    // Bottom Sheet Modal Logic
-    // ------------------------------------
-    function openSheet(dateKey) {
-        appState.selectedDateKey = dateKey;
-        const d = parseDateKey(dateKey);
-        const info = getDayInfo(d);
-
-        document.getElementById('sheetDateTitle').textContent = `${d.getDate()} ${MONTHS_GENITIVE[d.getMonth()]}`;
-        
-        const badge = document.getElementById('sheetStatusBadge');
-        if (info.isWork) {
-            badge.className = 'text-xs font-bold mt-1 px-2.5 py-1 rounded-md bg-blue-500/20 text-blue-400 border border-blue-500/30';
-            badge.textContent = `Рабочая смена • 8 300 ₽`;
-        } else {
-            badge.className = 'text-xs font-bold mt-1 px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 border border-slate-700';
-            badge.textContent = `Выходной день • 0 ₽`;
-        }
-
-        // Highlight active button
-        const override = appState.overrides[dateKey] || 'default';
-        const btns = {
-            'default': document.getElementById('btnOptDefault'),
-            'extra': document.getElementById('btnOptExtra'),
-            'off': document.getElementById('btnOptOff')
-        };
-        
-        Object.values(btns).forEach(btn => {
-            btn.classList.remove('border-blue-500', 'bg-blue-500/10');
-            btn.classList.add('border-slate-700', 'bg-slate-800/50');
-        });
-        
-        if(btns[override]) {
-            btns[override].classList.add('border-blue-500', 'bg-blue-500/10');
-            btns[override].classList.remove('border-slate-700', 'bg-slate-800/50');
-        }
-
-        document.getElementById('sheetOverlay').classList.add('open');
-        document.getElementById('bottomSheet').classList.add('open');
-    }
-
-    function closeSheet() {
-        document.getElementById('sheetOverlay').classList.remove('open');
-        document.getElementById('bottomSheet').classList.remove('open');
-        appState.selectedDateKey = null;
-    }
-
-    function overrideDay(type) {
-        if (!appState.selectedDateKey) return;
-        const key = appState.selectedDateKey;
-        
-        if (type === 'default') {
-            delete appState.overrides[key];
-        } else {
-            appState.overrides[key] = type;
-        }
-        
-        saveState();
-        renderAll();
-        closeSheet();
-    }
-
-    // Initialize
-    window.onload = initApp;
-
-</script>
+  </script>
 </body>
 </html>
