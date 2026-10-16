@@ -1,13 +1,13 @@
 {
-  "name": "Tempo — рабочий календарь",
+  "name": "Tempo — Glass Calendar",
   "short_name": "Tempo",
-  "description": "Быстрый современный календарь для работы и личных планов.",
+  "description": "Стеклянный рабочий календарь с локальным хранением и офлайн-доступом.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0d0f16",
-  "theme_color": "#11131b",
+  "background_color": "#0d0e19",
+  "theme_color": "#10111d",
   "lang": "ru",
   "icons": [
     {
