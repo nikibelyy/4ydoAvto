@@ -49,6 +49,11 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -82,6 +87,18 @@
       </svg>
     );
 
+    const IconChevronLeft = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19l-7-7 7-7" />
+      </svg>
+    );
+
+    const IconChevronRight = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+      </svg>
+    );
+
     // --- Константы и утилиты ---
     const WEEKDAYS = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
     const MONTHS = [
@@ -96,6 +113,16 @@
       "Два дня иллюзии свободы."
     ];
 
+    const DEFAULT_SETTINGS = {
+      payType: 'shift',       // 'shift' (за смену) или 'hour' (в час)
+      rate: 3500,             // Ставка
+      hoursPerShift: 12,      // Часов в смене
+      taxRate: 0,             // Налог в % (например, 13)
+      currency: '₽',          // Валюта
+      lockSchedule: false,    // Блокировка случайного изменения даты в календаре
+      monthsCount: 6          // Сколько месяцев рендерить
+    };
+
     const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
     const getFirstDayOfMonth = (year, month) => {
       let day = new Date(year, month, 1).getDay();
@@ -107,27 +134,32 @@
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     };
 
-    // --- Компонент одного месяца ---
+    const formatMoney = (val) => {
+      return Math.round(val).toLocaleString('ru-RU');
+    };
+
+    // Проверка рабочего дня по циклу 2/2
+    const isWorkDayByCycle = (year, month, day, cycleStartDateStr) => {
+      if (!cycleStartDateStr) return false;
+      const [sy, sm, sd] = cycleStartDateStr.split('-').map(Number);
+      const start = new Date(sy, sm - 1, sd, 0, 0, 0);
+      const current = new Date(year, month, day, 0, 0, 0);
+
+      const diffTime = current.getTime() - start.getTime();
+      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+      const cycleLength = 4;
+      const dayInCycle = ((diffDays % cycleLength) + cycleLength) % cycleLength;
+      return dayInCycle === 0 || dayInCycle === 1;
+    };
+
+    // --- Компонент одного месяца в Календаре ---
     const MonthCalendar = ({ year, month, todayStr, cycleStartDateStr, onDayClick }) => {
       const daysInMonth = getDaysInMonth(year, month);
       const firstDay = getFirstDayOfMonth(year, month);
 
       const blanks = Array.from({ length: firstDay }, (_, i) => i);
       const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-
-      const checkIsWorkDay = (day) => {
-        if (!cycleStartDateStr) return false;
-        const [sy, sm, sd] = cycleStartDateStr.split('-').map(Number);
-        const start = new Date(sy, sm - 1, sd, 0, 0, 0);
-        const current = new Date(year, month, day, 0, 0, 0);
-
-        const diffTime = current.getTime() - start.getTime();
-        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-
-        const cycleLength = 4;
-        const dayInCycle = ((diffDays % cycleLength) + cycleLength) % cycleLength;
-        return dayInCycle === 0 || dayInCycle === 1;
-      };
 
       return (
         <div className="mb-10">
@@ -149,7 +181,7 @@
               const dateObj = new Date(year, month, day);
               const dateStr = formatDate(dateObj);
               const isToday = dateStr === todayStr;
-              const isWork = checkIsWorkDay(day);
+              const isWork = isWorkDayByCycle(year, month, day, cycleStartDateStr);
 
               return (
                 <div key={day} className="flex justify-center items-center aspect-square">
@@ -180,9 +212,49 @@
       const [todayStr] = useState(() => formatDate(new Date()));
       const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
 
+      // Дата начала цикла 2/2
       const [cycleStartDateStr, setCycleStartDateStr] = useState(() => {
         return localStorage.getItem('depressive_ws_startDate') || todayStr;
       });
+
+      // Настройки
+      const [settings, setSettings] = useState(() => {
+        try {
+          const saved = localStorage.getItem('depressive_ws_settings');
+          return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : DEFAULT_SETTINGS;
+        } catch {
+          return DEFAULT_SETTINGS;
+        }
+      });
+
+      // Корректировки по месяцам (доп. смены и премии/штрафы): { "2026-10": { extraShifts: 0, bonus: 0 } }
+      const [adjustments, setAdjustments] = useState(() => {
+        try {
+          const saved = localStorage.getItem('depressive_ws_adjustments');
+          return saved ? JSON.parse(saved) : {};
+        } catch {
+          return {};
+        }
+      });
+
+      // Выбранный месяц во вкладке Зарплата
+      const [salaryViewDate, setSalaryViewDate] = useState(() => {
+        const now = new Date();
+        return { year: now.getFullYear(), month: now.getMonth() };
+      });
+
+      // Сохранение в localStorage
+      useEffect(() => {
+        localStorage.setItem('depressive_ws_startDate', cycleStartDateStr);
+      }, [cycleStartDateStr]);
+
+      useEffect(() => {
+        localStorage.setItem('depressive_ws_settings', JSON.stringify(settings));
+      }, [settings]);
+
+      useEffect(() => {
+        localStorage.setItem('depressive_ws_adjustments', JSON.stringify(adjustments));
+      }, [adjustments]);
 
       const monthsToRender = useMemo(() => {
         const list = [];
@@ -190,7 +262,8 @@
         let startYear = currentDate.getFullYear();
         let startMonth = currentDate.getMonth();
 
-        for (let i = 0; i < 6; i++) {
+        const count = Number(settings.monthsCount) || 6;
+        for (let i = 0; i < count; i++) {
           list.push({ year: startYear, month: startMonth });
           startMonth++;
           if (startMonth > 11) {
@@ -199,17 +272,108 @@
           }
         }
         return list;
-      }, []);
-
-      useEffect(() => {
-        localStorage.setItem('depressive_ws_startDate', cycleStartDateStr);
-      }, [cycleStartDateStr]);
+      }, [settings.monthsCount]);
 
       const handleDayClick = (dateStr) => {
+        if (settings.lockSchedule) return;
         setCycleStartDateStr(dateStr);
         if (navigator.vibrate) navigator.vibrate(20);
       };
 
+      const updateSetting = (key, value) => {
+        setSettings(prev => ({ ...prev, [key]: value }));
+      };
+
+      const currentMonthKey = `${salaryViewDate.year}-${String(salaryViewDate.month + 1).padStart(2, '0')}`;
+      const currentAdj = adjustments[currentMonthKey] || { extraShifts: 0, bonus: 0 };
+
+      const updateAdjustment = (field, value) => {
+        setAdjustments(prev => ({
+          ...prev,
+          [currentMonthKey]: {
+            ...(prev[currentMonthKey] || { extraShifts: 0, bonus: 0 }),
+            [field]: value
+          }
+        }));
+      };
+
+      // --- Расчет зарплаты для выбранного месяца ---
+      const salaryStats = useMemo(() => {
+        const { year, month } = salaryViewDate;
+        const daysInMonth = getDaysInMonth(year, month);
+        const now = new Date();
+        const isCurrentMonth = now.getFullYear() === year && now.getMonth() === month;
+        const isPastMonth = year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth());
+        const currentDayOfMonth = now.getDate();
+
+        let firstHalfShifts = 0;  // 1 - 15 число (аванс)
+        let secondHalfShifts = 0; // 16 - конец месяца (расчет)
+        let passedShifts = 0;     // Отработано на текущий момент
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const isWork = isWorkDayByCycle(year, month, d, cycleStartDateStr);
+          if (isWork) {
+            if (d <= 15) firstHalfShifts++;
+            else secondHalfShifts++;
+
+            if (isPastMonth || (isCurrentMonth && d <= currentDayOfMonth)) {
+              passedShifts++;
+            }
+          }
+        }
+
+        const extraShifts = Number(currentAdj.extraShifts) || 0;
+        const bonus = Number(currentAdj.bonus) || 0;
+
+        const baseShifts = firstHalfShifts + secondHalfShifts;
+        const totalShifts = Math.max(0, baseShifts + extraShifts);
+        const restDays = Math.max(0, daysInMonth - totalShifts);
+        const totalHours = totalShifts * (Number(settings.hoursPerShift) || 0);
+
+        const singleShiftPay = settings.payType === 'hour'
+          ? (Number(settings.rate) || 0) * (Number(settings.hoursPerShift) || 0)
+          : (Number(settings.rate) || 0);
+
+        const taxMultiplier = Math.max(0, 1 - (Number(settings.taxRate) || 0) / 100);
+
+        const grossBase = totalShifts * singleShiftPay;
+        const netBase = grossBase * taxMultiplier;
+        const netTotal = Math.max(0, netBase + bonus);
+
+        const advanceNet = firstHalfShifts * singleShiftPay * taxMultiplier;
+        const paydayNet = Math.max(0, netTotal - advanceNet);
+
+        // Заработано к сегодняшнему дню
+        const effectivePassedShifts = Math.min(totalShifts, Math.max(0, passedShifts + (isPastMonth ? extraShifts : 0)));
+        const earnedSoFar = effectivePassedShifts * singleShiftPay * taxMultiplier;
+        const progressPercent = totalShifts > 0 ? Math.min(100, Math.round((effectivePassedShifts / totalShifts) * 100)) : 0;
+
+        return {
+          baseShifts,
+          totalShifts,
+          restDays,
+          totalHours,
+          singleShiftPay,
+          netTotal,
+          advanceNet,
+          paydayNet,
+          earnedSoFar,
+          effectivePassedShifts,
+          progressPercent
+        };
+      }, [salaryViewDate, cycleStartDateStr, settings, currentAdj]);
+
+      const changeSalaryMonth = (delta) => {
+        setSalaryViewDate(prev => {
+          let m = prev.month + delta;
+          let y = prev.year;
+          if (m < 0) { m = 11; y--; }
+          if (m > 11) { m = 0; y++; }
+          return { year: y, month: m };
+        });
+      };
+
+      // --- Вкладка: Календарь ---
       const renderCalendar = () => (
         <div className="px-5 pb-36">
           <div className="sticky top-0 z-20 bg-zinc-950/85 backdrop-blur-md pt-safe-top pb-3 border-b border-zinc-900/60 mb-6">
@@ -243,27 +407,283 @@
         </div>
       );
 
+      // --- Вкладка: Зарплата ---
       const renderSalary = () => (
-        <div className="flex flex-col items-center justify-center h-full pb-20 px-6 text-center">
-          <div className="w-16 h-16 rounded-full border border-zinc-800/60 flex items-center justify-center mb-6">
-            <IconWallet active={false} />
+        <div className="px-5 pt-safe-top pb-36">
+          {/* Переключатель месяца */}
+          <div className="flex items-center justify-between pt-6 pb-6 border-b border-zinc-900/60">
+            <button
+              onClick={() => changeSalaryMonth(-1)}
+              className="p-2 rounded-full text-zinc-500 hover:text-zinc-300 active:bg-zinc-900 transition"
+            >
+              <IconChevronLeft />
+            </button>
+            <div className="text-center">
+              <h1 className="text-lg font-light tracking-widest text-zinc-200">
+                {MONTHS[salaryViewDate.month]}
+              </h1>
+              <span className="text-xs font-mono tracking-[0.2em] text-zinc-600 block mt-0.5">
+                {salaryViewDate.year}
+              </span>
+            </div>
+            <button
+              onClick={() => changeSalaryMonth(1)}
+              className="p-2 rounded-full text-zinc-500 hover:text-zinc-300 active:bg-zinc-900 transition"
+            >
+              <IconChevronRight />
+            </button>
           </div>
-          <h2 className="text-xl font-light text-zinc-400 mb-3 tracking-wide">Пустота</h2>
-          <p className="text-sm text-zinc-600 font-light leading-relaxed">
-            Здесь будет расчет вашей компенсации за потраченное время.<br/>Когда-нибудь.
-          </p>
+
+          {/* Главная карточка итоговой суммы */}
+          <div className="mt-6 p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 text-center relative overflow-hidden">
+            <span className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 block mb-2">
+              Ожидание за месяц
+            </span>
+            <div className="text-4xl font-light tracking-tight text-zinc-100 my-1">
+              {formatMoney(salaryStats.netTotal)} <span className="text-2xl text-zinc-500">{settings.currency}</span>
+            </div>
+            <span className="text-xs text-zinc-600 font-light block mt-2">
+              {salaryStats.totalShifts} смен · {salaryStats.totalHours} ч · {salaryStats.restDays} вых
+            </span>
+
+            {/* Прогресс-бар отработанного времени */}
+            <div className="mt-6 pt-5 border-t border-zinc-800/40 text-left">
+              <div className="flex justify-between text-xs mb-2">
+                <span className="text-zinc-500 font-light">Уже пройдено ({salaryStats.effectivePassedShifts} из {salaryStats.totalShifts})</span>
+                <span className="text-zinc-300 font-mono">{formatMoney(salaryStats.earnedSoFar)} {settings.currency}</span>
+              </div>
+              <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-rose-900/70 rounded-full transition-all duration-500"
+                  style={{ width: `${salaryStats.progressPercent}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Аванс и Расчет */}
+          <div className="grid grid-cols-2 gap-3 mt-4">
+            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80">
+              <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">
+                1–15 число (Аванс)
+              </span>
+              <div className="text-xl font-light text-zinc-300">
+                {formatMoney(salaryStats.advanceNet)} <span className="text-sm text-zinc-600">{settings.currency}</span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80">
+              <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">
+                16–конец (Расчет)
+              </span>
+              <div className="text-xl font-light text-zinc-300">
+                {formatMoney(salaryStats.paydayNet)} <span className="text-sm text-zinc-600">{settings.currency}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Корректировки текущего месяца */}
+          <div className="mt-6 p-5 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-5">
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="text-sm text-zinc-300 font-light">Доп. смены / Отгулы</div>
+                <div className="text-[11px] text-zinc-600">Поверх стандартного цикла ({salaryStats.baseShifts})</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => updateAdjustment('extraShifts', (Number(currentAdj.extraShifts) || 0) - 1)}
+                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                >
+                  −
+                </button>
+                <span className="w-6 text-center font-mono text-sm text-zinc-200">
+                  {currentAdj.extraShifts > 0 ? `+${currentAdj.extraShifts}` : currentAdj.extraShifts || 0}
+                </span>
+                <button
+                  onClick={() => updateAdjustment('extraShifts', (Number(currentAdj.extraShifts) || 0) + 1)}
+                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="border-t border-zinc-900 pt-4 flex justify-between items-center gap-4">
+              <div>
+                <div className="text-sm text-zinc-300 font-light">Премия или штраф</div>
+                <div className="text-[11px] text-zinc-600">Минус для удержания</div>
+              </div>
+              <div className="relative w-32">
+                <input
+                  type="number"
+                  value={currentAdj.bonus || ''}
+                  placeholder="0"
+                  onChange={(e) => updateAdjustment('bonus', e.target.value === '' ? 0 : Number(e.target.value))}
+                  className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-xs text-zinc-600 font-light">
+              1 смена = {formatMoney(salaryStats.singleShiftPay)} {settings.currency} (до вычета)
+            </p>
+          </div>
         </div>
       );
 
+      // --- Вкладка: Настройки ---
       const renderSettings = () => (
-        <div className="flex flex-col items-center justify-center h-full pb-20 px-6 text-center">
-          <div className="w-16 h-16 rounded-full border border-zinc-800/60 flex items-center justify-center mb-6">
-            <IconSettings active={false} />
+        <div className="px-5 pt-safe-top pb-36">
+          <div className="pt-6 pb-6 border-b border-zinc-900/60 text-center">
+            <h1 className="text-lg font-light tracking-widest text-zinc-200">
+              Параметры
+            </h1>
+            <span className="text-xs text-zinc-600 font-light block mt-0.5">
+              Условия вашего цикла
+            </span>
           </div>
-          <h2 className="text-xl font-light text-zinc-400 mb-3 tracking-wide">Неизменность</h2>
-          <p className="text-sm text-zinc-600 font-light leading-relaxed">
-            Систему нельзя изменить. Можно только подстроиться.
-          </p>
+
+          {/* Блок: Оплата */}
+          <div className="mt-6 space-y-4">
+            <h2 className="text-[11px] uppercase tracking-widest text-zinc-500 px-1">
+              Оплата труда
+            </h2>
+
+            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-4">
+              {/* Переключатель За смену / В час */}
+              <div className="grid grid-cols-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800/60">
+                <button
+                  onClick={() => updateSetting('payType', 'shift')}
+                  className={`py-2 text-xs rounded-lg transition-all ${settings.payType === 'shift' ? 'bg-zinc-800 text-zinc-200 font-medium' : 'text-zinc-500'}`}
+                >
+                  За смену
+                </button>
+                <button
+                  onClick={() => updateSetting('payType', 'hour')}
+                  className={`py-2 text-xs rounded-lg transition-all ${settings.payType === 'hour' ? 'bg-zinc-800 text-zinc-200 font-medium' : 'text-zinc-500'}`}
+                >
+                  За час
+                </button>
+              </div>
+
+              {/* Ставка */}
+              <div className="flex justify-between items-center pt-2">
+                <span className="text-sm text-zinc-300 font-light">
+                  {settings.payType === 'shift' ? 'Ставка за смену' : 'Часовая ставка'}
+                </span>
+                <input
+                  type="number"
+                  value={settings.rate}
+                  onChange={(e) => updateSetting('rate', e.target.value)}
+                  className="w-32 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                />
+              </div>
+
+              {/* Длительность смены */}
+              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+                <span className="text-sm text-zinc-300 font-light">Часов в смене</span>
+                <input
+                  type="number"
+                  value={settings.hoursPerShift}
+                  onChange={(e) => updateSetting('hoursPerShift', e.target.value)}
+                  className="w-24 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                />
+              </div>
+
+              {/* Налог / Удержание */}
+              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+                <div>
+                  <span className="text-sm text-zinc-300 font-light block">Налог / Вычет (%)</span>
+                  <span className="text-[11px] text-zinc-600">0 — если ставка уже «на руки»</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => updateSetting('taxRate', settings.taxRate === 13 ? 0 : 13)}
+                    className={`px-2.5 py-1.5 rounded-lg text-xs border transition ${Number(settings.taxRate) === 13 ? 'bg-rose-950/50 border-rose-900/60 text-rose-200' : 'bg-zinc-900 border-zinc-800 text-zinc-500'}`}
+                  >
+                    13%
+                  </button>
+                  <input
+                    type="number"
+                    value={settings.taxRate}
+                    onChange={(e) => updateSetting('taxRate', e.target.value)}
+                    className="w-16 bg-zinc-900/80 border border-zinc-800 rounded-xl px-2.5 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                  />
+                </div>
+              </div>
+
+              {/* Валюта */}
+              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+                <span className="text-sm text-zinc-300 font-light">Валюта</span>
+                <div className="flex gap-1.5">
+                  {['₽', '₸', '$', '€', 'Br'].map(curr => (
+                    <button
+                      key={curr}
+                      onClick={() => updateSetting('currency', curr)}
+                      className={`w-9 h-9 rounded-xl text-sm font-mono border transition ${settings.currency === curr ? 'bg-zinc-800 border-zinc-600 text-zinc-100' : 'bg-zinc-900 border-zinc-800/80 text-zinc-500'}`}
+                    >
+                      {curr}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Блок: График и календарь */}
+          <div className="mt-6 space-y-4">
+            <h2 className="text-[11px] uppercase tracking-widest text-zinc-500 px-1">
+              График 2/2
+            </h2>
+
+            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-4">
+              {/* Начало цикла */}
+              <div className="flex justify-between items-center">
+                <div>
+                  <span className="text-sm text-zinc-300 font-light block">1-й рабочий день</span>
+                  <span className="text-[11px] text-zinc-600">Точка отсчета цикла</span>
+                </div>
+                <input
+                  type="date"
+                  value={cycleStartDateStr}
+                  onChange={(e) => e.target.value && setCycleStartDateStr(e.target.value)}
+                  className="bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 font-mono focus:outline-none"
+                />
+              </div>
+
+              {/* Закрепить график */}
+              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+                <div>
+                  <span className="text-sm text-zinc-300 font-light block">Закрепить цикл</span>
+                  <span className="text-[11px] text-zinc-600">Защита от случайных нажатий в календаре</span>
+                </div>
+                <button
+                  onClick={() => updateSetting('lockSchedule', !settings.lockSchedule)}
+                  className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ${settings.lockSchedule ? 'bg-rose-900/70' : 'bg-zinc-800'}`}
+                >
+                  <div className={`w-5 h-5 rounded-full bg-zinc-200 transition-transform duration-300 ${settings.lockSchedule ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+              </div>
+
+              {/* Горизонт отображения */}
+              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+                <span className="text-sm text-zinc-300 font-light">Месяцев вперед</span>
+                <div className="flex gap-1.5">
+                  {[3, 6, 12].map(cnt => (
+                    <button
+                      key={cnt}
+                      onClick={() => updateSetting('monthsCount', cnt)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono border transition ${Number(settings.monthsCount) === cnt ? 'bg-zinc-800 border-zinc-600 text-zinc-100' : 'bg-zinc-900 border-zinc-800/80 text-zinc-500'}`}
+                    >
+                      {cnt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       );
 
