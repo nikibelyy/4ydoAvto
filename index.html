@@ -114,13 +114,13 @@
     ];
 
     const DEFAULT_SETTINGS = {
-      payType: 'shift',       // 'shift' (за смену) или 'hour' (в час)
-      rate: 3500,             // Ставка
-      hoursPerShift: 12,      // Часов в смене
-      taxRate: 0,             // Налог в % (например, 13)
-      currency: '₽',          // Валюта
-      lockSchedule: false,    // Блокировка случайного изменения даты в календаре
-      monthsCount: 6          // Сколько месяцев рендерить
+      regularRate: 3500,        // Обычная смена (Пн-Пт, Вс)
+      saturdayRate: 5500,       // Смена в субботу
+      after16Rate: 550,         // Час после 16:00
+      autoHoursAfter16: 0,      // Автоматических часов после 16:00 в каждой смене
+      currency: '₽',            // Валюта
+      lockSchedule: false,      // Блокировка случайного изменения даты в календаре
+      monthsCount: 6            // Сколько месяцев отображать
     };
 
     const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
@@ -182,21 +182,26 @@
               const dateStr = formatDate(dateObj);
               const isToday = dateStr === todayStr;
               const isWork = isWorkDayByCycle(year, month, day, cycleStartDateStr);
+              const isSaturday = dateObj.getDay() === 6;
 
               return (
                 <div key={day} className="flex justify-center items-center aspect-square">
                   <button
                     onClick={() => onDayClick(dateStr)}
                     className={`
-                      w-10 h-10 rounded-full flex items-center justify-center text-[15px] transition-all duration-300
+                      w-10 h-10 rounded-full flex flex-col items-center justify-center text-[15px] transition-all duration-300 relative
                       ${isToday ? 'border border-rose-900/70 text-rose-200 font-medium' : 'font-light'}
-                      ${isWork && !isToday ? 'bg-slate-800/80 text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]' : ''}
+                      ${isWork && !isToday ? 'bg-slate-800/80 text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]' : ''}
                       ${!isWork && !isToday ? 'text-zinc-600 hover:text-zinc-400' : ''}
                       ${isWork && isToday ? 'bg-rose-950/60 text-rose-200 shadow-[0_0_12px_rgba(159,18,57,0.3)]' : ''}
                       ${!isWork && isToday ? 'bg-rose-950/20' : ''}
                     `}
                   >
-                    {day}
+                    <span>{day}</span>
+                    {/* Индикатор повышенной субботней смены */}
+                    {isWork && isSaturday && (
+                      <span className="w-1 h-1 rounded-full bg-rose-400/70 absolute bottom-1.5" />
+                    )}
                   </button>
                 </div>
               );
@@ -220,17 +225,17 @@
       // Настройки
       const [settings, setSettings] = useState(() => {
         try {
-          const saved = localStorage.getItem('depressive_ws_settings');
+          const saved = localStorage.getItem('depressive_ws_settings_v2');
           return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : DEFAULT_SETTINGS;
         } catch {
           return DEFAULT_SETTINGS;
         }
       });
 
-      // Корректировки по месяцам (доп. смены и премии/штрафы): { "2026-10": { extraShifts: 0, bonus: 0 } }
+      // Корректировки по месяцам: { "2026-10": { extraAfter16Hours: 0, extraShifts: 0, extraSatShifts: 0, bonus: 0 } }
       const [adjustments, setAdjustments] = useState(() => {
         try {
-          const saved = localStorage.getItem('depressive_ws_adjustments');
+          const saved = localStorage.getItem('depressive_ws_adjustments_v2');
           return saved ? JSON.parse(saved) : {};
         } catch {
           return {};
@@ -249,11 +254,11 @@
       }, [cycleStartDateStr]);
 
       useEffect(() => {
-        localStorage.setItem('depressive_ws_settings', JSON.stringify(settings));
+        localStorage.setItem('depressive_ws_settings_v2', JSON.stringify(settings));
       }, [settings]);
 
       useEffect(() => {
-        localStorage.setItem('depressive_ws_adjustments', JSON.stringify(adjustments));
+        localStorage.setItem('depressive_ws_adjustments_v2', JSON.stringify(adjustments));
       }, [adjustments]);
 
       const monthsToRender = useMemo(() => {
@@ -285,13 +290,18 @@
       };
 
       const currentMonthKey = `${salaryViewDate.year}-${String(salaryViewDate.month + 1).padStart(2, '0')}`;
-      const currentAdj = adjustments[currentMonthKey] || { extraShifts: 0, bonus: 0 };
+      const currentAdj = adjustments[currentMonthKey] || {
+        extraAfter16Hours: 0,
+        extraShifts: 0,
+        extraSatShifts: 0,
+        bonus: 0
+      };
 
       const updateAdjustment = (field, value) => {
         setAdjustments(prev => ({
           ...prev,
           [currentMonthKey]: {
-            ...(prev[currentMonthKey] || { extraShifts: 0, bonus: 0 }),
+            ...(prev[currentMonthKey] || { extraAfter16Hours: 0, extraShifts: 0, extraSatShifts: 0, bonus: 0 }),
             [field]: value
           }
         }));
@@ -306,60 +316,88 @@
         const isPastMonth = year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth());
         const currentDayOfMonth = now.getDate();
 
-        let firstHalfShifts = 0;  // 1 - 15 число (аванс)
-        let secondHalfShifts = 0; // 16 - конец месяца (расчет)
-        let passedShifts = 0;     // Отработано на текущий момент
+        const regularRate = Number(settings.regularRate) || 0;
+        const saturdayRate = Number(settings.saturdayRate) || 5500;
+        const after16Rate = Number(settings.after16Rate) || 550;
+        const autoHoursAfter16 = Number(settings.autoHoursAfter16) || 0;
+
+        let regularShifts = 0;
+        let saturdayShifts = 0;
+
+        let advanceSum = 0;      // 1 - 15 число
+        let secondHalfSum = 0;   // 16 - конец месяца
+        let earnedSoFar = 0;     // Заработано к текущему дню
+        let passedShifts = 0;
 
         for (let d = 1; d <= daysInMonth; d++) {
           const isWork = isWorkDayByCycle(year, month, d, cycleStartDateStr);
           if (isWork) {
-            if (d <= 15) firstHalfShifts++;
-            else secondHalfShifts++;
+            const dayOfWeek = new Date(year, month, d).getDay();
+            const isSat = dayOfWeek === 6;
+
+            const shiftBasePay = isSat ? saturdayRate : regularRate;
+            const shiftAutoAfter16Pay = autoHoursAfter16 * after16Rate;
+            const totalDayPay = shiftBasePay + shiftAutoAfter16Pay;
+
+            if (isSat) saturdayShifts++;
+            else regularShifts++;
+
+            if (d <= 15) advanceSum += totalDayPay;
+            else secondHalfSum += totalDayPay;
 
             if (isPastMonth || (isCurrentMonth && d <= currentDayOfMonth)) {
               passedShifts++;
+              earnedSoFar += totalDayPay;
             }
           }
         }
 
         const extraShifts = Number(currentAdj.extraShifts) || 0;
+        const extraSatShifts = Number(currentAdj.extraSatShifts) || 0;
+        const extraAfter16Hours = Number(currentAdj.extraAfter16Hours) || 0;
         const bonus = Number(currentAdj.bonus) || 0;
 
-        const baseShifts = firstHalfShifts + secondHalfShifts;
-        const totalShifts = Math.max(0, baseShifts + extraShifts);
+        const baseShifts = regularShifts + saturdayShifts;
+        const totalRegularShifts = Math.max(0, regularShifts + extraShifts);
+        const totalSaturdayShifts = Math.max(0, saturdayShifts + extraSatShifts);
+        const totalShifts = totalRegularShifts + totalSaturdayShifts;
         const restDays = Math.max(0, daysInMonth - totalShifts);
-        const totalHours = totalShifts * (Number(settings.hoursPerShift) || 0);
 
-        const singleShiftPay = settings.payType === 'hour'
-          ? (Number(settings.rate) || 0) * (Number(settings.hoursPerShift) || 0)
-          : (Number(settings.rate) || 0);
+        const totalAfter16Hours = (totalShifts * autoHoursAfter16) + extraAfter16Hours;
+        const after16PayTotal = extraAfter16Hours * after16Rate;
 
-        const taxMultiplier = Math.max(0, 1 - (Number(settings.taxRate) || 0) / 100);
+        const extraShiftsPay = (extraShifts * (regularRate + autoHoursAfter16 * after16Rate)) +
+                               (extraSatShifts * (saturdayRate + autoHoursAfter16 * after16Rate));
 
-        const grossBase = totalShifts * singleShiftPay;
-        const netBase = grossBase * taxMultiplier;
-        const netTotal = Math.max(0, netBase + bonus);
+        const totalMonthPay = Math.max(0, advanceSum + secondHalfSum + extraShiftsPay + after16PayTotal + bonus);
+        const paydaySum = Math.max(0, totalMonthPay - advanceSum);
 
-        const advanceNet = firstHalfShifts * singleShiftPay * taxMultiplier;
-        const paydayNet = Math.max(0, netTotal - advanceNet);
+        // Добавляем подработки и вечерние часы к уже заработанному, если месяц текущий или прошлый
+        const earnedWithExtras = (isCurrentMonth || isPastMonth)
+          ? Math.max(0, earnedSoFar + extraShiftsPay + after16PayTotal + bonus)
+          : 0;
 
-        // Заработано к сегодняшнему дню
-        const effectivePassedShifts = Math.min(totalShifts, Math.max(0, passedShifts + (isPastMonth ? extraShifts : 0)));
-        const earnedSoFar = effectivePassedShifts * singleShiftPay * taxMultiplier;
-        const progressPercent = totalShifts > 0 ? Math.min(100, Math.round((effectivePassedShifts / totalShifts) * 100)) : 0;
+        const progressPercent = totalMonthPay > 0
+          ? Math.min(100, Math.round((earnedWithExtras / totalMonthPay) * 100))
+          : 0;
 
         return {
           baseShifts,
+          regularShifts: totalRegularShifts,
+          saturdayShifts: totalSaturdayShifts,
           totalShifts,
           restDays,
-          totalHours,
-          singleShiftPay,
-          netTotal,
-          advanceNet,
-          paydayNet,
-          earnedSoFar,
-          effectivePassedShifts,
-          progressPercent
+          totalAfter16Hours,
+          after16PayTotal: totalAfter16Hours * after16Rate,
+          totalMonthPay,
+          advanceSum,
+          paydaySum,
+          earnedWithExtras,
+          passedShifts,
+          progressPercent,
+          regularRate,
+          saturdayRate,
+          after16Rate
         };
       }, [salaryViewDate, cycleStartDateStr, settings, currentAdj]);
 
@@ -382,8 +420,11 @@
               <span className="text-[11px] text-zinc-600 italic"></span>
             </div>
             <div className="grid grid-cols-7 text-center">
-              {WEEKDAYS.map((day) => (
-                <div key={day} className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
+              {WEEKDAYS.map((day, idx) => (
+                <div
+                  key={day}
+                  className={`text-[10px] font-medium uppercase tracking-widest ${idx === 5 ? 'text-rose-400/70' : 'text-zinc-600'}`}
+                >
                   {day}
                 </div>
               ))}
@@ -437,20 +478,31 @@
           {/* Главная карточка итоговой суммы */}
           <div className="mt-6 p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 text-center relative overflow-hidden">
             <span className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 block mb-2">
-              Ожидание за месяц
+              Итого за месяц
             </span>
             <div className="text-4xl font-light tracking-tight text-zinc-100 my-1">
-              {formatMoney(salaryStats.netTotal)} <span className="text-2xl text-zinc-500">{settings.currency}</span>
+              {formatMoney(salaryStats.totalMonthPay)} <span className="text-2xl text-zinc-500">{settings.currency}</span>
             </div>
-            <span className="text-xs text-zinc-600 font-light block mt-2">
-              {salaryStats.totalShifts} смен · {salaryStats.totalHours} ч · {salaryStats.restDays} вых
-            </span>
+
+            {/* Детализация смен */}
+            <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-xs text-zinc-500 font-light mt-3">
+              <span>{salaryStats.totalShifts} смен:</span>
+              <span className="text-zinc-400">{salaryStats.regularShifts} обычн.</span>
+              <span>·</span>
+              <span className="text-rose-300/80">{salaryStats.saturdayShifts} субб. (по {formatMoney(salaryStats.saturdayRate)} {settings.currency})</span>
+            </div>
+
+            {salaryStats.totalAfter16Hours > 0 && (
+              <div className="text-xs text-zinc-400 font-light mt-1">
+                + {salaryStats.totalAfter16Hours} ч после 16:00 ({formatMoney(salaryStats.after16PayTotal)} {settings.currency})
+              </div>
+            )}
 
             {/* Прогресс-бар отработанного времени */}
             <div className="mt-6 pt-5 border-t border-zinc-800/40 text-left">
               <div className="flex justify-between text-xs mb-2">
-                <span className="text-zinc-500 font-light">Уже пройдено ({salaryStats.effectivePassedShifts} из {salaryStats.totalShifts})</span>
-                <span className="text-zinc-300 font-mono">{formatMoney(salaryStats.earnedSoFar)} {settings.currency}</span>
+                <span className="text-zinc-500 font-light">Уже заработано ({salaryStats.passedShifts} смен)</span>
+                <span className="text-zinc-200 font-mono">{formatMoney(salaryStats.earnedWithExtras)} {settings.currency}</span>
               </div>
               <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden">
                 <div
@@ -468,7 +520,7 @@
                 1–15 число (Аванс)
               </span>
               <div className="text-xl font-light text-zinc-300">
-                {formatMoney(salaryStats.advanceNet)} <span className="text-sm text-zinc-600">{settings.currency}</span>
+                {formatMoney(salaryStats.advanceSum)} <span className="text-sm text-zinc-600">{settings.currency}</span>
               </div>
             </div>
 
@@ -477,17 +529,50 @@
                 16–конец (Расчет)
               </span>
               <div className="text-xl font-light text-zinc-300">
-                {formatMoney(salaryStats.paydayNet)} <span className="text-sm text-zinc-600">{settings.currency}</span>
+                {formatMoney(salaryStats.paydaySum)} <span className="text-sm text-zinc-600">{settings.currency}</span>
               </div>
             </div>
           </div>
 
-          {/* Корректировки текущего месяца */}
+          {/* Управление часами после 16:00 и подработками */}
           <div className="mt-6 p-5 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-5">
+            {/* Часы после 16:00 */}
             <div className="flex justify-between items-center">
               <div>
-                <div className="text-sm text-zinc-300 font-light">Доп. смены / Отгулы</div>
-                <div className="text-[11px] text-zinc-600">Поверх стандартного цикла ({salaryStats.baseShifts})</div>
+                <div className="text-sm text-zinc-200 font-light">Часы после 16:00</div>
+                <div className="text-[11px] text-zinc-500">
+                  По {formatMoney(salaryStats.after16Rate)} {settings.currency}/час
+                  {currentAdj.extraAfter16Hours > 0 ? ` (+${formatMoney(currentAdj.extraAfter16Hours * salaryStats.after16Rate)} ${settings.currency})` : ''}
+                </div>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => updateAdjustment('extraAfter16Hours', Math.max(0, (Number(currentAdj.extraAfter16Hours) || 0) - 1))}
+                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  value={currentAdj.extraAfter16Hours || ''}
+                  placeholder="0"
+                  onChange={(e) => updateAdjustment('extraAfter16Hours', e.target.value === '' ? 0 : Math.max(0, Number(e.target.value)))}
+                  className="w-12 bg-zinc-900/80 border border-zinc-800 rounded-lg py-1 text-center font-mono text-sm text-zinc-200 focus:outline-none"
+                />
+                <button
+                  onClick={() => updateAdjustment('extraAfter16Hours', (Number(currentAdj.extraAfter16Hours) || 0) + 1)}
+                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Доп. обычные смены / отгулы */}
+            <div className="border-t border-zinc-900 pt-4 flex justify-between items-center">
+              <div>
+                <div className="text-sm text-zinc-300 font-light">Доп. обычные смены</div>
+                <div className="text-[11px] text-zinc-600">По {formatMoney(salaryStats.regularRate)} {settings.currency} (минус — отгул)</div>
               </div>
               <div className="flex items-center gap-3">
                 <button
@@ -508,10 +593,36 @@
               </div>
             </div>
 
+            {/* Доп. субботние смены */}
+            <div className="border-t border-zinc-900 pt-4 flex justify-between items-center">
+              <div>
+                <div className="text-sm text-zinc-300 font-light">Доп. смены в субботу</div>
+                <div className="text-[11px] text-zinc-600">По {formatMoney(salaryStats.saturdayRate)} {settings.currency}</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => updateAdjustment('extraSatShifts', (Number(currentAdj.extraSatShifts) || 0) - 1)}
+                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                >
+                  −
+                </button>
+                <span className="w-6 text-center font-mono text-sm text-rose-300">
+                  {currentAdj.extraSatShifts > 0 ? `+${currentAdj.extraSatShifts}` : currentAdj.extraSatShifts || 0}
+                </span>
+                <button
+                  onClick={() => updateAdjustment('extraSatShifts', (Number(currentAdj.extraSatShifts) || 0) + 1)}
+                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Премия или штраф */}
             <div className="border-t border-zinc-900 pt-4 flex justify-between items-center gap-4">
               <div>
-                <div className="text-sm text-zinc-300 font-light">Премия или штраф</div>
-                <div className="text-[11px] text-zinc-600">Минус для удержания</div>
+                <div className="text-sm text-zinc-300 font-light">Премия / Доплата</div>
+                <div className="text-[11px] text-zinc-600">Любая фиксированная сумма</div>
               </div>
               <div className="relative w-32">
                 <input
@@ -524,12 +635,6 @@
               </div>
             </div>
           </div>
-
-          <div className="mt-8 text-center">
-            <p className="text-xs text-zinc-600 font-light">
-              1 смена = {formatMoney(salaryStats.singleShiftPay)} {settings.currency} (до вычета)
-            </p>
-          </div>
         </div>
       );
 
@@ -541,92 +646,82 @@
               Параметры
             </h1>
             <span className="text-xs text-zinc-600 font-light block mt-0.5">
-              Условия вашего цикла
+              Тарифы и настройка цикла
             </span>
           </div>
 
-          {/* Блок: Оплата */}
+          {/* Блок: Ставки оплаты */}
           <div className="mt-6 space-y-4">
             <h2 className="text-[11px] uppercase tracking-widest text-zinc-500 px-1">
-              Оплата труда
+              Тарифы (без налогов)
             </h2>
 
             <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-4">
-              {/* Переключатель За смену / В час */}
-              <div className="grid grid-cols-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800/60">
-                <button
-                  onClick={() => updateSetting('payType', 'shift')}
-                  className={`py-2 text-xs rounded-lg transition-all ${settings.payType === 'shift' ? 'bg-zinc-800 text-zinc-200 font-medium' : 'text-zinc-500'}`}
-                >
-                  За смену
-                </button>
-                <button
-                  onClick={() => updateSetting('payType', 'hour')}
-                  className={`py-2 text-xs rounded-lg transition-all ${settings.payType === 'hour' ? 'bg-zinc-800 text-zinc-200 font-medium' : 'text-zinc-500'}`}
-                >
-                  За час
-                </button>
-              </div>
-
-              {/* Ставка */}
-              <div className="flex justify-between items-center pt-2">
-                <span className="text-sm text-zinc-300 font-light">
-                  {settings.payType === 'shift' ? 'Ставка за смену' : 'Часовая ставка'}
-                </span>
-                <input
-                  type="number"
-                  value={settings.rate}
-                  onChange={(e) => updateSetting('rate', e.target.value)}
-                  className="w-32 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
-                />
-              </div>
-
-              {/* Длительность смены */}
-              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
-                <span className="text-sm text-zinc-300 font-light">Часов в смене</span>
-                <input
-                  type="number"
-                  value={settings.hoursPerShift}
-                  onChange={(e) => updateSetting('hoursPerShift', e.target.value)}
-                  className="w-24 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
-                />
-              </div>
-
-              {/* Налог / Удержание */}
-              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+              {/* Обычная смена */}
+              <div className="flex justify-between items-center">
                 <div>
-                  <span className="text-sm text-zinc-300 font-light block">Налог / Вычет (%)</span>
-                  <span className="text-[11px] text-zinc-600">0 — если ставка уже «на руки»</span>
+                  <span className="text-sm text-zinc-300 font-light block">Обычная смена</span>
+                  <span className="text-[11px] text-zinc-600">Пн–Пт и Воскресенье</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => updateSetting('taxRate', settings.taxRate === 13 ? 0 : 13)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs border transition ${Number(settings.taxRate) === 13 ? 'bg-rose-950/50 border-rose-900/60 text-rose-200' : 'bg-zinc-900 border-zinc-800 text-zinc-500'}`}
-                  >
-                    13%
-                  </button>
                   <input
                     type="number"
-                    value={settings.taxRate}
-                    onChange={(e) => updateSetting('taxRate', e.target.value)}
-                    className="w-16 bg-zinc-900/80 border border-zinc-800 rounded-xl px-2.5 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                    value={settings.regularRate}
+                    onChange={(e) => updateSetting('regularRate', e.target.value)}
+                    className="w-28 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
                   />
+                  <span className="text-zinc-500 text-sm">{settings.currency}</span>
                 </div>
               </div>
 
-              {/* Валюта */}
+              {/* Смена в субботу */}
               <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
-                <span className="text-sm text-zinc-300 font-light">Валюта</span>
-                <div className="flex gap-1.5">
-                  {['₽', '₸', '$', '€', 'Br'].map(curr => (
-                    <button
-                      key={curr}
-                      onClick={() => updateSetting('currency', curr)}
-                      className={`w-9 h-9 rounded-xl text-sm font-mono border transition ${settings.currency === curr ? 'bg-zinc-800 border-zinc-600 text-zinc-100' : 'bg-zinc-900 border-zinc-800/80 text-zinc-500'}`}
-                    >
-                      {curr}
-                    </button>
-                  ))}
+                <div>
+                  <span className="text-sm text-rose-200/90 font-light block">Смена в субботу</span>
+                  <span className="text-[11px] text-zinc-600">Повышенный тариф</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    value={settings.saturdayRate}
+                    onChange={(e) => updateSetting('saturdayRate', e.target.value)}
+                    className="w-28 bg-zinc-900/80 border border-rose-950/60 rounded-xl px-3 py-2 text-right text-base text-rose-200 font-mono focus:outline-none focus:border-rose-800"
+                  />
+                  <span className="text-zinc-500 text-sm">{settings.currency}</span>
+                </div>
+              </div>
+
+              {/* Час после 16:00 */}
+              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+                <div>
+                  <span className="text-sm text-zinc-300 font-light block">Час после 16:00</span>
+                  <span className="text-[11px] text-zinc-600">Вечерняя почасовая ставка</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    value={settings.after16Rate}
+                    onChange={(e) => updateSetting('after16Rate', e.target.value)}
+                    className="w-28 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                  />
+                  <span className="text-zinc-500 text-sm">{settings.currency}</span>
+                </div>
+              </div>
+
+              {/* Авто-часы после 16:00 в каждой смене */}
+              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+                <div>
+                  <span className="text-sm text-zinc-300 font-light block">Авто-часов после 16:00</span>
+                  <span className="text-[11px] text-zinc-600">Если входят в каждую смену по умолчанию</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    value={settings.autoHoursAfter16}
+                    onChange={(e) => updateSetting('autoHoursAfter16', e.target.value)}
+                    className="w-20 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                  />
+                  <span className="text-zinc-500 text-sm">ч</span>
                 </div>
               </div>
             </div>
