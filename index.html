@@ -10,13 +10,43 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="График" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#09090b" />
+  <meta name="theme-color" content="#0f0f14" />
 
-  <!-- Иконка для главного экрана -->
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2309090b'/><circle cx='50' cy='50' r='28' fill='%231e293b' stroke='%234c0519' stroke-width='4'/></svg>" />
+  <!-- Иконка для главного экрана в стиле ЮMoney -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%238B3FFD'/><circle cx='50' cy='50' r='24' fill='%23ffffff'/><circle cx='50' cy='50' r='10' fill='%238B3FFD'/></svg>" />
+
+  <!-- Шрифт Manrope (современный финтех-стиль) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Подключение Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            yoo: {
+              bg: '#0f0f14',
+              card: '#1a1a24',
+              cardHover: '#22222f',
+              purple: '#8B3FFD',
+              purpleDark: '#6920D6',
+              purpleLight: '#A86BFF',
+              green: '#00D97E',
+              amber: '#FFB800',
+              sky: '#38BDF8'
+            }
+          }
+        }
+      }
+    }
+  </script>
 
   <!-- Подключение React и Babel для работы прямо в браузере -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -28,19 +58,20 @@
       color-scheme: dark;
     }
     body {
-      background-color: #000;
+      background-color: #09090d;
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
       overscroll-behavior-y: none;
+      font-family: 'Manrope', sans-serif;
     }
     .pt-safe-top {
       padding-top: env(safe-area-inset-top, 16px);
     }
     .pb-safe-bottom {
-      padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 8px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 12px);
     }
     .hide-scrollbar::-webkit-scrollbar {
       display: none;
@@ -54,6 +85,12 @@
       -webkit-appearance: none;
       margin: 0;
     }
+    .yoo-gradient {
+      background: linear-gradient(135deg, #9649FF 0%, #7326E5 55%, #5214B8 100%);
+    }
+    .yoo-glow {
+      box-shadow: 0 12px 32px -8px rgba(139, 63, 253, 0.45);
+    }
   </style>
 </head>
 <body>
@@ -62,62 +99,55 @@
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
-    // --- Иконки ---
+    // --- Иконки в стиле ЮMoney ---
     const IconCalendar = ({ active }) => (
-      <svg className={`w-6 h-6 transition-colors duration-500 ${active ? 'text-zinc-200' : 'text-zinc-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="1.5" />
-        <line x1="16" y1="2" x2="16" y2="6" strokeWidth="1.5" />
-        <line x1="8" y1="2" x2="8" y2="6" strokeWidth="1.5" />
-        <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5" />
+      <svg className={`w-6 h-6 transition-all duration-300 ${active ? 'text-[#A86BFF] scale-105' : 'text-zinc-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="18" rx="4" ry="4" strokeWidth={active ? "2.2" : "1.8"} />
+        <line x1="16" y1="2" x2="16" y2="6" strokeWidth={active ? "2.2" : "1.8"} strokeLinecap="round" />
+        <line x1="8" y1="2" x2="8" y2="6" strokeWidth={active ? "2.2" : "1.8"} strokeLinecap="round" />
+        <line x1="3" y1="10" x2="21" y2="10" strokeWidth={active ? "2.2" : "1.8"} />
       </svg>
     );
 
     const IconWallet = ({ active }) => (
-      <svg className={`w-6 h-6 transition-colors duration-500 ${active ? 'text-zinc-200' : 'text-zinc-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <rect x="3" y="6" width="18" height="15" rx="2" ry="2" strokeWidth="1.5" />
-        <path d="M3 10h18" strokeWidth="1.5" />
-        <path d="M16 14h.01" strokeWidth="2" strokeLinecap="round" />
+      <svg className={`w-6 h-6 transition-all duration-300 ${active ? 'text-[#A86BFF] scale-105' : 'text-zinc-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M19 7V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1" strokeWidth={active ? "2.2" : "1.8"} strokeLinecap="round" />
+        <rect x="15" y="9" width="6" height="6" rx="2" strokeWidth={active ? "2.2" : "1.8"} />
+        <circle cx="18" cy="12" r="1" fill="currentColor" />
       </svg>
     );
 
     const IconSettings = ({ active }) => (
-      <svg className={`w-6 h-6 transition-colors duration-500 ${active ? 'text-zinc-200' : 'text-zinc-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="3" strokeWidth="1.5" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" strokeWidth="1.5" />
+      <svg className={`w-6 h-6 transition-all duration-300 ${active ? 'text-[#A86BFF] scale-105' : 'text-zinc-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3" strokeWidth={active ? "2.2" : "1.8"} />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" strokeWidth={active ? "2.2" : "1.8"} />
       </svg>
     );
 
     const IconChevronLeft = () => (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19l-7-7 7-7" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M15 19l-7-7 7-7" />
       </svg>
     );
 
     const IconChevronRight = () => (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M9 5l7 7-7 7" />
       </svg>
     );
 
     // --- Константы и утилиты ---
-    const WEEKDAYS = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+    const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     const MONTHS = [
       'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
       'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
     ];
-    const QUOTES = [
-      "Бесконечная петля дней...",
-      "Снова на смену. Как и всегда.",
-      "Свет тускнеет с каждым циклом.",
-      "Время сливается в сплошной поток.",
-      "Два дня иллюзии свободы."
-    ];
 
     const DEFAULT_SETTINGS = {
-      regularRate: 3500,        // Обычная смена
-      saturdayRate: 5500,       // Смена в субботу
-      sundayBonus: 500,         // Каждое воскресенье +500 ₽
-      sundayMode: 'all',        // 'all' — каждое вс всегда, 'work' — только рабочее вс
+      regularRate: 8300,        // Обычная смена (Пн-Пт, Вс) — 8300 ₽
+      saturdayRate: 5500,       // Смена в субботу — 5500 ₽
+      sundayBonus: 500,         // Доплата за воскресенье — +500 ₽
+      sundayMode: 'work',       // 'work' — только рабочее вс (+500 ₽), 'all' — каждое вс
       after16Rate: 550,         // Час после 16:00
       autoHoursAfter16: 0,      // Автоматических часов после 16:00 в каждой смене
       currency: '₽',            // Валюта
@@ -164,17 +194,17 @@
       const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
       return (
-        <div className="mb-10">
-          <div className="text-center mb-6">
-            <h2 className="text-lg font-light tracking-widest text-zinc-300 capitalize opacity-90">
+        <div className="mb-6 p-5 rounded-3xl bg-yoo-card border border-white/[0.06] shadow-lg">
+          <div className="flex items-baseline justify-between mb-4 px-1">
+            <h2 className="text-lg font-bold tracking-tight text-white">
               {MONTHS[month]}
             </h2>
-            <span className="text-xs font-mono tracking-[0.2em] text-zinc-600 mt-1 block">
+            <span className="text-xs font-semibold text-zinc-500">
               {year}
             </span>
           </div>
 
-          <div className="grid grid-cols-7 gap-y-3 gap-x-2">
+          <div className="grid grid-cols-7 gap-y-2.5 gap-x-1.5">
             {blanks.map(b => (
               <div key={`blank-${b}`} className="aspect-square" />
             ))}
@@ -194,22 +224,23 @@
                   <button
                     onClick={() => onDayClick(dateStr)}
                     className={`
-                      w-10 h-10 rounded-full flex flex-col items-center justify-center text-[15px] transition-all duration-300 relative
-                      ${isToday ? 'border border-rose-900/70 text-rose-200 font-medium' : 'font-light'}
-                      ${isWork && !isToday ? 'bg-slate-800/80 text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]' : ''}
-                      ${!isWork && !isToday ? 'text-zinc-600 hover:text-zinc-400' : ''}
-                      ${isWork && isToday ? 'bg-rose-950/60 text-rose-200 shadow-[0_0_12px_rgba(159,18,57,0.3)]' : ''}
-                      ${!isWork && isToday ? 'bg-rose-950/20' : ''}
+                      w-10 h-10 rounded-2xl flex flex-col items-center justify-center text-sm transition-all duration-200 relative active:scale-90
+                      ${isWork && !isToday ? 'bg-[#8B3FFD] text-white font-bold shadow-[0_4px_12px_rgba(139,63,253,0.35)]' : ''}
+                      ${!isWork && !isToday ? 'text-zinc-400 hover:bg-white/5 font-medium' : ''}
+                      ${isWork && isToday ? 'bg-white text-[#6920D6] font-extrabold ring-2 ring-[#8B3FFD] shadow-[0_0_16px_rgba(139,63,253,0.6)]' : ''}
+                      ${!isWork && isToday ? 'bg-white/10 text-white font-bold ring-2 ring-white/40' : ''}
                     `}
                   >
-                    <span>{day}</span>
-                    {/* Индикатор повышенной субботней смены */}
+                    <span className="leading-none">{day}</span>
+
+                    {/* Индикатор субботней смены (5500 ₽) */}
                     {isWork && isSaturday && (
-                      <span className="w-1 h-1 rounded-full bg-rose-400/70 absolute bottom-1.5" />
+                      <span className={`w-1.5 h-1.5 rounded-full absolute bottom-1 ${isToday ? 'bg-[#6920D6]' : 'bg-sky-300'}`} />
                     )}
-                    {/* Индикатор воскресной доплаты +500₽ */}
+
+                    {/* Индикатор воскресной доплаты (+500 ₽) */}
                     {showSundayDot && (
-                      <span className="w-1 h-1 rounded-full bg-amber-400/60 absolute bottom-1.5" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00D97E] absolute bottom-1 shadow-[0_0_6px_#00D97E]" />
                     )}
                   </button>
                 </div>
@@ -224,24 +255,42 @@
     function App() {
       const [activeTab, setActiveTab] = useState('calendar');
       const [todayStr] = useState(() => formatDate(new Date()));
-      const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
 
-      // Дата начала цикла 2/2
+      // Дата начала цикла 2/2 (сохраняем совместимость с вашим прошлым ключом)
       const [cycleStartDateStr, setCycleStartDateStr] = useState(() => {
         return localStorage.getItem('depressive_ws_startDate') || todayStr;
       });
 
-      // Настройки
+      // Настройки с новым ключом v4, чтобы новые ставки 8300 / 5500 / +500 применились сразу
       const [settings, setSettings] = useState(() => {
         try {
-          const saved = localStorage.getItem('depressive_ws_settings_v3');
-          return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : DEFAULT_SETTINGS;
+          const savedV4 = localStorage.getItem('yoomoney_ws_settings_v4');
+          if (savedV4) {
+            return { ...DEFAULT_SETTINGS, ...JSON.parse(savedV4) };
+          }
+          // Переносим только безопасные пользовательские настройки из старой версии, но ставим новые тарифы
+          const oldSaved = localStorage.getItem('depressive_ws_settings_v3');
+          if (oldSaved) {
+            const parsedOld = JSON.parse(oldSaved);
+            return {
+              ...DEFAULT_SETTINGS,
+              lockSchedule: parsedOld.lockSchedule ?? DEFAULT_SETTINGS.lockSchedule,
+              monthsCount: parsedOld.monthsCount ?? DEFAULT_SETTINGS.monthsCount,
+              after16Rate: parsedOld.after16Rate ?? DEFAULT_SETTINGS.after16Rate,
+              autoHoursAfter16: parsedOld.autoHoursAfter16 ?? DEFAULT_SETTINGS.autoHoursAfter16,
+              regularRate: 8300,
+              saturdayRate: 5500,
+              sundayBonus: 500,
+              sundayMode: 'work'
+            };
+          }
+          return DEFAULT_SETTINGS;
         } catch {
           return DEFAULT_SETTINGS;
         }
       });
 
-      // Корректировки по месяцам
+      // Корректировки по месяцам (сохраняем совместимость с прошлым ключом)
       const [adjustments, setAdjustments] = useState(() => {
         try {
           const saved = localStorage.getItem('depressive_ws_adjustments_v2');
@@ -263,7 +312,7 @@
       }, [cycleStartDateStr]);
 
       useEffect(() => {
-        localStorage.setItem('depressive_ws_settings_v3', JSON.stringify(settings));
+        localStorage.setItem('yoomoney_ws_settings_v4', JSON.stringify(settings));
       }, [settings]);
 
       useEffect(() => {
@@ -316,6 +365,35 @@
         }));
       };
 
+      // Информация о сегодняшнем дне для верхнего виджета
+      const todayInfo = useMemo(() => {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth();
+        const d = now.getDate();
+        const dayOfWeek = now.getDay();
+        const isWork = isWorkDayByCycle(y, m, d, cycleStartDateStr);
+        const isSat = dayOfWeek === 6;
+        const isSun = dayOfWeek === 0;
+
+        const regularRate = Number(settings.regularRate) || 8300;
+        const saturdayRate = Number(settings.saturdayRate) || 5500;
+        const sundayBonus = Number(settings.sundayBonus) ?? 500;
+        const sundayMode = settings.sundayMode || 'work';
+        const after16Rate = Number(settings.after16Rate) || 550;
+        const autoHours = Number(settings.autoHoursAfter16) || 0;
+
+        let todayPay = 0;
+        if (isWork) {
+          todayPay += (isSat ? saturdayRate : regularRate) + (autoHours * after16Rate);
+        }
+        if (isSun && (sundayMode === 'all' || isWork)) {
+          todayPay += sundayBonus;
+        }
+
+        return { isWork, isSat, isSun, todayPay };
+      }, [cycleStartDateStr, settings]);
+
       // --- Расчет зарплаты для выбранного месяца ---
       const salaryStats = useMemo(() => {
         const { year, month } = salaryViewDate;
@@ -326,10 +404,10 @@
         const currentDayOfMonth = now.getDate();
 
         const regularRate = Number(settings.regularRate) || 0;
-        const saturdayRate = Number(settings.saturdayRate) || 5500;
-        const sundayBonus = Number(settings.sundayBonus) ?? 500;
-        const sundayMode = settings.sundayMode || 'all';
-        const after16Rate = Number(settings.after16Rate) || 550;
+        const saturdayRate = Number(settings.saturdayRate) || 0;
+        const sundayBonus = Number(settings.sundayBonus) || 0;
+        const sundayMode = settings.sundayMode || 'work';
+        const after16Rate = Number(settings.after16Rate) || 0;
         const autoHoursAfter16 = Number(settings.autoHoursAfter16) || 0;
 
         let regularShifts = 0;
@@ -362,7 +440,7 @@
             }
           }
 
-          // Каждое воскресенье +500 ₽ (всегда или в рабочую смену, согласно настройке)
+          // Воскресная доплата +500 ₽ (по умолчанию только в рабочее воскресенье)
           if (isSun && (sundayMode === 'all' || isWork)) {
             sundaysCount++;
             dayPay += sundayBonus;
@@ -381,25 +459,26 @@
         const extraAfter16Hours = Number(currentAdj.extraAfter16Hours) || 0;
         const bonus = Number(currentAdj.bonus) || 0;
 
-        const baseShifts = regularShifts + saturdayShifts;
         const totalRegularShifts = Math.max(0, regularShifts + extraShifts);
         const totalSaturdayShifts = Math.max(0, saturdayShifts + extraSatShifts);
         const totalShifts = totalRegularShifts + totalSaturdayShifts;
         const restDays = Math.max(0, daysInMonth - totalShifts);
 
         const totalAfter16Hours = (totalShifts * autoHoursAfter16) + extraAfter16Hours;
-        const after16PayTotal = extraAfter16Hours * after16Rate;
+        const extraAfter16Pay = extraAfter16Hours * after16Rate;
 
         const extraShiftsPay = (extraShifts * (regularRate + autoHoursAfter16 * after16Rate)) +
                                (extraSatShifts * (saturdayRate + autoHoursAfter16 * after16Rate));
 
+        const regularShiftsPayTotal = totalRegularShifts * regularRate;
+        const saturdayShiftsPayTotal = totalSaturdayShifts * saturdayRate;
         const sundayBonusTotal = sundaysCount * sundayBonus;
 
-        const totalMonthPay = Math.max(0, advanceSum + secondHalfSum + extraShiftsPay + after16PayTotal + bonus);
+        const totalMonthPay = Math.max(0, advanceSum + secondHalfSum + extraShiftsPay + extraAfter16Pay + bonus);
         const paydaySum = Math.max(0, totalMonthPay - advanceSum);
 
         const earnedWithExtras = (isCurrentMonth || isPastMonth)
-          ? Math.max(0, earnedSoFar + extraShiftsPay + after16PayTotal + bonus)
+          ? Math.max(0, earnedSoFar + extraShiftsPay + extraAfter16Pay + bonus)
           : 0;
 
         const progressPercent = totalMonthPay > 0
@@ -407,12 +486,13 @@
           : 0;
 
         return {
-          baseShifts,
           regularShifts: totalRegularShifts,
           saturdayShifts: totalSaturdayShifts,
           sundaysCount,
           sundayBonus,
           sundayBonusTotal,
+          regularShiftsPayTotal,
+          saturdayShiftsPayTotal,
           totalShifts,
           restDays,
           totalAfter16Hours,
@@ -425,7 +505,8 @@
           progressPercent,
           regularRate,
           saturdayRate,
-          after16Rate
+          after16Rate,
+          bonus
         };
       }, [salaryViewDate, cycleStartDateStr, settings, currentAdj]);
 
@@ -441,18 +522,55 @@
 
       // --- Вкладка: Календарь ---
       const renderCalendar = () => (
-        <div className="px-5 pb-36">
-          <div className="sticky top-0 z-20 bg-zinc-950/85 backdrop-blur-md pt-safe-top pb-3 border-b border-zinc-900/60 mb-6">
-            <div className="flex justify-between items-center mb-3 px-1 pt-2">
-              <span className="text-[11px] uppercase tracking-widest text-zinc-500"></span>
-              <span className="text-[11px] text-zinc-600 italic"></span>
+        <div className="px-4 pb-32">
+          {/* Верхняя шапка и статус сегодняшнего дня */}
+          <div className="sticky top-0 z-20 bg-[#0f0f14]/90 backdrop-blur-xl pt-safe-top pb-3 border-b border-white/[0.06] mb-5">
+            <div className="flex items-center justify-between pt-3 pb-3 px-1">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl yoo-gradient flex items-center justify-center shadow-md">
+                  <span className="text-white font-extrabold text-sm">Ю</span>
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-white leading-tight">Мой график 2/2</div>
+                  <div className="text-[11px] text-zinc-400 font-medium">
+                    {settings.lockSchedule ? 'Цикл закреплён' : 'Нажмите на день для смены цикла'}
+                  </div>
+                </div>
+              </div>
+
+              <div className={`px-3 py-1.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 ${
+                todayInfo.isWork
+                  ? 'bg-[#8B3FFD]/20 text-[#C49BFF] border border-[#8B3FFD]/30'
+                  : 'bg-zinc-800/80 text-zinc-300'
+              }`}>
+                <span className={`w-2 h-2 rounded-full ${todayInfo.isWork ? 'bg-[#00D97E]' : 'bg-zinc-500'}`} />
+                {todayInfo.isWork ? `Смена • ${formatMoney(todayInfo.todayPay)} ₽` : 'Сегодня выходной'}
+              </div>
             </div>
-            <div className="grid grid-cols-7 text-center">
+
+            {/* Легенда тарифов */}
+            <div className="flex items-center justify-between bg-[#1a1a24] rounded-2xl px-3 py-2 mb-3 text-[11px] text-zinc-300 border border-white/[0.04]">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-md bg-[#8B3FFD] inline-block" />
+                <span>Будни: <b>{formatMoney(settings.regularRate)}₽</b></span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-sky-300 inline-block" />
+                <span>Сб: <b>{formatMoney(settings.saturdayRate)}₽</b></span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#00D97E] inline-block" />
+                <span>Раб. Вс: <b>+{formatMoney(settings.sundayBonus)}₽</b></span>
+              </div>
+            </div>
+
+            {/* Дни недели */}
+            <div className="grid grid-cols-7 text-center px-2">
               {WEEKDAYS.map((day, idx) => (
                 <div
                   key={day}
-                  className={`text-[10px] font-medium uppercase tracking-widest ${
-                    idx === 5 ? 'text-rose-400/70' : idx === 6 ? 'text-amber-400/60' : 'text-zinc-600'
+                  className={`text-xs font-bold ${
+                    idx === 5 ? 'text-sky-400' : idx === 6 ? 'text-[#00D97E]' : 'text-zinc-500'
                   }`}
                 >
                   {day}
@@ -469,124 +587,223 @@
               todayStr={todayStr}
               cycleStartDateStr={cycleStartDateStr}
               onDayClick={handleDayClick}
-              sundayMode={settings.sundayMode || 'all'}
+              sundayMode={settings.sundayMode || 'work'}
             />
           ))}
-
-          <div className="text-center pt-4 pb-8 opacity-40">
-            <p className="text-xs text-zinc-500 font-light italic">«{quote}»</p>
-          </div>
         </div>
       );
 
       // --- Вкладка: Зарплата ---
       const renderSalary = () => (
-        <div className="px-5 pt-safe-top pb-36">
+        <div className="px-4 pt-safe-top pb-32">
           {/* Переключатель месяца */}
-          <div className="flex items-center justify-between pt-6 pb-6 border-b border-zinc-900/60">
+          <div className="flex items-center justify-between pt-4 pb-4">
             <button
               onClick={() => changeSalaryMonth(-1)}
-              className="p-2 rounded-full text-zinc-500 hover:text-zinc-300 active:bg-zinc-900 transition"
+              className="w-10 h-10 rounded-2xl bg-yoo-card border border-white/[0.06] text-zinc-300 flex items-center justify-center active:scale-95 transition"
             >
               <IconChevronLeft />
             </button>
             <div className="text-center">
-              <h1 className="text-lg font-light tracking-widest text-zinc-200">
+              <h1 className="text-lg font-extrabold text-white tracking-tight">
                 {MONTHS[salaryViewDate.month]}
               </h1>
-              <span className="text-xs font-mono tracking-[0.2em] text-zinc-600 block mt-0.5">
+              <span className="text-xs font-semibold text-zinc-500 block">
                 {salaryViewDate.year}
               </span>
             </div>
             <button
               onClick={() => changeSalaryMonth(1)}
-              className="p-2 rounded-full text-zinc-500 hover:text-zinc-300 active:bg-zinc-900 transition"
+              className="w-10 h-10 rounded-2xl bg-yoo-card border border-white/[0.06] text-zinc-300 flex items-center justify-center active:scale-95 transition"
             >
               <IconChevronRight />
             </button>
           </div>
 
-          {/* Главная карточка итоговой суммы */}
-          <div className="mt-6 p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 text-center relative overflow-hidden">
-            <span className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 block mb-2">
-              Итого за месяц
-            </span>
-            <div className="text-4xl font-light tracking-tight text-zinc-100 my-1">
-              {formatMoney(salaryStats.totalMonthPay)} <span className="text-2xl text-zinc-500">{settings.currency}</span>
+          {/* Главная карточка в стиле кошелька ЮMoney */}
+          <div className="mt-2 p-6 rounded-3xl yoo-gradient yoo-glow text-white relative overflow-hidden">
+            {/* Декоративные круги в стиле ЮMoney */}
+            <div className="w-40 h-40 rounded-full bg-white/10 absolute -top-12 -right-10 blur-xl pointer-events-none" />
+            <div className="w-28 h-28 rounded-full bg-black/15 absolute -bottom-10 -left-8 pointer-events-none" />
+
+            <div className="flex items-center justify-between mb-2 relative z-10">
+              <span className="text-xs font-bold uppercase tracking-wider text-white/75">
+                Расчёт за месяц
+              </span>
+              <span className="px-2.5 py-1 rounded-full bg-black/25 text-xs font-bold text-white/90">
+                {salaryStats.totalShifts} смен • {salaryStats.restDays} вых.
+              </span>
             </div>
 
-            {/* Детализация смен */}
-            <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-xs text-zinc-500 font-light mt-3">
-              <span>{salaryStats.totalShifts} смен:</span>
-              <span className="text-zinc-400">{salaryStats.regularShifts} обычн.</span>
-              <span>·</span>
-              <span className="text-rose-300/80">{salaryStats.saturdayShifts} субб. (по {formatMoney(salaryStats.saturdayRate)} {settings.currency})</span>
+            <div className="text-4xl font-extrabold tracking-tight my-1 relative z-10">
+              {formatMoney(salaryStats.totalMonthPay)} <span className="text-2xl font-bold text-white/80">{settings.currency}</span>
             </div>
-
-            {/* Детализация воскресений (+500₽) */}
-            {salaryStats.sundayBonusTotal > 0 && (
-              <div className="text-xs text-amber-300/70 font-light mt-1">
-                + {salaryStats.sundaysCount} вс (+{formatMoney(salaryStats.sundayBonusTotal)} {settings.currency})
-              </div>
-            )}
-
-            {salaryStats.totalAfter16Hours > 0 && (
-              <div className="text-xs text-zinc-400 font-light mt-1">
-                + {salaryStats.totalAfter16Hours} ч после 16:00 ({formatMoney(salaryStats.after16PayTotal)} {settings.currency})
-              </div>
-            )}
 
             {/* Прогресс-бар отработанного времени */}
-            <div className="mt-6 pt-5 border-t border-zinc-800/40 text-left">
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-zinc-500 font-light">Уже заработано ({salaryStats.passedShifts} смен)</span>
-                <span className="text-zinc-200 font-mono">{formatMoney(salaryStats.earnedWithExtras)} {settings.currency}</span>
+            <div className="mt-6 pt-4 border-t border-white/15 relative z-10">
+              <div className="flex justify-between items-center text-xs mb-2">
+                <span className="text-white/80 font-medium">
+                  Заработано сейчас ({salaryStats.passedShifts} из {salaryStats.totalShifts} смен)
+                </span>
+                <span className="text-white font-extrabold">
+                  {formatMoney(salaryStats.earnedWithExtras)} {settings.currency}
+                </span>
               </div>
-              <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-black/30 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-rose-900/70 rounded-full transition-all duration-500"
+                  className="h-full bg-[#00D97E] rounded-full transition-all duration-500"
                   style={{ width: `${salaryStats.progressPercent}%` }}
                 />
               </div>
             </div>
           </div>
 
-          {/* Аванс и Расчет */}
+          {/* Карточки Аванса и Расчета */}
           <div className="grid grid-cols-2 gap-3 mt-4">
-            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80">
-              <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">
-                1–15 число (Аванс)
-              </span>
-              <div className="text-xl font-light text-zinc-300">
-                {formatMoney(salaryStats.advanceSum)} <span className="text-sm text-zinc-600">{settings.currency}</span>
+            <div className="p-4 rounded-3xl bg-yoo-card border border-white/[0.06]">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="w-2 h-2 rounded-full bg-[#A86BFF]" />
+                <span className="text-xs font-semibold text-zinc-400">1–15 число (Аванс)</span>
+              </div>
+              <div className="text-xl font-extrabold text-white mt-1">
+                {formatMoney(salaryStats.advanceSum)} <span className="text-sm font-semibold text-zinc-500">{settings.currency}</span>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80">
-              <span className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">
-                16–конец (Расчет)
-              </span>
-              <div className="text-xl font-light text-zinc-300">
-                {formatMoney(salaryStats.paydaySum)} <span className="text-sm text-zinc-600">{settings.currency}</span>
+            <div className="p-4 rounded-3xl bg-yoo-card border border-white/[0.06]">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="w-2 h-2 rounded-full bg-[#00D97E]" />
+                <span className="text-xs font-semibold text-zinc-400">16–конец (Расчёт)</span>
+              </div>
+              <div className="text-xl font-extrabold text-white mt-1">
+                {formatMoney(salaryStats.paydaySum)} <span className="text-sm font-semibold text-zinc-500">{settings.currency}</span>
               </div>
             </div>
           </div>
 
-          {/* Управление часами после 16:00 и подработками */}
-          <div className="mt-6 p-5 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-5">
-            {/* Часы после 16:00 */}
+          {/* Наглядная детализация начислений */}
+          <div className="mt-4 p-5 rounded-3xl bg-yoo-card border border-white/[0.06] space-y-3">
+            <div className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">
+              Детализация начислений
+            </div>
+
+            <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-md bg-[#8B3FFD]" />
+                <span className="text-zinc-300 font-medium">
+                  Обычные смены ({salaryStats.regularShifts} × {formatMoney(salaryStats.regularRate)} ₽)
+                </span>
+              </div>
+              <span className="font-bold text-white">{formatMoney(salaryStats.regularShiftsPayTotal)} ₽</span>
+            </div>
+
+            <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-md bg-sky-400" />
+                <span className="text-zinc-300 font-medium">
+                  Субботы ({salaryStats.saturdayShifts} × {formatMoney(salaryStats.saturdayRate)} ₽)
+                </span>
+              </div>
+              <span className="font-bold text-sky-300">{formatMoney(salaryStats.saturdayShiftsPayTotal)} ₽</span>
+            </div>
+
+            <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-md bg-[#00D97E]" />
+                <span className="text-zinc-300 font-medium">
+                  Рабочие воскресенья ({salaryStats.sundaysCount} × +{formatMoney(salaryStats.sundayBonus)} ₽)
+                </span>
+              </div>
+              <span className="font-bold text-[#00D97E]">+{formatMoney(salaryStats.sundayBonusTotal)} ₽</span>
+            </div>
+
+            {salaryStats.totalAfter16Hours > 0 && (
+              <div className="flex justify-between items-center text-sm pt-1 border-t border-white/[0.05]">
+                <span className="text-zinc-400 font-medium">
+                  Часы после 16:00 ({salaryStats.totalAfter16Hours} ч)
+                </span>
+                <span className="font-bold text-white">+{formatMoney(salaryStats.after16PayTotal)} ₽</span>
+              </div>
+            )}
+
+            {salaryStats.bonus !== 0 && (
+              <div className="flex justify-between items-center text-sm pt-1 border-t border-white/[0.05]">
+                <span className="text-zinc-400 font-medium">Премия / Корректировка</span>
+                <span className={`font-bold ${salaryStats.bonus > 0 ? 'text-[#00D97E]' : 'text-rose-400'}`}>
+                  {salaryStats.bonus > 0 ? '+' : ''}{formatMoney(salaryStats.bonus)} ₽
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Управление подработками, часами и премиями */}
+          <div className="mt-4 p-5 rounded-3xl bg-yoo-card border border-white/[0.06] space-y-4">
+            <div className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+              Корректировки месяца
+            </div>
+
+            {/* Доп. обычные смены / отгулы */}
             <div className="flex justify-between items-center">
               <div>
-                <div className="text-sm text-zinc-200 font-light">Часы после 16:00</div>
-                <div className="text-[11px] text-zinc-500">
-                  По {formatMoney(salaryStats.after16Rate)} {settings.currency}/час
-                  {currentAdj.extraAfter16Hours > 0 ? ` (+${formatMoney(currentAdj.extraAfter16Hours * salaryStats.after16Rate)} ${settings.currency})` : ''}
-                </div>
+                <div className="text-sm text-white font-semibold">Доп. обычные смены</div>
+                <div className="text-xs text-zinc-500">По {formatMoney(salaryStats.regularRate)} {settings.currency} (минус — отгул)</div>
               </div>
               <div className="flex items-center gap-2.5">
                 <button
+                  onClick={() => updateAdjustment('extraShifts', (Number(currentAdj.extraShifts) || 0) - 1)}
+                  className="w-9 h-9 rounded-xl bg-[#252533] text-white font-bold flex items-center justify-center active:scale-90 transition"
+                >
+                  −
+                </button>
+                <span className="w-7 text-center font-bold text-sm text-white">
+                  {currentAdj.extraShifts > 0 ? `+${currentAdj.extraShifts}` : currentAdj.extraShifts || 0}
+                </span>
+                <button
+                  onClick={() => updateAdjustment('extraShifts', (Number(currentAdj.extraShifts) || 0) + 1)}
+                  className="w-9 h-9 rounded-xl bg-[#8B3FFD] text-white font-bold flex items-center justify-center active:scale-90 transition"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Доп. субботние смены */}
+            <div className="border-t border-white/[0.06] pt-4 flex justify-between items-center">
+              <div>
+                <div className="text-sm text-white font-semibold">Доп. смены в субботу</div>
+                <div className="text-xs text-zinc-500">По {formatMoney(salaryStats.saturdayRate)} {settings.currency}</div>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => updateAdjustment('extraSatShifts', (Number(currentAdj.extraSatShifts) || 0) - 1)}
+                  className="w-9 h-9 rounded-xl bg-[#252533] text-white font-bold flex items-center justify-center active:scale-90 transition"
+                >
+                  −
+                </button>
+                <span className="w-7 text-center font-bold text-sm text-sky-300">
+                  {currentAdj.extraSatShifts > 0 ? `+${currentAdj.extraSatShifts}` : currentAdj.extraSatShifts || 0}
+                </span>
+                <button
+                  onClick={() => updateAdjustment('extraSatShifts', (Number(currentAdj.extraSatShifts) || 0) + 1)}
+                  className="w-9 h-9 rounded-xl bg-[#8B3FFD] text-white font-bold flex items-center justify-center active:scale-90 transition"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Часы после 16:00 */}
+            <div className="border-t border-white/[0.06] pt-4 flex justify-between items-center">
+              <div>
+                <div className="text-sm text-white font-semibold">Часы после 16:00</div>
+                <div className="text-xs text-zinc-500">
+                  По {formatMoney(salaryStats.after16Rate)} {settings.currency}/час
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
                   onClick={() => updateAdjustment('extraAfter16Hours', Math.max(0, (Number(currentAdj.extraAfter16Hours) || 0) - 1))}
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                  className="w-9 h-9 rounded-xl bg-[#252533] text-white font-bold flex items-center justify-center active:scale-90 transition"
                 >
                   −
                 </button>
@@ -595,72 +812,22 @@
                   value={currentAdj.extraAfter16Hours || ''}
                   placeholder="0"
                   onChange={(e) => updateAdjustment('extraAfter16Hours', e.target.value === '' ? 0 : Math.max(0, Number(e.target.value)))}
-                  className="w-12 bg-zinc-900/80 border border-zinc-800 rounded-lg py-1 text-center font-mono text-sm text-zinc-200 focus:outline-none"
+                  className="w-12 bg-[#121218] border border-white/10 rounded-xl py-1.5 text-center font-bold text-sm text-white focus:outline-none focus:border-[#8B3FFD]"
                 />
                 <button
                   onClick={() => updateAdjustment('extraAfter16Hours', (Number(currentAdj.extraAfter16Hours) || 0) + 1)}
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
+                  className="w-9 h-9 rounded-xl bg-[#8B3FFD] text-white font-bold flex items-center justify-center active:scale-90 transition"
                 >
                   +
                 </button>
               </div>
             </div>
 
-            {/* Доп. обычные смены / отгулы */}
-            <div className="border-t border-zinc-900 pt-4 flex justify-between items-center">
+            {/* Премия или доплата */}
+            <div className="border-t border-white/[0.06] pt-4 flex justify-between items-center gap-4">
               <div>
-                <div className="text-sm text-zinc-300 font-light">Доп. обычные смены</div>
-                <div className="text-[11px] text-zinc-600">По {formatMoney(salaryStats.regularRate)} {settings.currency} (минус — отгул)</div>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => updateAdjustment('extraShifts', (Number(currentAdj.extraShifts) || 0) - 1)}
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
-                >
-                  −
-                </button>
-                <span className="w-6 text-center font-mono text-sm text-zinc-200">
-                  {currentAdj.extraShifts > 0 ? `+${currentAdj.extraShifts}` : currentAdj.extraShifts || 0}
-                </span>
-                <button
-                  onClick={() => updateAdjustment('extraShifts', (Number(currentAdj.extraShifts) || 0) + 1)}
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Доп. субботние смены */}
-            <div className="border-t border-zinc-900 pt-4 flex justify-between items-center">
-              <div>
-                <div className="text-sm text-zinc-300 font-light">Доп. смены в субботу</div>
-                <div className="text-[11px] text-zinc-600">По {formatMoney(salaryStats.saturdayRate)} {settings.currency}</div>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => updateAdjustment('extraSatShifts', (Number(currentAdj.extraSatShifts) || 0) - 1)}
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
-                >
-                  −
-                </button>
-                <span className="w-6 text-center font-mono text-sm text-rose-300">
-                  {currentAdj.extraSatShifts > 0 ? `+${currentAdj.extraSatShifts}` : currentAdj.extraSatShifts || 0}
-                </span>
-                <button
-                  onClick={() => updateAdjustment('extraSatShifts', (Number(currentAdj.extraSatShifts) || 0) + 1)}
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 flex items-center justify-center active:bg-zinc-800"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Премия или штраф */}
-            <div className="border-t border-zinc-900 pt-4 flex justify-between items-center gap-4">
-              <div>
-                <div className="text-sm text-zinc-300 font-light">Премия / Доплата</div>
-                <div className="text-[11px] text-zinc-600">Любая фиксированная сумма</div>
+                <div className="text-sm text-white font-semibold">Премия / Доплата</div>
+                <div className="text-xs text-zinc-500">Любая фиксированная сумма</div>
               </div>
               <div className="relative w-32">
                 <input
@@ -668,7 +835,7 @@
                   value={currentAdj.bonus || ''}
                   placeholder="0"
                   onChange={(e) => updateAdjustment('bonus', e.target.value === '' ? 0 : Number(e.target.value))}
-                  className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                  className="w-full bg-[#121218] border border-white/10 rounded-2xl px-3.5 py-2 text-right text-sm text-white font-bold focus:outline-none focus:border-[#8B3FFD]"
                 />
               </div>
             </div>
@@ -678,171 +845,158 @@
 
       // --- Вкладка: Настройки ---
       const renderSettings = () => (
-        <div className="px-5 pt-safe-top pb-36">
-          <div className="pt-6 pb-6 border-b border-zinc-900/60 text-center">
-            <h1 className="text-lg font-light tracking-widest text-zinc-200">
-              Параметры
+        <div className="px-4 pt-safe-top pb-32">
+          <div className="pt-5 pb-4 px-1">
+            <h1 className="text-xl font-extrabold text-white tracking-tight">
+              Настройки
             </h1>
-            <span className="text-xs text-zinc-600 font-light block mt-0.5">
-              Тарифы и настройка цикла
+            <span className="text-xs text-zinc-400 font-medium block mt-0.5">
+              Тарифы смен и параметры графика 2/2
             </span>
           </div>
 
           {/* Блок: Ставки оплаты */}
-          <div className="mt-6 space-y-4">
-            <h2 className="text-[11px] uppercase tracking-widest text-zinc-500 px-1">
-              Тарифы (без налогов)
+          <div className="mt-2 space-y-3">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 px-1">
+              Тарифы оплаты
             </h2>
 
-            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-4">
+            <div className="p-5 rounded-3xl bg-yoo-card border border-white/[0.06] space-y-4">
               {/* Обычная смена */}
               <div className="flex justify-between items-center">
                 <div>
-                  <span className="text-sm text-zinc-300 font-light block">Обычная смена</span>
-                  <span className="text-[11px] text-zinc-600">Стандартный тариф</span>
+                  <span className="text-sm text-white font-semibold block">Обычная смена (Пн–Пт, Вс)</span>
+                  <span className="text-xs text-zinc-500">Базовый дневной тариф</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
                     value={settings.regularRate}
                     onChange={(e) => updateSetting('regularRate', e.target.value)}
-                    className="w-28 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                    className="w-28 bg-[#121218] border border-white/10 rounded-2xl px-3.5 py-2 text-right text-sm text-white font-bold focus:outline-none focus:border-[#8B3FFD]"
                   />
-                  <span className="text-zinc-500 text-sm">{settings.currency}</span>
+                  <span className="text-zinc-400 font-bold text-sm">{settings.currency}</span>
                 </div>
               </div>
 
               {/* Смена в субботу */}
-              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+              <div className="flex justify-between items-center border-t border-white/[0.06] pt-4">
                 <div>
-                  <span className="text-sm text-rose-200/90 font-light block">Смена в субботу</span>
-                  <span className="text-[11px] text-zinc-600">Повышенный тариф</span>
+                  <span className="text-sm text-sky-300 font-semibold block">Смена в субботу</span>
+                  <span className="text-xs text-zinc-500">Субботний тариф</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
                     value={settings.saturdayRate}
                     onChange={(e) => updateSetting('saturdayRate', e.target.value)}
-                    className="w-28 bg-zinc-900/80 border border-rose-950/60 rounded-xl px-3 py-2 text-right text-base text-rose-200 font-mono focus:outline-none focus:border-rose-800"
+                    className="w-28 bg-[#121218] border border-sky-500/30 rounded-2xl px-3.5 py-2 text-right text-sm text-sky-300 font-bold focus:outline-none focus:border-sky-400"
                   />
-                  <span className="text-zinc-500 text-sm">{settings.currency}</span>
+                  <span className="text-zinc-400 font-bold text-sm">{settings.currency}</span>
                 </div>
               </div>
 
               {/* Воскресенье +500₽ */}
-              <div className="border-t border-zinc-900 pt-4 space-y-3">
+              <div className="border-t border-white/[0.06] pt-4 space-y-3">
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="text-sm text-amber-200/80 font-light block">Воскресенье (+ к ЗП)</span>
-                    <span className="text-[11px] text-zinc-600">Надбавка за воскресенье</span>
+                    <span className="text-sm text-[#00D97E] font-semibold block">Доплата за воскресенье</span>
+                    <span className="text-xs text-zinc-500">Плюс к базовой ставке ({formatMoney(Number(settings.regularRate) + Number(settings.sundayBonus))} ₽)</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
                       value={settings.sundayBonus}
                       onChange={(e) => updateSetting('sundayBonus', e.target.value)}
-                      className="w-28 bg-zinc-900/80 border border-amber-950/50 rounded-xl px-3 py-2 text-right text-base text-amber-200/90 font-mono focus:outline-none focus:border-amber-800"
+                      className="w-28 bg-[#121218] border border-[#00D97E]/30 rounded-2xl px-3.5 py-2 text-right text-sm text-[#00D97E] font-bold focus:outline-none focus:border-[#00D97E]"
                     />
-                    <span className="text-zinc-500 text-sm">{settings.currency}</span>
+                    <span className="text-zinc-400 font-bold text-sm">{settings.currency}</span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800/60">
-                  <button
-                    onClick={() => updateSetting('sundayMode', 'all')}
-                    className={`py-1.5 text-[11px] rounded-lg transition-all ${settings.sundayMode !== 'work' ? 'bg-zinc-800 text-zinc-200 font-medium' : 'text-zinc-500'}`}
-                  >
-                    Каждое вс всегда
-                  </button>
+                <div className="grid grid-cols-2 bg-[#121218] p-1 rounded-2xl border border-white/[0.06]">
                   <button
                     onClick={() => updateSetting('sundayMode', 'work')}
-                    className={`py-1.5 text-[11px] rounded-lg transition-all ${settings.sundayMode === 'work' ? 'bg-zinc-800 text-zinc-200 font-medium' : 'text-zinc-500'}`}
+                    className={`py-2 text-xs rounded-xl transition-all ${settings.sundayMode === 'work' ? 'bg-[#8B3FFD] text-white font-bold shadow' : 'text-zinc-400 font-medium'}`}
                   >
-                    Только в смену
+                    Только рабочее Вс
+                  </button>
+                  <button
+                    onClick={() => updateSetting('sundayMode', 'all')}
+                    className={`py-2 text-xs rounded-xl transition-all ${settings.sundayMode === 'all' ? 'bg-[#8B3FFD] text-white font-bold shadow' : 'text-zinc-400 font-medium'}`}
+                  >
+                    Каждое Вс месяца
                   </button>
                 </div>
               </div>
 
               {/* Час после 16:00 */}
-              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+              <div className="flex justify-between items-center border-t border-white/[0.06] pt-4">
                 <div>
-                  <span className="text-sm text-zinc-300 font-light block">Час после 16:00</span>
-                  <span className="text-[11px] text-zinc-600">Вечерняя почасовая ставка</span>
+                  <span className="text-sm text-white font-semibold block">Час после 16:00</span>
+                  <span className="text-xs text-zinc-500">Вечерняя почасовая ставка</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
                     value={settings.after16Rate}
                     onChange={(e) => updateSetting('after16Rate', e.target.value)}
-                    className="w-28 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
+                    className="w-28 bg-[#121218] border border-white/10 rounded-2xl px-3.5 py-2 text-right text-sm text-white font-bold focus:outline-none focus:border-[#8B3FFD]"
                   />
-                  <span className="text-zinc-500 text-sm">{settings.currency}</span>
-                </div>
-              </div>
-
-              {/* Авто-часы после 16:00 в каждой смене */}
-              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
-                <div>
-                  <span className="text-sm text-zinc-300 font-light block">Авто-часов после 16:00</span>
-                  <span className="text-[11px] text-zinc-600">Если входят в каждую смену по умолчанию</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    value={settings.autoHoursAfter16}
-                    onChange={(e) => updateSetting('autoHoursAfter16', e.target.value)}
-                    className="w-20 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-right text-base text-zinc-200 font-mono focus:outline-none focus:border-zinc-600"
-                  />
-                  <span className="text-zinc-500 text-sm">ч</span>
+                  <span className="text-zinc-400 font-bold text-sm">{settings.currency}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Блок: График и календарь */}
-          <div className="mt-6 space-y-4">
-            <h2 className="text-[11px] uppercase tracking-widest text-zinc-500 px-1">
+          <div className="mt-6 space-y-3">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 px-1">
               График 2/2
             </h2>
 
-            <div className="p-4 rounded-2xl bg-zinc-900/20 border border-zinc-900/80 space-y-4">
+            <div className="p-5 rounded-3xl bg-yoo-card border border-white/[0.06] space-y-4">
               {/* Начало цикла */}
               <div className="flex justify-between items-center">
                 <div>
-                  <span className="text-sm text-zinc-300 font-light block">1-й рабочий день</span>
-                  <span className="text-[11px] text-zinc-600">Точка отсчета цикла</span>
+                  <span className="text-sm text-white font-semibold block">1-й рабочий день</span>
+                  <span className="text-xs text-zinc-500">Точка отсчёта цикла 2/2</span>
                 </div>
                 <input
                   type="date"
                   value={cycleStartDateStr}
                   onChange={(e) => e.target.value && setCycleStartDateStr(e.target.value)}
-                  className="bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 font-mono focus:outline-none"
+                  className="bg-[#121218] border border-white/10 rounded-2xl px-3 py-2 text-sm text-white font-bold focus:outline-none focus:border-[#8B3FFD]"
                 />
               </div>
 
               {/* Закрепить график */}
-              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
+              <div className="flex justify-between items-center border-t border-white/[0.06] pt-4">
                 <div>
-                  <span className="text-sm text-zinc-300 font-light block">Закрепить цикл</span>
-                  <span className="text-[11px] text-zinc-600">Защита от случайных нажатий в календаре</span>
+                  <span className="text-sm text-white font-semibold block">Закрепить цикл</span>
+                  <span className="text-xs text-zinc-500">Защита от случайных нажатий в календаре</span>
                 </div>
                 <button
                   onClick={() => updateSetting('lockSchedule', !settings.lockSchedule)}
-                  className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ${settings.lockSchedule ? 'bg-rose-900/70' : 'bg-zinc-800'}`}
+                  className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ${settings.lockSchedule ? 'bg-[#8B3FFD]' : 'bg-zinc-700'}`}
                 >
-                  <div className={`w-5 h-5 rounded-full bg-zinc-200 transition-transform duration-300 ${settings.lockSchedule ? 'translate-x-5' : 'translate-x-0'}`} />
+                  <div className={`w-5 h-5 rounded-full bg-white transition-transform duration-300 ${settings.lockSchedule ? 'translate-x-5' : 'translate-x-0'}`} />
                 </button>
               </div>
 
               {/* Горизонт отображения */}
-              <div className="flex justify-between items-center border-t border-zinc-900 pt-4">
-                <span className="text-sm text-zinc-300 font-light">Месяцев вперед</span>
+              <div className="flex justify-between items-center border-t border-white/[0.06] pt-4">
+                <span className="text-sm text-white font-semibold">Месяцев вперёд</span>
                 <div className="flex gap-1.5">
                   {[3, 6, 12].map(cnt => (
                     <button
                       key={cnt}
                       onClick={() => updateSetting('monthsCount', cnt)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-mono border transition ${Number(settings.monthsCount) === cnt ? 'bg-zinc-800 border-zinc-600 text-zinc-100' : 'bg-zinc-900 border-zinc-800/80 text-zinc-500'}`}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                        Number(settings.monthsCount) === cnt
+                          ? 'bg-[#8B3FFD] text-white shadow'
+                          : 'bg-[#121218] text-zinc-400 border border-white/5'
+                      }`}
                     >
                       {cnt}
                     </button>
@@ -855,54 +1009,45 @@
       );
 
       return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-black text-zinc-400 font-sans">
-          <div className="w-full max-w-md h-[100dvh] relative flex flex-col bg-zinc-950 overflow-hidden sm:border-x sm:border-zinc-900/50 shadow-2xl">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#09090d] text-zinc-200 font-sans">
+          <div className="w-full max-w-md h-[100dvh] relative flex flex-col bg-yoo-bg overflow-hidden sm:border-x sm:border-white/[0.06] shadow-2xl">
             <main className="flex-1 overflow-y-auto hide-scrollbar">
               {activeTab === 'calendar' && renderCalendar()}
               {activeTab === 'salary' && renderSalary()}
               {activeTab === 'settings' && renderSettings()}
             </main>
 
-            {/* Стеклянная нижняя панель */}
-            <nav className="absolute bottom-0 w-full z-50 pt-2 pb-safe-bottom bg-zinc-950/75 backdrop-blur-xl border-t border-white/5">
-              <div className="flex justify-around items-center px-2">
+            {/* Нижняя панель навигации в стиле ЮMoney */}
+            <nav className="absolute bottom-0 w-full z-50 pt-2 pb-safe-bottom bg-[#14141d]/90 backdrop-blur-2xl border-t border-white/[0.07]">
+              <div className="flex justify-around items-center px-3">
                 <button
                   onClick={() => setActiveTab('calendar')}
-                  className="flex flex-col items-center p-2.5 gap-1.5 relative w-24"
+                  className="flex flex-col items-center py-1.5 gap-1 relative w-24"
                 >
                   <IconCalendar active={activeTab === 'calendar'} />
-                  <span className={`text-[10px] tracking-wider transition-colors duration-300 ${activeTab === 'calendar' ? 'text-zinc-200 font-medium' : 'text-zinc-600 font-light'}`}>
+                  <span className={`text-[11px] transition-colors duration-200 ${activeTab === 'calendar' ? 'text-white font-bold' : 'text-zinc-500 font-semibold'}`}>
                     График
                   </span>
-                  {activeTab === 'calendar' && (
-                    <div className="absolute top-0 w-8 h-[2px] bg-zinc-500 rounded-b-full" />
-                  )}
                 </button>
 
                 <button
                   onClick={() => setActiveTab('salary')}
-                  className="flex flex-col items-center p-2.5 gap-1.5 relative w-24"
+                  className="flex flex-col items-center py-1.5 gap-1 relative w-24"
                 >
                   <IconWallet active={activeTab === 'salary'} />
-                  <span className={`text-[10px] tracking-wider transition-colors duration-300 ${activeTab === 'salary' ? 'text-zinc-200 font-medium' : 'text-zinc-600 font-light'}`}>
-                    Зарплата
+                  <span className={`text-[11px] transition-colors duration-200 ${activeTab === 'salary' ? 'text-white font-bold' : 'text-zinc-500 font-semibold'}`}>
+                    Кошелёк
                   </span>
-                  {activeTab === 'salary' && (
-                    <div className="absolute top-0 w-8 h-[2px] bg-zinc-500 rounded-b-full" />
-                  )}
                 </button>
 
                 <button
                   onClick={() => setActiveTab('settings')}
-                  className="flex flex-col items-center p-2.5 gap-1.5 relative w-24"
+                  className="flex flex-col items-center py-1.5 gap-1 relative w-24"
                 >
                   <IconSettings active={activeTab === 'settings'} />
-                  <span className={`text-[10px] tracking-wider transition-colors duration-300 ${activeTab === 'settings' ? 'text-zinc-200 font-medium' : 'text-zinc-600 font-light'}`}>
+                  <span className={`text-[11px] transition-colors duration-200 ${activeTab === 'settings' ? 'text-white font-bold' : 'text-zinc-500 font-semibold'}`}>
                     Настройки
                   </span>
-                  {activeTab === 'settings' && (
-                    <div className="absolute top-0 w-8 h-[2px] bg-zinc-500 rounded-b-full" />
-                  )}
                 </button>
               </div>
             </nav>
